@@ -1,0 +1,122 @@
+/* =====================================================================
+   Bloom — Edge Cases on REAL product screens · stylesheet add-on
+   Backdrop = actual screenshot of Bloom Prototype. Pin marks the trigger,
+   overlay shows the edge UI in its true position.
+   ===================================================================== */
+
+/* ── real-screenshot composite ── */
+.shot{
+  position:relative; border-radius:13px; overflow:hidden;
+  border:1px solid var(--hairline); box-shadow:0 10px 28px rgba(2,47,54,.13);
+  background:var(--cream);
+}
+.shot img.bg{display:block; width:100%; height:auto}
+.shot .dimlayer{position:absolute; inset:0; background:rgba(2,30,36,.42); z-index:4}
+
+/* trigger pin (reuses .pin look, absolute % coords) */
+.shot .pin{
+  position:absolute; transform:translate(-50%,-50%); z-index:5;
+  width:23px; height:23px; border-radius:50%; background:var(--flame); color:#fff;
+  font-size:12px; font-weight:900; display:grid; place-items:center;
+  box-shadow:0 0 0 3px rgba(255,255,255,.85), 0 2px 8px rgba(0,0,0,.35);
+}
+.shot{cursor:pointer}
+
+/* ── LIVE firing: overlay + dim hidden until the card is clicked ── */
+/* dim sits under the pin; overlays sit above it */
+.shot .dimlayer{opacity:0; transition:opacity .3s ease; z-index:3}
+.shot .ovl{
+  opacity:0; pointer-events:none;
+  transition:opacity .28s ease, transform .38s cubic-bezier(.2,.9,.3,1.18);
+}
+.shot .ovl.center{transform:translate(-50%,-44%) scale(.93)}
+.shot .ovl.top{transform:translate(-50%,-14px)}
+.shot .ovl.mid{transform:translate(-50%,-44%) scale(.92)}
+.shot .ovl.at{transform:translate(-50%,-8px)}
+.shot .ovl.bottom,.shot .ovl.topright{transform:translateY(14px)}
+.shot.fired .dimlayer{opacity:1}
+.shot.fired .ovl{opacity:1}
+.shot.fired .ovl.center,.shot.fired .ovl.mid{transform:translate(-50%,-50%) scale(1)}
+.shot.fired .ovl.at{transform:translate(-50%,0)}
+.shot.fired .ovl.top{transform:translate(-50%,0)}
+.shot.fired .ovl.bottom,.shot.fired .ovl.topright{transform:translateY(0)}
+
+.shot .pin{transition:opacity .25s}
+
+/* fire/reset chip */
+.shot .fire{
+  position:absolute; right:8px; bottom:8px; z-index:11;
+  background:var(--flame); color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.03em;
+  padding:5px 12px; border-radius:999px; display:flex; gap:6px; align-items:center;
+  box-shadow:0 4px 12px rgba(247,102,56,.4); transition:background .2s;
+}
+.shot .fire .rst{display:none}
+.shot.fired .fire{background:var(--ink); box-shadow:0 4px 12px rgba(2,47,54,.3)}
+.shot.fired .fire .go{display:none}
+.shot.fired .fire .rst{display:inline}
+
+/* print & reduced motion: always show the fired state */
+@media print{
+  .shot .ovl,.shot .dimlayer{opacity:1 !important; transform:translate(-50%,-50%) !important}
+  .shot .ovl.top{transform:translate(-50%,0) !important}
+  .shot .ovl.at{transform:translate(-50%,0) !important}
+  .shot .ovl.bottom,.shot .ovl.topright{transform:none !important}
+  .shot .fire{display:none}
+}
+.shot .pin::after{
+  content:""; position:absolute; inset:-8px; border-radius:50%; border:2px solid var(--flame);
+  opacity:.6; animation:pinpulse 1.8s ease-out infinite;
+}
+
+/* result overlay positions */
+.shot .ovl{position:absolute; z-index:6}
+.shot .ovl.center{left:50%; top:50%}
+.shot .ovl.mid{/* left/top set inline from the pin anchor */}
+.shot .ovl.top{top:6%}
+.shot .ovl.bottom{right:2.5%; bottom:5%}
+.shot .ovl.topright{right:2.5%; top:5%}
+.shot .ovl.at{/* left/top/width set inline — sits exactly under its field */}
+.shot .ovl.at .edge-ui{width:100%}
+.shot .ovl .edge-ui{filter:drop-shadow(0 16px 30px rgba(2,30,36,.35))}
+
+/* inline field error — looks like real product validation, attached to the field */
+.shot .inline-err{
+  width:100%; background:#FFF6F3; border:1px solid var(--blush); color:var(--blushInk);
+  font-size:10.5px; font-weight:700; border-radius:8px; padding:4px 9px;
+  display:flex; gap:6px; align-items:center; line-height:1.25; text-align:left; white-space:nowrap;
+}
+.shot .inline-err.warn{background:#FFF9E8; border-color:var(--butter); color:var(--butterInk)}
+.shot .inline-err u{text-decoration:underline; cursor:pointer}
+
+/* size the edge-UI inside shots */
+.shot .modal{max-width:238px} .shot .banner{max-width:250px} .shot .toast{max-width:232px}
+.shot .acard{max-width:236px} .shot .field{max-width:220px; background:#fff; border:1px solid var(--hairline); border-radius:12px; padding:12px}
+.shot .state{max-width:230px; background:#fff; border:1px solid var(--hairline); border-radius:14px; padding:14px 12px}
+.shot .jcard{max-width:230px} .shot .prog{max-width:224px}
+.shot .skel{max-width:230px; background:#fff; border:1px solid var(--hairline); border-radius:12px; padding:12px}
+
+/* number chip #2 on the overlay */
+.shot .ovl .two{
+  position:absolute; top:-9px; left:-9px; width:21px; height:21px; border-radius:50%;
+  background:var(--ink); color:#fff; font-size:11px; font-weight:900; display:grid; place-items:center;
+  box-shadow:0 0 0 2.5px rgba(255,255,255,.9); z-index:8;
+}
+
+/* edge row = shot + caption side by side on wide, stacked on narrow */
+.edges.real{grid-template-columns:repeat(auto-fill,minmax(470px,1fr)); gap:24px}
+.edge .shotwrap{padding:14px 14px 4px}
+
+/* screen tag on the shot */
+.shot .scrtag{
+  position:absolute; left:8px; top:8px; z-index:10;
+  background:rgba(2,47,54,.85); color:#fff; backdrop-filter:blur(4px);
+  font-size:9.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  padding:3px 9px; border-radius:999px; display:flex; gap:5px; align-items:center;
+}
+.shot .scrtag .d{width:5px; height:5px; border-radius:50%; background:var(--cyan)}
+
+/* map thumbs from real screenshots */
+.mapcard .thumb img{display:block; width:100%; height:100%; object-fit:cover; object-position:top left}
+
+/* print: keep composites intact */
+@media print{ .shot{box-shadow:none} }

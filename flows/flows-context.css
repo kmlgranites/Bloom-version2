@@ -1,0 +1,107 @@
+/* =====================================================================
+   Bloom — Edge Cases IN CONTEXT · stylesheet add-on
+   Composites each edge state onto a miniature of the REAL product screen,
+   in its true position, with a numbered pin on the trigger element.
+   ===================================================================== */
+:root{
+  --wire:#ECE5D5; --wire2:#F3EDDF; --wireInk:#D4CBB6; --wireTxt:#B7AD96;
+}
+
+/* ── Flow map (bird's-eye of the real screens) ── */
+.map{
+  background:var(--paper); border:1px solid var(--hairline); border-radius:20px;
+  padding:22px 22px 24px; margin-top:8px;
+}
+.map h4{font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:4px}
+.map .msub{font-size:13px; color:var(--inkSoft); font-weight:600; margin-bottom:18px}
+.maprow{display:flex; align-items:stretch; gap:0; flex-wrap:wrap}
+.mapnode{display:flex; align-items:center; gap:0}
+.mapcard{
+  width:148px; cursor:pointer; text-decoration:none; color:inherit;
+  border-radius:12px; padding:7px; border:1px solid var(--hairline); background:var(--creamSoft);
+  transition:transform .12s, box-shadow .12s;
+}
+.mapcard:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(2,47,54,.10)}
+.mapcard .thumb{height:84px; border-radius:8px; overflow:hidden; position:relative; border:1px solid var(--hairline)}
+.mapcard .mlabel{display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:7px; padding:0 2px}
+.mapcard .mn{font-size:12px; font-weight:800; color:var(--ink)}
+.mapcard .mc{font-size:10px; font-weight:800; background:var(--blush); color:var(--blushInk); padding:1px 7px; border-radius:999px}
+.maparrow{color:var(--wireTxt); font-size:17px; padding:0 7px; align-self:center; flex-shrink:0}
+.mapbranch{display:flex; flex-direction:column; gap:8px}
+
+/* ── Mini device frame holding a real-screen wireframe ── */
+.device{
+  width:100%; background:var(--paper); border:1px solid var(--hairline); border-radius:12px;
+  overflow:hidden; box-shadow:0 10px 26px rgba(2,47,54,.10);
+}
+.device .dbar{height:23px; background:var(--creamSoft); border-bottom:1px solid var(--hairline); display:flex; align-items:center; gap:5px; padding:0 9px}
+.device .dbar i{width:7px; height:7px; border-radius:50%; background:#D9D0BF}
+.device .dbar .durl{margin-left:7px; font-size:9px; font-weight:700; color:var(--muted); background:#fff; border:1px solid var(--hairline); border-radius:5px; padding:1px 9px; max-width:70%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis}
+
+/* the wireframe canvas — pins + overlay are positioned within this */
+.wf{position:relative; height:248px; background:var(--cream); overflow:hidden}
+.wf.tall{height:268px}
+
+/* wire primitives */
+.wb{background:var(--wire); border-radius:5px}
+.wf-side{position:absolute; left:0; top:0; bottom:0; width:27%; background:var(--creamSoft); border-right:1px solid var(--hairline); padding:10px 9px; display:flex; flex-direction:column; gap:6px}
+.wf-side .wlogo{height:10px; width:54px; background:var(--ink); border-radius:3px; opacity:.85; margin-bottom:5px}
+.wf-side .wnav{height:9px; border-radius:4px; background:var(--wire)}
+.wf-side .wnav.on{background:var(--ink); opacity:.85; width:90%}
+.wf-main{position:absolute; left:27%; right:0; top:0; bottom:0; padding:11px 12px; overflow:hidden}
+.wf-full{position:absolute; inset:0; padding:12px}
+
+.wtext{height:8px; border-radius:4px; background:var(--wire)}
+.wtitle{height:13px; border-radius:4px; background:var(--wireInk)}
+.wcard{background:#fff; border:1px solid var(--hairline); border-radius:8px; padding:8px}
+.wchip{height:16px; border-radius:99px; background:var(--wire); width:54px}
+.wbtnD{height:16px; border-radius:99px; background:var(--ink); opacity:.85}
+
+/* anchor wrapper — invisible, just a positioning target for the pin */
+[data-anchor]{position:relative}
+
+/* ── numbered trigger pin ── */
+.pin{
+  position:absolute; transform:translate(-50%,-50%); z-index:9;
+  width:21px; height:21px; border-radius:50%; background:var(--flame); color:#fff;
+  font-size:11px; font-weight:900; display:grid; place-items:center;
+  box-shadow:0 0 0 3px rgba(247,102,56,.28), 0 2px 6px rgba(0,0,0,.25); pointer-events:none;
+}
+.pin::after{
+  content:""; position:absolute; inset:-7px; border-radius:50%; border:2px solid var(--flame);
+  opacity:.55; animation:pinpulse 1.8s ease-out infinite;
+}
+@keyframes pinpulse{0%{transform:scale(.7);opacity:.6} 100%{transform:scale(1.7);opacity:0}}
+
+/* ── result overlay (the actual edge UI, in its true position) ── */
+.ovl{position:absolute; z-index:6; pointer-events:none}
+.ovl.center{inset:0; display:grid; place-items:center; background:rgba(2,30,36,.34)}
+.ovl.top{top:9px; left:50%; transform:translateX(-50%); width:88%; display:flex; justify-content:center}
+.ovl.topright{top:9px; right:9px}
+.ovl.bottom{bottom:9px; right:9px}
+.ovl.mid{inset:0; display:grid; place-items:center}
+.ovl-inner{transform:scale(.84); transform-origin:center}
+.ovl.top .ovl-inner{transform:scale(.8); transform-origin:top center}
+.ovl.bottom .ovl-inner,.ovl.topright .ovl-inner{transform:scale(.8); transform-origin:bottom right}
+
+/* shrink the edge-UI components a touch for in-screen fit */
+.wf .modal{max-width:218px} .wf .modal .mt{font-size:15px} .wf .modal .mb{font-size:11px}
+.wf .banner{max-width:235px} .wf .toast{max-width:218px}
+.wf .acard{max-width:218px} .wf .field{max-width:206px}
+.wf .state{max-width:215px} .wf .jcard{max-width:215px} .wf .prog{max-width:212px} .wf .skel{max-width:215px}
+
+/* caption: trigger action → result */
+.ctxcap{display:flex; align-items:center; gap:8px; padding:11px 15px; background:var(--creamSoft); border-top:1px solid var(--hairline); flex-wrap:wrap}
+.ctxcap .step{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; color:var(--inkSoft)}
+.ctxcap .num{width:16px; height:16px; border-radius:50%; font-size:9.5px; font-weight:900; display:grid; place-items:center; flex-shrink:0}
+.ctxcap .num.t{background:var(--flame); color:#fff}
+.ctxcap .num.r{background:var(--ink); color:#fff}
+.ctxcap .to{color:var(--wireTxt); font-weight:900}
+
+/* the in-context edge card overrides the plain stage */
+.edge .ctxwrap{padding:14px 14px 0}
+.edge-where{font-size:9.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:6px; padding:0 2px 8px}
+.edge-where b{color:var(--cyanInk)}
+
+/* wider grid so each composite has room */
+.edges.ctx{grid-template-columns:repeat(auto-fill,minmax(384px,1fr)); gap:22px}
