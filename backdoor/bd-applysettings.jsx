@@ -102,9 +102,9 @@ function ASwitchRow({ label, hint, on, onToggle, children }) {
 }
 
 const A_QUALITY = [
-  { k:"Good", min:70, week:26, desc:"Includes solid but slightly weaker matches. A wider net, more applications." },
-  { k:"Strong", min:80, week:12, desc:"Confidently on-target matches. A balanced mix of volume and fit." },
-  { k:"Excellent", min:90, week:4, desc:"Only your very best matches. Fewest applications, highest fit." },
+  { k:"Good", min:70, week:26, desc:"Only apply to jobs where you meet most of the key requirements. A wider net, more applications." },
+  { k:"Strong", min:80, week:12, desc:"Only apply to jobs where you meet nearly all the key requirements. A balanced mix of volume and fit." },
+  { k:"Excellent", min:90, week:4, desc:"Only apply to jobs you're an outstanding fit for. Fewest applications, highest fit." },
 ];
 
 function ApplySettingsPanel({ st, set, goProfile }) {
@@ -115,7 +115,7 @@ function ApplySettingsPanel({ st, set, goProfile }) {
     onsite:false, cities:["New York, NY"],
     salary:140, period:"year", noPay:true, sponsor:false,
     quality:"Strong", cap:10, askEssay:true, askLong:false, coverText:"Hi [Company] team,\n\nI'm applying for the [Role] position. I'm a backend-leaning full-stack engineer with 6 years building payments and platform infrastructure, most recently at Groww, where I own the payouts service handling 40k+ daily transactions.\n\nI work mostly in Node.js, TypeScript and PostgreSQL, and I'm comfortable owning a service end to end, from schema design to on-call. I'd bring that same ownership to [Company].\n\nThanks for your time. I'd love to talk.\n\nVinodh Kumar", coverEdited:false,
-    industries:[], include:[], exclude:[], companies:["Staffing firms"], notes:"", advOpen:false,
+    industries:[], include:[], exclude:[], companies:[], skipTypes:["Staffing firms","Recruiting agencies"], notes:"", advOpen:false,
   });
   const [saving, setSaving] = React.useState(false);
   const [touched, setTouched] = React.useState(false);
@@ -129,7 +129,7 @@ function ApplySettingsPanel({ st, set, goProfile }) {
   const levels = Array.isArray(st.level) ? st.level : (st.level ? [st.level] : []);
   const types = st.types || [];
   const est = Math.max(1, Math.round(q.week * (s.remote && s.onsite ? 1.4 : 1) * (s.noPay ? 1 : .55) * (levels.length>1 ? 1 : .6)));
-  const advCount = s.industries.length + s.include.length + s.exclude.length + s.companies.length + (s.notes.trim() ? 1 : 0);
+  const advCount = s.industries.length + s.include.length + s.exclude.length + s.companies.length + (s.skipTypes||[]).length + (s.notes.trim() ? 1 : 0);
   const sel = {padding:"9px 32px 9px 12px", borderRadius:10, border:`1.5px solid ${aT.hairline}`, fontFamily:aFB, fontSize:13.5, fontWeight:600, color:aT.ink, background:"#fff", outline:"none", cursor:"pointer"};
 
   return (
@@ -163,37 +163,6 @@ function ApplySettingsPanel({ st, set, goProfile }) {
             );
           })}
         </div>
-        {isAuto && (
-          <React.Fragment>
-            <AField label="Daily limit" hint="Bloom spends it on your strongest matches first.">
-              <div style={{display:"inline-flex", alignItems:"center", border:`1.5px solid ${aT.hairline}`, borderRadius:10, overflow:"hidden"}}>
-                <button type="button" aria-label="Fewer" onClick={()=>u({cap:Math.max(1,s.cap-1)})} style={{width:38, height:38, border:"none", background:"#fff", cursor:"pointer", fontSize:18, color:aT.ink}}>−</button>
-                <span style={{minWidth:90, textAlign:"center", fontSize:14, fontWeight:700}}>{s.cap} a day</span>
-                <button type="button" aria-label="More" onClick={()=>u({cap:Math.min(50,s.cap+1)})} style={{width:38, height:38, border:"none", background:"#fff", cursor:"pointer", fontSize:18, color:aT.ink}}>+</button>
-              </div>
-            </AField>
-          </React.Fragment>
-        )}
-        <AField label="Cover letter" hint="Bloom drafted this from your résumé and tailors it to each job before sending. Edit it anytime.">
-          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginBottom:8}}>
-            <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:12, fontWeight:700, color:"#0A6E6E", background:"#E0FAFA", borderRadius:999, padding:"4px 10px"}}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/></svg>
-              {s.coverEdited ? "Edited by you · still tailored per job" : "Drafted from your résumé"}
-            </span>
-            {s.coverEdited && (
-              <button type="button" onClick={()=>u({coverText:"Hi [Company] team,\n\nI'm applying for the [Role] position. I'm a backend-leaning full-stack engineer with 6 years building payments and platform infrastructure, most recently at Groww, where I own the payouts service handling 40k+ daily transactions.\n\nI work mostly in Node.js, TypeScript and PostgreSQL, and I'm comfortable owning a service end to end, from schema design to on-call. I'd bring that same ownership to [Company].\n\nThanks for your time. I'd love to talk.\n\nVinodh Kumar", coverEdited:false})}
-                style={{border:"none", background:"none", padding:0, fontFamily:"inherit", fontSize:12, fontWeight:700, color:aT.ink, textDecoration:"underline", cursor:"pointer"}}>Reset to Bloom's draft</button>
-            )}
-          </div>
-          <textarea value={s.coverText} onChange={e=>u({coverText:e.target.value, coverEdited:true})} rows={11}
-            placeholder={"Hi [Company] team,\n\nI'm excited to apply for the [Role] position..."}
-            style={{width:"100%", boxSizing:"border-box", padding:"12px 14px", borderRadius:10, border:`1.5px solid ${aT.hairline}`,
-              fontFamily:"inherit", fontSize:13.5, fontWeight:500, color:aT.ink, lineHeight:1.55, resize:"vertical", outline:"none"}}/>
-          <div style={{display:"flex", justifyContent:"space-between", gap:12, marginTop:8, fontSize:12, color:aT.muted, fontWeight:600, lineHeight:1.5}}>
-            <span>Tip: write <b style={{color:aT.ink}}>[Company]</b> and <b style={{color:aT.ink}}>[Role]</b> and Bloom fills them in for each job.</span>
-            <span style={{flexShrink:0}}>{(s.coverText||"").trim() ? (s.coverText.trim().split(/\s+/).length + " words") : ""}</span>
-          </div>
-        </AField>
       </ASection>
 
       <ASection n="02" title="Jobs to look for">
@@ -243,19 +212,40 @@ function ApplySettingsPanel({ st, set, goProfile }) {
       </ASection>
 
       <ASection n="03" title="Match quality" sub="Bloom only applies when a job clears this bar for your résumé.">
-        <div role="radiogroup" aria-label="Match quality" style={{display:"grid", gridTemplateColumns:"repeat(3, minmax(0,1fr))", gap:8}}>
-          {A_QUALITY.map(x=>{
-            const on = s.quality===x.k;
-            return (
-              <button key={x.k} type="button" role="radio" aria-checked={on} onClick={()=>u({quality:x.k})} style={{padding:"12px 10px", borderRadius:12, cursor:"pointer",
-                border:`1.5px solid ${on ? aT.ink : aT.hairline}`, background: on ? "#F4F8F8" : "#fff", textAlign:"center"}}>
-                <div style={{fontSize:14, fontWeight:700, color:aT.ink}}>{x.k}</div>
-                <div style={{fontSize:12, fontWeight:600, color:aT.muted, marginTop:2}}>{x.min}%+ fit</div>
-              </button>
-            );
-          })}
-        </div>
-        <div aria-live="polite" style={{fontSize:13, color:aT.muted, fontWeight:600, lineHeight:1.5}}>{q && q.desc}</div>
+        {(() => {
+          const qi = Math.max(0, A_QUALITY.findIndex(x=>x.k===s.quality));
+          const pct = qi / (A_QUALITY.length-1) * 100;
+          return (
+            <div style={{background:"#E0FAFA", borderRadius:14, padding:"18px 20px 16px"}}>
+              <div style={{display:"flex", alignItems:"flex-start", gap:8, fontSize:13.5, fontWeight:600, color:aT.ink, lineHeight:1.5}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A6E6E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0, marginTop:2}}><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                <span aria-live="polite">{q && q.desc}</span>
+              </div>
+              <div style={{position:"relative", height:28, marginTop:16}}>
+                <div style={{position:"absolute", left:0, right:0, top:12, height:4, borderRadius:999, background:"#fff"}}/>
+                <div style={{position:"absolute", left:0, top:12, height:4, borderRadius:999, background:aT.ink, width:pct+"%", transition:"width .2s"}}/>
+                <span style={{position:"absolute", top:5, left:`calc(${pct}% - 9px)`, width:18, height:18, borderRadius:"50%", background:aT.ink,
+                  border:"3px solid #fff", boxSizing:"border-box", boxShadow:"0 1px 3px rgba(2,47,54,.25)", transition:"left .2s", pointerEvents:"none"}}/>
+                <input type="range" min={0} max={A_QUALITY.length-1} step={1} value={qi} aria-label="Match quality"
+                  aria-valuetext={`${A_QUALITY[qi].k}, ${A_QUALITY[qi].min}% match or higher`}
+                  onChange={e=>u({quality:A_QUALITY[Number(e.target.value)].k})}
+                  style={{position:"absolute", inset:0, width:"100%", height:"100%", margin:0, opacity:0, cursor:"pointer"}}/>
+              </div>
+              <div style={{display:"grid", gridTemplateColumns:"repeat(3, minmax(0,1fr))", marginTop:6}}>
+                {A_QUALITY.map((x,i)=>{
+                  const on = i===qi;
+                  return (
+                    <button key={x.k} type="button" onClick={()=>u({quality:x.k})} style={{border:"none", background:"none", padding:"2px 0", cursor:"pointer",
+                      fontFamily:"inherit", fontSize:13, color:aT.ink, fontWeight: on ? 800 : 500,
+                      textAlign: i===0 ? "left" : i===A_QUALITY.length-1 ? "right" : "center"}}>
+                      {x.k}<span style={{fontWeight:500, color: on ? aT.ink : aT.muted}}> · {x.min}%+{i===0 ? " match" : ""}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
         {s.quality==="Excellent" && levels.includes("Entry") &&
           <div style={{fontSize:12.5, color:"#8A5A00", fontWeight:600}}>For entry-level roles, Strong usually finds far more jobs.</div>}
       </ASection>
@@ -281,8 +271,31 @@ function ApplySettingsPanel({ st, set, goProfile }) {
             <AField label="Skip if it mentions" hint="Skip any job whose description includes one of these.">
               <ATags values={s.exclude} onChange={v=>u({exclude:v})} placeholder="e.g. on-call, clearance" blocked={s.include} blockedLabel="Must mention"/>
             </AField>
-            <AField label="Skip these companies">
-              <ATags values={s.companies} onChange={v=>u({companies:v})} placeholder="Add a company"/>
+            <AField label="Skip these companies" hint="Skip by company type, or add specific companies by name.">
+              <div style={{display:"flex", flexDirection:"column", gap:14}}>
+                <div>
+                  <div style={{fontSize:12, fontWeight:700, color:aT.muted, marginBottom:8}}>Company type</div>
+                  <div style={{display:"flex", flexWrap:"wrap", gap:8}}>
+                    {["Staffing firms","Recruiting agencies","Consultancies","Government","Defense","Crypto","Gambling"].map(t=>{
+                      const on = (s.skipTypes||[]).includes(t);
+                      return (
+                        <button key={t} type="button" aria-pressed={on} onClick={()=>u({skipTypes: on ? s.skipTypes.filter(x=>x!==t) : [...(s.skipTypes||[]), t]})}
+                          style={{display:"inline-flex", alignItems:"center", gap:6, padding:"7px 13px", borderRadius:999, cursor:"pointer",
+                            fontFamily:"inherit", fontSize:12.5, fontWeight:700, whiteSpace:"nowrap",
+                            background: on ? aT.ink : "#fff", color: on ? "#fff" : aT.ink, border:`1.5px solid ${on ? aT.ink : aT.hairline}`}}>
+                          {on && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>}
+                          {t}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <div style={{fontSize:12, fontWeight:700, color:aT.muted, marginBottom:8}}>Company name</div>
+                  <ATags values={s.companies} onChange={v=>u({companies:v})} placeholder="Type a company, e.g. your current employer"
+                    suggestions={["Google","Meta","Amazon","Infosys","TCS","Accenture"]}/>
+                </div>
+              </div>
             </AField>
           </div>
         )}

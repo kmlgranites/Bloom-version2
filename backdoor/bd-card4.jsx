@@ -168,13 +168,19 @@ function ChecklistCard({ st, set, locked, onNext, toast }) {
               })}
             </div>
           </div>
-          <KRow label="Need workplace accommodations?" hint="Disability, religious, or other." last>
-            <KToggle value={q.accommodations || "Prefer not"} options={["Yes","No","Prefer not"]}
-              onChange={v=>upd({accommodations:v})}/>
+          <KRow label="Salary expectation" hint="Used when an application asks. Annual, USD." last>
+            <div style={{display:"flex", alignItems:"center", gap:6, flexShrink:0}}>
+              <span style={{fontSize:14.5, fontWeight:600, color:kT.muted}}>$</span>
+              <input value={q.salary || ""} onChange={e=>{ const d=e.target.value.replace(/[^0-9]/g,"").slice(0,7); upd({salary: d ? Number(d).toLocaleString("en-US") : ""}); }}
+                placeholder="140,000" inputMode="numeric" aria-label="Salary expectation"
+                style={{width:96, background:"transparent", border:"none", borderBottom:`1.5px solid ${kT.hairline}`, outline:"none",
+                  fontFamily:kFB, fontSize:14.5, fontWeight:500, color:kT.ink, padding:"7px 2px", textAlign:"right"}}/>
+              <span style={{fontSize:13, fontWeight:600, color:kT.muted}}>/ year</span>
+            </div>
           </KRow>
 
           <KGroup>BACKGROUND</KGroup>
-          <KRow label="GPA" hint="Some applications ask. Leave blank to skip.">
+          <KRow label="GPA" hint="Some applications ask. Leave blank to skip." last>
             <div style={{display:"flex", alignItems:"center", gap:10, flexShrink:0}}>
               <input value={q.gpa || ""} onChange={e=>upd({gpa:e.target.value.replace(/[^0-9.]/g,"").slice(0,4)})}
                 placeholder="3.6" inputMode="decimal" aria-label="GPA"
@@ -183,12 +189,7 @@ function ChecklistCard({ st, set, locked, onNext, toast }) {
               <KToggle value={q.gpaScale || "/ 4.0"} options={["/ 4.0","/ 10"]} onChange={v=>upd({gpaScale:v})}/>
             </div>
           </KRow>
-          <KRow label="Active government clearance?">
-            <KToggle value={q.clearance || "No"} options={["Yes","No"]} onChange={v=>upd({clearance:v})}/>
-          </KRow>
-          <KRow label="Family ties to foreign governments?" hint="Employers are required to ask." last>
-            <KToggle value={q.foreignTies || "No"} options={["Yes","No"]} onChange={v=>upd({foreignTies:v})}/>
-          </KRow>
+
 
           <KGroup>DIVERSITY &amp; INCLUSION (OPTIONAL)</KGroup>
           <KRow label="Gender">

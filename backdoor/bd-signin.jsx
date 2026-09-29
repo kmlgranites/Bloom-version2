@@ -195,7 +195,6 @@ function SignIn({ onDone }) {
           </div>
 
           <div style={{display:"grid", gap:9}}>
-            {sso("Continue with Google", GoogleMark)}
             {sso("Continue with LinkedIn", LinkedInMark)}
           </div>
 

@@ -241,6 +241,9 @@ const DIconGift = () => (
 const DIconInfo = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
 );
+const DIconKey = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+);
 const DIconPower = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg>
 );
@@ -722,19 +725,10 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:4}}>Auto-apply targeting</div>
       <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Fine-tune which jobs Bloom applies to, and how many.</div>
 
-      <div style={{display:"flex", alignItems:"flex-end", justifyContent:"space-between", gap:16, flexWrap:"wrap", paddingBottom:18}}>
-        <div>
-          <TLabel>RÉSUMÉ PROFILE</TLabel>
-          <select value={t.profile} onChange={e=>u({profile:e.target.value})} style={sel}>
-            <option value="Default">Default (default)</option>
-          </select>
-        </div>
-        <div style={{display:"flex", alignItems:"center", gap:12}}>
-          <TInfoTip text={t.laneOn ? `~${q.week} matches this week` : "Off for this profile"}
-            title="Jobs matched in the last 7 days"
-            body="This is how many new jobs fit this lane's filters over the past week. It's a preview to help you tune your filters, not a limit. Auto-apply is only limited by your daily cap."/>
-          <TSwitch on={t.laneOn} onToggle={()=>u({laneOn:!t.laneOn})} label="Auto-apply with this profile"/>
-        </div>
+      <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, paddingBottom:18}}>
+        <TInfoTip text={`~${q.week} matches this week`}
+          title="Jobs matched in the last 7 days"
+          body="This is how many new jobs fit your filters over the past week. It's a preview to help you tune your filters, not a limit. Auto-apply is only limited by your daily cap."/>
       </div>
 
       <div style={sect}>
@@ -991,7 +985,7 @@ function ReferralsPanel() {
   const copy = ()=>{ try { navigator.clipboard && navigator.clipboard.writeText(link); } catch(e){} setCopied(true); setTimeout(()=>setCopied(false), 1800); };
   const saveCode = ()=>{ const v = draft.trim().toUpperCase().replace(/[^A-Z0-9-]/g,""); if(v.length>=4){ setCode(v); setEditing(false); } };
   const draftOk = draft.trim().replace(/[^A-Za-z0-9-]/g,"").length>=4;
-  const msg = encodeURIComponent("I use Bloom to auto-apply to jobs. Get free applications with my link: " + link);
+  const msg = encodeURIComponent("I use Bloom to auto-apply to jobs. Sign up with my link and we both get 50 bonus applications when you subscribe: " + link);
   const share = ()=>{ if(navigator.share){ navigator.share({title:"Bloom", url:link}).catch(()=>{}); } else copy(); };
   const btn = {display:"inline-flex", alignItems:"center", gap:8, padding:"9px 16px", borderRadius:10, border:`1.5px solid ${dT.hairline}`,
     background:"#fff", fontFamily:dFB, fontSize:13.5, fontWeight:600, color:dT.ink, cursor:"pointer", textDecoration:"none"};
@@ -999,7 +993,7 @@ function ReferralsPanel() {
     <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px", minWidth:0}}>
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:6}}>Referrals</div>
       <div style={{fontSize:13, color:dT.muted, fontWeight:500, lineHeight:1.55, marginBottom:24}}>
-        Refer a friend and you both get 50 free applications when they upgrade to a paid plan.
+        Invite a friend. When they subscribe to a paid plan, you both get 50 bonus applications. Works on the Free plan too.
       </div>
 
       <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, marginBottom:8}}>
@@ -1048,7 +1042,7 @@ function ReferralsPanel() {
       </div>
 
       <div style={{display:"flex", gap:44, flexWrap:"wrap", margin:"30px 0 28px"}}>
-        {[["INVITED","0"],["JOINED AND PAID","0"],["APPS EARNED","0"]].map(([l,v])=>(
+        {[["INVITED","0"],["SUBSCRIBED","0"],["BONUS EARNED","0"]].map(([l,v])=>(
           <div key={l}>
             <div style={{fontSize:11, fontWeight:700, color:dT.muted, letterSpacing:".06em", marginBottom:4}}>{l}</div>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:32, color:dT.ink, lineHeight:1}}>{v}</div>
@@ -1060,8 +1054,8 @@ function ReferralsPanel() {
         <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:12}}>How it works</div>
         <ol style={{margin:0, paddingLeft:20, display:"flex", flexDirection:"column", gap:9, fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.5}}>
           <li>Share your link with a friend.</li>
-          <li>They sign up and get 10 free applications.</li>
-          <li>When they upgrade to a paid plan, you both get 50 applications.</li>
+          <li>They sign up with your link.</li>
+          <li>When they subscribe to a paid plan, you both get 50 bonus applications.</li>
         </ol>
       </div>
     </div>
@@ -1195,13 +1189,150 @@ function AboutHelpPanel() {
   );
 }
 
-function BillingPanel() {
+function SitePasswordPanel({ st, set }) {
+  const saved = st.appPassword || "";
+  const [editing, setEditing] = React.useState(!saved);
+  const [draft, setDraft] = React.useState("");
+  const [show, setShow] = React.useState(false);
+  const [view, setView] = React.useState(false);
+  const [confirmDel, setConfirmDel] = React.useState(false);
+  const [updated, setUpdated] = React.useState(()=>new Date().toLocaleDateString("en-GB"));
+  const rules = window.P_RULES || [];
+  const ok = rules.every(([,t])=>t(draft));
+  const save = ()=>{ if(!ok) return; set({appPassword:draft}); setUpdated(new Date().toLocaleDateString("en-GB")); setEditing(false); setDraft(""); setShow(false); setView(false); };
+  const btnDark = {display:"inline-flex", alignItems:"center", gap:8, padding:"11px 20px", borderRadius:999, border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"};
+  const btnLight = {display:"inline-flex", alignItems:"center", gap:8, padding:"11px 20px", borderRadius:999, border:`1.5px solid ${dT.hairline}`, background:"#fff", color:dT.ink, fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"};
+  return (
+    <div style={{display:"flex", flexDirection:"column", gap:20, minWidth:0}}>
+      <div>
+        <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:6}}>Site password</div>
+        <div style={{fontSize:13, color:dT.muted, fontWeight:500, lineHeight:1.55, maxWidth:560}}>
+          Store a password for job sites that create an account when you apply, like Workday, iCIMS, and Oracle. Bloom uses it to sign you up so applications don't get stuck.
+        </div>
+      </div>
+
+      {!editing ? (
+        <div style={{display:"flex", flexDirection:"column", gap:14}}>
+          <div style={{display:"flex", alignItems:"center", gap:8, fontSize:14, fontWeight:600, color:dT.ink}}>
+            <span style={{width:8, height:8, borderRadius:"50%", background:"#1F8A5B"}}/>Password saved · Updated {updated}
+          </div>
+          <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap"}}>
+            <button onClick={()=>setView(v=>!v)} style={{display:"inline-flex", alignItems:"center", gap:7, border:"none", background:"none", padding:0, cursor:"pointer",
+              fontFamily:dFB, fontSize:13, fontWeight:700, color:dT.ink}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              {view ? "Hide password" : "View password"}
+            </button>
+            {view && <code style={{fontSize:13, background:"#F1F3F4", borderRadius:6, padding:"4px 9px", color:dT.ink, userSelect:"all"}}>{saved}</code>}
+          </div>
+          {confirmDel ? (
+            <div role="alertdialog" style={{display:"flex", alignItems:"center", gap:12, flexWrap:"wrap", padding:"12px 14px", borderRadius:12, background:"#FDF1F1", border:"1px solid #F4D3D3"}}>
+              <span style={{fontSize:13, fontWeight:600, color:"#8A2A2A", flex:"1 1 240px"}}>Remove it? Applications on Workday-style sites will wait for you as "Needs you".</span>
+              <button onClick={()=>setConfirmDel(false)} style={{...btnLight, padding:"8px 14px", fontSize:12.5}}>Cancel</button>
+              <button onClick={()=>{ set({appPassword:""}); setConfirmDel(false); setEditing(true); }} style={{...btnDark, padding:"8px 14px", fontSize:12.5, background:"#C0392B"}}>Remove</button>
+            </div>
+          ) : (
+            <div style={{display:"flex", gap:10, flexWrap:"wrap", marginTop:4}}>
+              <button onClick={()=>{ setEditing(true); setDraft(""); }} style={btnDark}>Update password
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              </button>
+              <button onClick={()=>setConfirmDel(true)} style={{...btnLight, color:"#C0392B"}}>Remove
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9z"/></svg>
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div style={{maxWidth:520, display:"flex", flexDirection:"column", gap:14}}>
+          {!saved && <div style={{fontSize:13, fontWeight:600, color:"#8A5A00"}}>No password saved. Applications that need an account will wait for you.</div>}
+          <div style={{border:`1.5px solid ${dT.hairline}`, borderRadius:14, overflow:"hidden"}}>
+            <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, padding:"11px 16px", background:"#F9FAFB", borderBottom:`1px solid ${dT.hairline}`}}>
+              <label htmlFor="bd-sitepw" style={{fontSize:11, fontWeight:800, color:dT.muted, letterSpacing:".07em"}}>{saved ? "NEW PASSWORD" : "PASSWORD"}</label>
+              <button type="button" onClick={()=>{ setDraft(window.pGen ? window.pGen() : ""); setShow(true); }} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:dFB, fontSize:12.5, fontWeight:700, color:"#0A6E6E"}}>Generate strong password</button>
+            </div>
+            <div style={{padding:"12px 16px 16px"}}>
+              <div style={{display:"flex", alignItems:"center", gap:8, borderBottom:`1.5px solid ${dT.hairline}`}}>
+                <input id="bd-sitepw" type={show ? "text" : "password"} value={draft} onChange={e=>setDraft(e.target.value)} autoComplete="new-password" spellCheck={false}
+                  onKeyDown={e=>{ if(e.key==="Enter") save(); }} placeholder="Enter a password"
+                  style={{flex:1, minWidth:0, border:"none", outline:"none", background:"transparent", fontFamily:dFB, fontSize:14.5, fontWeight:500, color:dT.ink, padding:"9px 0"}}/>
+                <button type="button" onClick={()=>setShow(s=>!s)} aria-label={show ? "Hide password" : "Show password"} style={{border:"none", background:"none", padding:6, cursor:"pointer", color:dT.muted, display:"grid"}}>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <ul style={{listStyle:"none", margin:"12px 0 0", padding:0, display:"flex", flexDirection:"column", gap:7}}>
+                {rules.map(([label,test])=>{ const pass = test(draft); return (
+                  <li key={label} style={{display:"flex", alignItems:"center", gap:9, fontSize:12.5, fontWeight:600, color: pass ? dT.ink : dT.muted}}>
+                    <span aria-hidden="true" style={{width:16, height:16, borderRadius:"50%", display:"grid", placeItems:"center", flexShrink:0,
+                      border: pass ? "none" : `1.5px solid ${dT.hairline}`, background: pass ? "#1F8A5B" : "#fff"}}>
+                      {pass && <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>}
+                    </span>{label}
+                  </li>); })}
+              </ul>
+            </div>
+          </div>
+          <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap"}}>
+            <button onClick={save} disabled={!ok} style={{...btnDark, background: ok ? dT.ink : "#E4E7E8", color: ok ? "#fff" : dT.muted, cursor: ok ? "pointer" : "not-allowed"}}>Save password</button>
+            {saved && <button onClick={()=>{ setEditing(false); setDraft(""); }} style={btnLight}>Cancel</button>}
+            <span style={{fontSize:12.5, fontWeight:600, color:dT.muted, display:"flex", alignItems:"center", gap:6, marginLeft:4}}>
+              <span style={{width:7, height:7, borderRadius:"50%", background:"#1F8A5B"}}/>Encrypted before save
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DevScenarios({ st, set, onModal, goPlans }) {
+  const [open, setOpen] = React.useState(false);
+  const cur = (st.plan||"free")!=="free" ? st.plan : "u"+(st.freeUsed||0);
+  const S = [
+    ["u0", "New free user", "0 of 5 used", ()=>set({plan:"free", freeUsed:0})],
+    ["u3", "Mid trial", "3 of 5 used", ()=>set({plan:"free", freeUsed:3})],
+    ["u4", "Last one left", "4 of 5 · warning shows", ()=>set({plan:"free", freeUsed:4})],
+    ["u5", "Limit reached", "5 of 5 · paused + pop-up", ()=>{ set({plan:"free", freeUsed:5}); setTimeout(onModal, 150); }],
+    ["monthly", "Paid · Monthly", "10 a day", ()=>set({plan:"monthly"})],
+    ["quarterly", "Paid · Quarterly", "10 a day", ()=>set({plan:"quarterly"})],
+  ];
+  return (
+    <div style={{position:"fixed", right:16, bottom:16, zIndex:90, fontFamily:dFB, display:"flex", flexDirection:"column", alignItems:"flex-end"}} className="m-hide">
+      {open && (
+        <div style={{marginBottom:8, width:250, background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:14, boxShadow:"0 14px 40px rgba(2,47,54,.18)", padding:8}}>
+          <div style={{fontSize:10.5, fontWeight:800, letterSpacing:".08em", color:dT.muted, padding:"6px 8px 8px"}}>PROTOTYPE · PLAN SCENARIOS</div>
+          {S.map(([k,label,sub,fn])=>(
+            <button key={k} onClick={fn} style={{width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", borderRadius:9, border:"none",
+              background: cur===k ? "#F1F3F4" : "transparent", cursor:"pointer", textAlign:"left", fontFamily:dFB}}>
+              <span style={{width:14, height:14, borderRadius:"50%", flexShrink:0, border: cur===k ? `4px solid ${dT.ink}` : `1.5px solid ${dT.hairline}`, boxSizing:"border-box"}}/>
+              <span style={{minWidth:0}}>
+                <span style={{display:"block", fontSize:13, fontWeight:700, color:dT.ink}}>{label}</span>
+                <span style={{display:"block", fontSize:11.5, fontWeight:500, color:dT.muted}}>{sub}</span>
+              </span>
+            </button>
+          ))}
+          <button onClick={goPlans} style={{width:"100%", marginTop:4, padding:"9px 10px", borderRadius:9, border:`1px dashed ${dT.hairline}`, background:"#fff",
+            cursor:"pointer", fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink}}>Open pricing page →</button>
+        </div>
+      )}
+      <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} style={{display:"inline-flex", alignItems:"center", gap:7, padding:"8px 13px", borderRadius:999,
+        border:`1px dashed ${dT.ink}`, background:"#FFFCF6", color:dT.ink, cursor:"pointer", fontFamily:dFB, fontSize:12, fontWeight:700}}>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Scenarios
+      </button>
+    </div>
+  );
+}
+
+function BillingPanel({ st = {}, set = ()=>{} }) {
+  const plan = st.plan || "free";
+  const used = st.freeUsed || 0;
+  const out = plan==="free" && used >= D_FREE_LEFT;
+  const [justPaid, setJustPaid] = React.useState(null);
+  const choose = k => { set({plan:k}); setJustPaid(k); };
   const PLANS = [
-    { k:"free", name:"FREE", price:"$0", per:"forever", blurb:"Try Bloom on a few roles.", upTo:"5", unit:"applications, lifetime",
-      boxTitle:"Both apply modes", boxText:"Manual apply or Full Auto Apply. Only submitted applications count.", cta:"Current plan", current:true },
-    { k:"monthly", name:"MONTHLY", price:"$19", per:"/month", blurb:"For an active job search.", upTo:"300", unit:"applications / month",
+    { k:"free", name:"FREE", price:"$0", per:"forever", blurb:"Try Bloom on a few roles.", upTo:"5", unit:"applications total", sub:"One-time trial · no daily limit",
+      boxTitle:"Both apply modes", boxText:"Manual apply or Full Auto Apply. Only submitted applications count.", cta:"Current plan" },
+    { k:"monthly", name:"MONTHLY", price:"$19", per:"/month", blurb:"For an active job search.", upTo:"10", unit:"applications a day", sub:"About 300 a month",
       boxTitle:"Full Auto Apply", boxText:"Applies to new matches in the background. No opening the app, no clicking apply.", cta:"Choose Monthly" },
-    { k:"quarterly", name:"QUARTERLY", price:"$49", per:"/3 months", note:"just $0.54/day · save 14%", blurb:"Best value for a full search cycle.", upTo:"300", unit:"applications / month",
+    { k:"quarterly", name:"QUARTERLY", price:"$49", per:"/3 months", note:"just $0.54/day · save 14%", blurb:"Best value for a full search cycle.", upTo:"10", unit:"applications a day", sub:"About 300 a month",
       boxTitle:"Full Auto Apply", boxText:"Applies to new matches in the background. No opening the app, no clicking apply.", cta:"Choose Quarterly", popular:true },
   ];
   const Bolt = ({c}) => <svg width="15" height="15" viewBox="0 0 24 24" style={{flexShrink:0}} fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>;
@@ -1209,11 +1340,29 @@ function BillingPanel() {
     <div style={{display:"flex", flexDirection:"column", gap:24}}>
       <div>
         <div style={{fontFamily:dFD, fontWeight:700, fontSize:20, letterSpacing:"-0.02em"}}>Choose your plan</div>
-        <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>You're on Free. Only submitted applications count toward your limit.</div>
+        <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>
+          {plan==="free" ? `You're on Free · ${Math.min(used,D_FREE_LEFT)} of ${D_FREE_LEFT} used. Only submitted applications count.` : `You're on ${plan==="quarterly" ? "Quarterly" : "Monthly"}. Bloom sends up to 10 a day, on your strongest matches first.`}
+        </div>
       </div>
+      {justPaid && (
+        <div role="status" style={{display:"flex", alignItems:"center", gap:10, padding:"12px 16px", borderRadius:12, background:"#E8F6EE", border:"1px solid #CBE9D8"}}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F8A5B" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span style={{fontSize:13, fontWeight:600, color:"#1F5B3E"}}>You're on {justPaid==="quarterly" ? "Quarterly" : "Monthly"}. Bloom is applying again, starting with your best matches.</span>
+        </div>
+      )}
+      {out && !justPaid && (
+        <div style={{display:"flex", alignItems:"flex-start", gap:12, padding:"14px 16px", borderRadius:12, background:"#FDF3DF"}}>
+          <span style={{fontSize:18, lineHeight:1}}>⏸</span>
+          <div>
+            <div style={{fontSize:13.5, fontWeight:800, color:"#6B4A00"}}>You've used all {D_FREE_LEFT} free applications</div>
+            <div style={{fontSize:12.5, fontWeight:600, color:"#6B4A00", marginTop:3, lineHeight:1.5}}>{st.mode==="auto" ? "Bloom has paused applying." : "Apply is locked."} Pick a plan and Bloom picks up where it left off. Your matches and answers are kept.</div>
+          </div>
+        </div>
+      )}
 
       <div style={{display:"grid", gridTemplateColumns:"repeat(3, minmax(0,1fr))", gap:12, paddingTop:12}}>
         {PLANS.map(p=>{
+          p = {...p, current: p.k===plan};
           const d = p.popular;
           const fg = d ? "#fff" : dT.ink, mute = d ? "rgba(255,255,255,.72)" : dT.muted, line = d ? "rgba(255,255,255,.16)" : dT.hairline;
           return (
@@ -1236,6 +1385,7 @@ function BillingPanel() {
                 <span style={{fontFamily:dFD, fontWeight:700, fontSize:26, letterSpacing:"-0.03em", lineHeight:1}}>{p.upTo}</span>
                 <span style={{fontSize:12, fontWeight:600, color:mute, lineHeight:1.3}}>{p.unit}</span>
               </div>
+              {p.sub && <div style={{fontSize:11.5, fontWeight:600, color:mute, marginTop:4}}>{p.sub}</div>}
               <div style={{marginTop:14, borderRadius:12, padding:"11px 11px",
                 background: d ? "rgba(255,255,255,.06)" : "#F4F8F8", border:`1px solid ${d ? "rgba(255,255,255,.14)" : dT.hairline}`}}>
                 <div style={{display:"flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:700}}>
@@ -1244,10 +1394,10 @@ function BillingPanel() {
                 <div style={{fontSize:11.5, fontWeight:500, color:mute, lineHeight:1.45, marginTop:4}}>{p.boxText}</div>
               </div>
               <div style={{flex:1, minHeight:16}}/>
-              <button disabled={p.current} className={p.current ? "" : "bd-cta"} style={{width:"100%", padding:"11px 8px", borderRadius:999, lineHeight:1.25,
+              <button disabled={p.current || (p.k==="free" && plan!=="free")} onClick={()=>!p.current && p.k!=="free" && choose(p.k)} className={p.current ? "" : "bd-cta"} style={{width:"100%", padding:"11px 8px", borderRadius:999, lineHeight:1.25,
                 border: p.current ? `1.5px solid ${dT.hairline}` : "none",
                 background: p.current ? "#fff" : d ? "#fff" : dT.ink, color: p.current ? dT.muted : d ? dT.ink : "#fff",
-                fontFamily:dFB, fontSize:13, fontWeight:700, cursor: p.current ? "default" : "pointer"}}>{p.cta}</button>
+                fontFamily:dFB, fontSize:13, fontWeight:700, cursor: p.current ? "default" : "pointer", opacity: (p.k==="free" && plan!=="free") ? .5 : 1}}>{p.current ? "Current plan" : p.k==="free" ? "Free plan" : p.cta}</button>
             </div>
           );
         })}
@@ -1846,52 +1996,10 @@ function ProfileToolbar({ profiles, setProfiles, activeId, setActiveId, defaultI
     background: tab===k ? "#E6F2EA" : "transparent", color: tab===k ? "#17362C" : dT.muted});
   return (
     <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", paddingBottom:16, marginBottom:22, borderBottom:`1px solid ${dT.hairline}`}}>
-      <div ref={box} style={{position:"relative", width:260, maxWidth:"100%"}}>
-        <div style={{display:"flex", alignItems:"center", gap:6, padding:"0 8px 0 14px", height:40, borderRadius:10, border:`1.5px solid ${dT.hairline}`, background:"#fff"}}>
-          {renaming ? (
-            <input autoFocus value={draft} onChange={e=>setDraft(e.target.value)} onBlur={commit}
-              onKeyDown={e=>{ if(e.key==="Enter") commit(); if(e.key==="Escape"){ setDraft(active.name); setRenaming(false); } }}
-              style={{flex:1, minWidth:0, border:"none", outline:"none", fontFamily:dFB, fontSize:14, fontWeight:500, color:dT.ink, background:"transparent"}}/>
-          ) : (
-            <button onClick={()=>setOpen(o=>!o)} style={{flex:1, minWidth:0, textAlign:"left", border:"none", background:"none", cursor:"pointer",
-              fontFamily:dFB, fontSize:14, fontWeight:500, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", padding:0, height:"100%"}}>{active.name}</button>
-          )}
-          <button onClick={()=>setRenaming(true)} aria-label="Rename profile" title="Rename profile" style={{...iconBtn(true), width:28, height:28}}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill={dT.ink}><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-          </button>
-          <button onClick={()=>setOpen(o=>!o)} aria-label="Switch profile" style={{...iconBtn(true), width:24, height:28}}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-        </div>
-        {open && (
-          <div style={{position:"absolute", top:"calc(100% + 6px)", left:0, right:0, background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:10,
-            boxShadow:"0 10px 28px rgba(2,47,54,.12)", zIndex:20, padding:5}}>
-            {profiles.map(p=>(
-              <button key={p.id} onClick={()=>{ setActiveId(p.id); setOpen(false); }} style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between",
-                gap:8, padding:"9px 10px", borderRadius:7, border:"none", cursor:"pointer", fontFamily:dFB, fontSize:13.5, fontWeight:p.id===activeId?700:500,
-                color:dT.ink, background: p.id===activeId ? "#F1F3F4" : "transparent", textAlign:"left"}}>
-                <span style={{overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{p.name}</span>
-                {p.id===defaultId && <span style={{fontSize:11, fontWeight:700, color:"#8A6D00"}}>★ Default</span>}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-      <button onClick={()=>setDefaultId(activeId)} aria-label={isDefault ? "Default profile" : "Set as default"} title={isDefault ? "Default profile" : "Set as default"} style={iconBtn(true)}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill={isDefault ? "#E6B422" : "#C9CED1"}><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-      </button>
-      <button onClick={del} disabled={!canDelete} aria-label="Delete profile" title={canDelete ? "Delete profile" : "You need at least one profile"} style={iconBtn(canDelete)}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill={canDelete ? "#E0474C" : "#C9CED1"}><path d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9z"/></svg>
-      </button>
-      <button onClick={addProfile} style={{display:"flex", alignItems:"center", gap:7, padding:"8px 10px", border:"none", background:"none", cursor:"pointer",
-        fontFamily:dFB, fontSize:14, fontWeight:600, color:"#17362C", whiteSpace:"nowrap"}}>
-        <span style={{fontSize:17, lineHeight:1}}>+</span> Add Profile
-      </button>
-      <div style={{display:"flex", gap:4, marginLeft:6}}>
+      <div style={{display:"flex", gap:4}}>
         <button onClick={()=>setTab("resume")} style={tabBtn("resume")}>Resume</button>
         <button onClick={()=>setTab("details")} style={tabBtn("details")}>Profile Details</button>
       </div>
-      {creating && <CreateProfileModal profiles={profiles} defaultId={defaultId} onClose={()=>setCreating(false)} onCreate={createProfile}/>}
     </div>
   );
 }
@@ -2333,13 +2441,14 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
         {title!=="Profile" && (
         <div style={{display:"flex", flexDirection:"column", gap:2}}>
           <DSubNav icon={<DIconAccount/>} label="Account" active={sub==="account"} onClick={()=>setSub("account")}/>
+          <DSubNav icon={<DIconKey/>} label="Site password" active={sub==="sitepw"} onClick={()=>setSub("sitepw")}/>
           <DSubNav icon={<DIconSparkle/>} label="Plan & billing" active={sub==="billing"} onClick={()=>setSub("billing")}/>
           <DSubNav icon={<DIconGift/>} label="Referrals" active={sub==="refer"} onClick={()=>setSub("refer")}/>
           <DSubNav icon={<DIconInfo/>} label="About & help" active={sub==="about"} onClick={()=>setSub("about")}/>
         </div>
         )}
 
-        {sub==="billing" && title!=="Profile" ? <BillingPanel/> : sub==="about" && title!=="Profile" ? <AboutHelpPanel/> : sub==="refer" && title!=="Profile" ? <ReferralsPanel/> : title==="Profile" ? <ProfileView st={st}/> : (
+        {sub==="sitepw" && title!=="Profile" ? <SitePasswordPanel st={st} set={set}/> : sub==="billing" && title!=="Profile" ? <BillingPanel st={st} set={set}/> : sub==="about" && title!=="Profile" ? <AboutHelpPanel/> : sub==="refer" && title!=="Profile" ? <ReferralsPanel/> : title==="Profile" ? <ProfileView st={st}/> : (
         <div style={{display:"flex", flexDirection:"column", gap:20, minWidth:0}}>
           <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"24px 28px"}}>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Sign-in</div>
@@ -2796,9 +2905,12 @@ function Dashboard({ st, set, onSignOut }) {
   const [recapOpen, setRecapOpen] = React.useState(true);
   const [skipFor, setSkipFor] = React.useState(null);
   const [matchPanel, setMatchPanel] = React.useState(null);
-  const [used, setUsed] = React.useState(0);
+  const used = st.freeUsed || 0;
+  const setUsed = v => set({ freeUsed: typeof v === "function" ? v(st.freeUsed || 0) : v });
+  const plan = st.plan || "free";
+  const paid = plan !== "free";
   const [upgradeOpen, setUpgradeOpen] = React.useState(false);
-  const left = Math.max(0, D_FREE_LEFT - used);
+  const left = paid ? Infinity : Math.max(0, D_FREE_LEFT - used);
   const MF0 = { fit:null, workplace:[], salary:null, posted:null };
   const [mf, setMf] = React.useState(MF0);
   const [mSort, setMSort] = React.useState("Best fit");
@@ -2820,7 +2932,7 @@ function Dashboard({ st, set, onSignOut }) {
     if (left<=0) { setUpgradeOpen(true); return; }
     const nowUsed = used + 1;
     setUsed(nowUsed);
-    if (nowUsed >= D_FREE_LEFT) setTimeout(()=>setUpgradeOpen(true), 900);
+    if (!paid && nowUsed >= D_FREE_LEFT) setTimeout(()=>setUpgradeOpen(true), 900);
     setMatches(l=>l.filter(x=>x.id!==m.id));
     setJobs(js=>[{ co:m.co, role:m.role, status:"Preparing", statusTone:"blue", resume:"Vinodh_Resume_2026.pdf", applied:"—",
       location:m.location, comp:m.comp, matchPct:m.match, posted:m.posted, about:"", answers:[] }, ...js]);
@@ -2838,12 +2950,18 @@ function Dashboard({ st, set, onSignOut }) {
   const sentToday = hasData ? jobs.filter(j=>j.status==="Submitted").length : 0;
 
   const counts = {};
+  const [showAllMatches, setShowAllMatches] = React.useState(false);
   const matchRows = matches.map((m,i)=>({ co:m.co, role:m.role, status:"Matched", statusTone:"teal", matchPct:m.match, applied:m.posted, _match:m, _rank:i }));
-  const allRows = [...matchRows, ...jobs];
+  const allRows = st.mode==="auto" ? [...jobs] : [...matchRows, ...jobs];
   D_TABS.forEach(t => counts[t] = t==="All" ? allRows.length : allRows.filter(j=>j.status===t).length);
   const rows0 = tab==="All" ? allRows : allRows.filter(j=>j.status===tab);
   const pri = s => s==="Needs you" ? 0 : s==="Matched" ? 1 : 2;
-  const rows = tab==="All" ? [...rows0].sort((a,b)=>(a._match?0:1)-(b._match?0:1) || pri(a.status)-pri(b.status)) : rows0;
+  const rowsSorted = tab==="All" ? [...rows0].sort((a,b)=>(a._match?0:1)-(b._match?0:1) || pri(a.status)-pri(b.status)) : rows0;
+  const MATCH_PREVIEW = 5;
+  const totalMatchRows = rowsSorted.filter(r=>r._match).length;
+  const hiddenMatches = (tab==="All" && !showAllMatches) ? Math.max(0, totalMatchRows - MATCH_PREVIEW) : 0;
+  let _mSeen = 0;
+  const rows = hiddenMatches ? rowsSorted.filter(r=>!r._match || (++_mSeen) <= MATCH_PREVIEW) : rowsSorted;
 
   function openReview(job) { setReviewJob(job); setView("review"); }
   function approve(co) {
@@ -2854,6 +2972,7 @@ function Dashboard({ st, set, onSignOut }) {
 
   return (
     <div className="m-dash" style={{height:"100vh", display:"flex", background:"#FFFCF6", fontFamily:dFB, color:dT.ink, overflow:"hidden"}}>
+      <DevScenarios st={st} set={set} onModal={()=>{ setView("pipeline"); setTimeout(()=>setUpgradeOpen(true), 60); }} goPlans={goPlans}/>
       {/* Sidebar */}
       <div className="m-side" style={{width:188, flexShrink:0, borderRight:`1px solid ${dT.hairline}`, background:"#fff",
         display:"flex", flexDirection:"column"}}>
@@ -2883,17 +3002,18 @@ function Dashboard({ st, set, onSignOut }) {
             <div>
               <div style={{fontSize:11, color:dT.muted, fontWeight:600, marginBottom:5, display:"flex", gap:6,
                 justifyContent:"space-between"}}>
-                <span>Free applications used</span><span>{used}/{D_FREE_LEFT}</span>
+                {paid ? <React.Fragment><span>{plan==="quarterly" ? "Quarterly" : "Monthly"} · today</span><span>3/10</span></React.Fragment>
+                  : <React.Fragment><span>{used>=D_FREE_LEFT ? "Free applications used up" : "Free applications used"}</span><span>{used}/{D_FREE_LEFT}</span></React.Fragment>}
               </div>
               <div style={{height:5, borderRadius:999, background:"#DCE6E7", overflow:"hidden"}}>
-                <div style={{height:"100%", width:`${used/D_FREE_LEFT*100}%`, background: used>=D_FREE_LEFT ? "#E0A21B" : "#0BB3B3", borderRadius:999}}/>
+                <div style={{height:"100%", width: paid ? "30%" : `${Math.min(1,used/D_FREE_LEFT)*100}%`, background: !paid && used>=D_FREE_LEFT ? "#E0A21B" : "#0BB3B3", borderRadius:999}}/>
               </div>
             </div>
-            <button onClick={goPlans} style={{width:"100%", padding:"9px 0", borderRadius:999, background:dT.ink, color:"#fff",
+            {!paid && <button onClick={goPlans} style={{width:"100%", padding:"9px 0", borderRadius:999, background:dT.ink, color:"#fff",
               border:"none", fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center",
               justifyContent:"center", gap:5}}>Upgrade to Pro
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
+            </button>}
           </div>
           <div style={{textAlign:"center", fontSize:11, color:dT.muted, fontWeight:600}}>v1.0.0</div>
         </div>
@@ -3022,6 +3142,12 @@ function Dashboard({ st, set, onSignOut }) {
           </div>
 
 
+          {!paid && left===1 && (
+            <div style={{display:"flex", alignItems:"center", gap:12, padding:"10px 16px", borderRadius:12, background:"#F4F8F8", border:`1px solid ${dT.hairline}`, flexShrink:0, flexWrap:"wrap"}}>
+              <span style={{fontSize:13, fontWeight:600, color:dT.ink, flex:"1 1 260px"}}>1 free application left. Upgrade now so Bloom doesn't stop.</span>
+              <button onClick={goPlans} style={{padding:"7px 14px", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
+            </div>
+          )}
           {left<=0 && (
             <div style={{display:"flex", alignItems:"center", gap:12, padding:"12px 16px", borderRadius:12, background:"#FDF3DF", flexShrink:0, flexWrap:"wrap"}}>
               <span style={{fontSize:13, fontWeight:600, color:"#6B4A00", flex:"1 1 260px"}}>
@@ -3075,10 +3201,10 @@ function Dashboard({ st, set, onSignOut }) {
             </div>
 
             <div>
-              <div className="m-hide" style={{display:"grid", gridTemplateColumns:"1.3fr 1.4fr 1fr minmax(140px,1fr)", gap:12,
+              <div className="m-hide" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
                 padding:"11px 20px", background:"#FAFAF8", borderBottom:`1px solid ${dT.hairline}`,
                 fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>
-                <div>COMPANY</div><div>JOB FIT</div><div>STATUS</div><div>ACTIVITY</div>
+                <div>COMPANY</div><div>JOB FIT</div><div style={{textAlign:"right"}}>STATUS</div>
               </div>
               {rows.length === 0 ? (
                 <div style={{padding:"40px 20px", textAlign:"center", fontSize:13.5, color:dT.muted, fontWeight:600}}>
@@ -3089,7 +3215,8 @@ function Dashboard({ st, set, onSignOut }) {
                 const grp = j._match ? "m" : "a";
                 const prevGrp = idx>0 ? (rows[idx-1]._match ? "m" : "a") : null;
                 const showHead = tab==="All" && grp!==prevGrp;
-                const nMatch = rows.filter(r=>r._match).length, nApp = rows.length - nMatch;
+                const nMatch = totalMatchRows, nApp = rows.filter(r=>!r._match).length;
+                const lastMatch = j._match && !(rows[idx+1] && rows[idx+1]._match);
                 const head = grp==="m"
                   ? [isAuto ? "Up next" : "Best matches for you", nMatch, isAuto ? "Bloom will apply to these automatically. Skip any you don't want." : "Apply to the ones you want. Nothing is sent without you."]
                   : ["Your applications", nApp, isAuto ? "Sent by Bloom. Anything marked Needs you is waiting on one answer." : "What you've sent and where each one stands."];
@@ -3103,39 +3230,59 @@ function Dashboard({ st, set, onSignOut }) {
                       <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>{head[2]}</span>
                     </div>
                   )}
-                  <div onClick={e=>{ if(e.target.closest("button")) return; j._match ? setMatchPanel(j._match) : openReview(j); }} className="m-row" style={{display:"grid", gridTemplateColumns:"1.3fr 1.4fr 1fr minmax(140px,1fr)", gap:12,
+                  <div onClick={e=>{ if(e.target.closest("button")) return; j._match ? setMatchPanel(j._match) : openReview(j); }} className="m-row" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
                     padding:"14px 20px", borderBottom:`1px solid ${dT.hairline}`, alignItems:"center", fontSize:13, cursor:"pointer"}}>
                     <div style={{display:"flex", alignItems:"center", gap:10, minWidth:0}}>
                       <CLogo co={j.co}/>
                       <div style={{minWidth:0}}>
                         <div style={{fontWeight:700, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.co}</div>
-                        <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.role}</div>
+                        <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.role}{j._match ? <span style={{fontWeight:500}}> · Posted {j.applied||"recently"}</span> : null}</div>
                       </div>
                     </div>
                     <div style={{fontWeight:700, color: j.matchPct>=85 ? "#1F6B45" : dT.ink}}>{j.matchPct ? j.matchPct+"%" : "—"}<span style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginLeft:6}}>{j.matchPct>=85 ? "Strong" : j.matchPct>=75 ? "Good" : "Fair"}</span></div>
-                    <div>
-                      <span style={{fontSize:11.5, fontWeight:700, color:tone.fg, background:tone.bg,
-                        borderRadius:999, padding:"4px 10px", whiteSpace:"nowrap"}}>{j.status}</span>
+                    <div style={{display:"flex", flexDirection:"column", alignItems:"flex-end", gap:5, minWidth:0}}>
+                      {(() => {
+                        const pill = (label=j.status) => <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:11.5, fontWeight:700, color:tone.fg, background:tone.bg,
+                          borderRadius:999, padding:"4px 10px", whiteSpace:"nowrap"}}><span style={{width:6, height:6, borderRadius:"50%", background:tone.fg}}/>{label}</span>;
+                        const sub = (t, extra) => <span style={{fontSize:12, fontWeight:500, color:dT.muted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"100%", ...extra}}>{t}</span>;
+                        const btn = (label, onClick, dark) => <button onClick={onClick} style={{padding:"7px 14px", borderRadius:999, whiteSpace:"nowrap", cursor:"pointer",
+                          fontFamily:dFB, fontSize:12, fontWeight:700, background: dark ? dT.ink : "#fff", color: dark ? "#fff" : dT.ink, border: dark ? "none" : `1px solid ${dT.hairline}`}}>{label}</button>;
+                        if (j._match) return (
+                          <React.Fragment>
+                            <span style={{display:"inline-flex", gap:6}}>
+                              {btn("Decline", ()=>skipMatch(j._match, "Not interested"))}
+                              {btn("Apply", ()=>applyMatch(j._match), true)}
+                            </span>
+                          </React.Fragment>
+                        );
+                        if (j.status==="Needs you") return (
+                          <span style={{display:"inline-flex", alignItems:"center", gap:8}}>
+                            {btn(`Answer ${openQ||1} question${openQ>1?"s":""} →`, ()=>openReview(j), true)}
+                            {pill()}
+                          </span>
+                        );
+                        if (j.status==="Submitting") return (<React.Fragment>{pill()}<span style={{fontSize:12, maxWidth:"100%", overflow:"hidden"}}><LiveTicker steps={D_INFLIGHT_STEPS}/></span></React.Fragment>);
+                        if (j.status==="Preparing") return (<React.Fragment>{pill()}{sub("Tailoring résumé…")}</React.Fragment>);
+                        if (j.status==="Submitted") return (<React.Fragment>{pill()}{sub("Submitted " + j.applied)}</React.Fragment>);
+                        if (j.status==="Failed") return (
+                          <span style={{display:"inline-flex", alignItems:"center", gap:8}}>
+                            {btn("Apply on company site ↗", ()=>window.open("https://example.com", "_blank"))}
+                            {pill()}
+                          </span>
+                        );
+                        if (j.status==="Skipped") return (<React.Fragment>{pill()}{sub("Didn't fit your filters")}</React.Fragment>);
+                        return (<React.Fragment>{pill()}{j.applied && j.applied!=="—" ? sub(j.applied) : null}</React.Fragment>);
+                      })()}
                     </div>
-                    <div style={{color:dT.muted, fontWeight:600, whiteSpace:"nowrap", overflow:"hidden"}}>{j._match ? (
-                      isAuto ? (
-                        <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:600, color:dT.ink}}>
-                          <span style={{width:6, height:6, borderRadius:"50%", background: paused ? "#F2B84B" : "#22A565"}}/>{paused ? "Queued · paused" : left<=0 ? "Waiting · free limit reached" : j._rank===0 ? "Applying next" : "In queue"}
-                          <button title="Bloom won't apply to this job" onClick={()=>skipMatch(j._match, "Removed from queue")} style={{marginLeft:8, padding:"4px 11px", borderRadius:999,
-                            border:`1px solid ${dT.hairline}`, background:"#fff", color:dT.ink, cursor:"pointer", fontFamily:dFB, fontSize:11.5, fontWeight:700, whiteSpace:"nowrap"}}>Skip</button></span>
-                      ) : (
-                        <span style={{display:"inline-flex", gap:6}}>
-                          <button onClick={()=>skipMatch(j._match, "Not interested")} style={{padding:"6px 14px", borderRadius:999, background:"#fff", color:dT.ink,
-                            border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Decline</button>
-                          <button onClick={()=>applyMatch(j._match)} style={{padding:"6px 16px", borderRadius:999, background:dT.ink, color:"#fff", border:"none",
-                            fontFamily:dFB, fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Apply</button>
-                        </span>
-                      )
-                    ) : j.status==="Submitting" ? <LiveTicker steps={D_INFLIGHT_STEPS}/> : j.status==="Preparing" ? "Tailoring résumé…" : j.status==="Needs you" ? (
-                      <button onClick={()=>openReview(j)} style={{padding:"6px 14px", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`,
-                        fontFamily:dFB, fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Answer {openQ||1} question{openQ>1?"s":""} →</button>
-                    ) : j.applied}</div>
                   </div>
+                  {lastMatch && tab==="All" && totalMatchRows > MATCH_PREVIEW && (
+                    <button onClick={()=>setShowAllMatches(v=>!v)} style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:6,
+                      padding:"11px 20px", border:"none", borderBottom:`1px solid ${dT.hairline}`, background:"#FAFAF8", cursor:"pointer",
+                      fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink}}>
+                      {showAllMatches ? "Show top 5 only" : `Show ${hiddenMatches} more matches`}
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{transform: showAllMatches ? "rotate(180deg)" : "none"}}><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                  )}
                   </React.Fragment>
                 );
               })}

@@ -91,7 +91,7 @@ function QDropdown({ value, onChange, options, placeholder }) {
               <button key={label} type="button" disabled={soon}
                 onClick={()=>{ if(!soon){ onChange(label); setOpen(false); } }}
                 style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10,
-                  padding:"10px 12px", borderRadius:6, fontFamily:qFB, fontSize:14, fontWeight:500,
+                  padding:"10px 12px", borderRadius:6, border:"none", fontFamily:qFB, fontSize:14, fontWeight:500,
                   color: soon ? qT.muted : qT.ink, background: value===label ? "#F7F1E6" : "transparent",
                   cursor: soon ? "default" : "pointer", textAlign:"left", opacity: soon ? .6 : 1}}>
                 <span>{label}</span>
