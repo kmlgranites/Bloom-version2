@@ -370,7 +370,7 @@ function DField({ label, value, action, last }) {
       padding:"14px 0", borderBottom: last ? "none" : `1px solid ${dT.hairline}`}}>
       <div>
         <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:5}}>{label}</div>
-        <div style={{fontSize:14, fontWeight:700, color:dT.ink}}>{value}</div>
+        <div style={{fontSize:14, fontWeight:600, color:dT.ink}}>{value}</div>
       </div>
       <button className="bd-textlink" style={{fontSize:13, fontWeight:700, color:dT.cyanInk, cursor:"pointer", flexShrink:0}}>{action}</button>
     </div>
@@ -1180,7 +1180,7 @@ function AboutHelpPanel() {
   return (
     <div style={{display:"flex", flexDirection:"column", gap:20}}>
       <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px"}}>
-        <div style={{fontFamily:dFD, fontWeight:700, fontSize:17, marginBottom:8}}>Help & support</div>
+        <div style={{fontFamily:dFD, fontWeight:700, fontSize:18, marginBottom:8}}>Help & support</div>
         <DField label="HELP CENTER" value="Guides, FAQs, troubleshooting" action="Open"/>
         <DField label="CONTACT US" value="hello@bloom.app · replies in ~4h" action="Email"/>
         <DField label="FEATURE REQUESTS" value="Tell us what to build next" action="Share" last/>

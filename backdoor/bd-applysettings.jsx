@@ -46,10 +46,15 @@ function APills({ options, values, onToggle, single }) {
     </div>
   );
 }
-function ATags({ values, onChange, placeholder, max, suggestions }) {
+function ATags({ values, onChange, placeholder, max, suggestions, blocked, blockedLabel }) {
   const [v, setV] = React.useState("");
+  const [warn, setWarn] = React.useState(null);
   const full = max && values.length>=max;
-  const add = s => { s = s.trim(); if(s && !values.includes(s) && !full) onChange([...values, s]); setV(""); };
+  const clash = s => (blocked||[]).find(b=>b.toLowerCase()===s.toLowerCase());
+  const add = s => { s = s.trim(); if(!s) return;
+    const hit = clash(s);
+    if (hit) { setWarn(hit); return; }
+    if(!values.some(x=>x.toLowerCase()===s.toLowerCase()) && !full) onChange([...values, s]); setV(""); setWarn(null); };
   const sugg = (suggestions||[]).filter(s=>!values.includes(s) && (!v || s.toLowerCase().includes(v.toLowerCase()))).slice(0,6);
   return (
     <div>
@@ -62,10 +67,16 @@ function ATags({ values, onChange, placeholder, max, suggestions }) {
               cursor:"pointer", color:aT.muted, fontSize:14, lineHeight:1, padding:"0 3px"}}>×</button>
           </span>
         ))}
-        {!full && <input value={v} onChange={e=>setV(e.target.value)} placeholder={values.length ? "" : placeholder}
+        {!full && <input value={v} onChange={e=>{ setV(e.target.value); if(warn) setWarn(null); }} placeholder={values.length ? "" : placeholder}
           onKeyDown={e=>{ if(e.key==="Enter"||e.key===","){ e.preventDefault(); add(v); } if(e.key==="Backspace" && !v && values.length) onChange(values.slice(0,-1)); }}
-          onBlur={()=>v && add(v)} style={{flex:1, minWidth:140, border:"none", outline:"none", fontFamily:aFB, fontSize:13.5, fontWeight:500, color:aT.ink, padding:"4px 2px"}}/>}
+          onBlur={()=>v && add(v)} aria-invalid={!!warn} style={{flex:1, minWidth:140, border:"none", outline:"none", fontFamily:aFB, fontSize:13.5, fontWeight:500, color:aT.ink, padding:"4px 2px"}}/>}
       </div>
+      {warn && (
+        <div role="alert" style={{display:"flex", alignItems:"flex-start", gap:7, marginTop:8, fontSize:12.5, fontWeight:600, color:"#8A5A00", lineHeight:1.45}}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0, marginTop:2}}><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          <span><b>{warn}</b> is already in {blockedLabel}. Remove it there first.</span>
+        </div>
+      )}
       {sugg.length>0 && !full && (
         <div style={{display:"flex", flexWrap:"wrap", gap:6, marginTop:8}}>
           {sugg.map(s=><button key={s} type="button" onClick={()=>add(s)} style={{padding:"4px 10px", borderRadius:999, border:`1px dashed ${aT.hairline}`,
@@ -265,10 +276,10 @@ function ApplySettingsPanel({ st, set, goProfile }) {
               <ATags values={s.industries} onChange={v=>u({industries:v})} placeholder="Add an industry" suggestions={["Fintech","SaaS","Healthcare","E-commerce","Developer tools"]}/>
             </AField>
             <AField label="Must mention" hint="Only apply if the job description includes any of these.">
-              <ATags values={s.include} onChange={v=>u({include:v})} placeholder="e.g. Kafka, Go"/>
+              <ATags values={s.include} onChange={v=>u({include:v})} placeholder="e.g. Kafka, Go" blocked={s.exclude} blockedLabel="Skip if it mentions"/>
             </AField>
             <AField label="Skip if it mentions" hint="Skip any job whose description includes one of these.">
-              <ATags values={s.exclude} onChange={v=>u({exclude:v})} placeholder="e.g. on-call, clearance"/>
+              <ATags values={s.exclude} onChange={v=>u({exclude:v})} placeholder="e.g. on-call, clearance" blocked={s.include} blockedLabel="Must mention"/>
             </AField>
             <AField label="Skip these companies">
               <ATags values={s.companies} onChange={v=>u({companies:v})} placeholder="Add a company"/>

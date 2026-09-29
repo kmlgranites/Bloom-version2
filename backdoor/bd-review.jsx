@@ -1,3 +1,17 @@
+window.R_JD = function(job){
+  const co = (job && job.co) || "the company";
+  const role = ((job && job.role) || "").toLowerCase();
+  const fe = /front|ios|android|mobile|web/.test(role), data = /data|ml|machine|ai/.test(role);
+  return {
+    do: fe ? [`Build and ship product features across ${co}'s customer-facing apps`, "Own UI performance, accessibility and design-system quality", "Partner with design and product from spec to launch", "Review code and help set frontend standards"]
+      : data ? ["Design and maintain data pipelines and model-serving infrastructure", "Improve data quality, freshness and observability", "Work with product teams to turn data into shipped features", "Own reliability for the systems you build"]
+      : [`Design, build and run backend services that power ${co}'s core product`, "Own services end to end, from schema design to on-call", "Improve reliability, latency and correctness of critical systems", "Work closely with product, risk and platform teams", "Mentor engineers and lead technical design reviews"],
+    need: ["5+ years building production software", fe ? "Strong React and TypeScript experience" : "Strong experience with Go, Java, Node.js or similar", fe ? "Eye for detail and experience shipping polished UI" : "Experience with distributed systems and relational databases (PostgreSQL, MySQL)", "Comfortable owning ambiguous problems end to end", "Clear written and verbal communication"],
+    nice: [fe ? "Experience with design systems or component libraries" : "Payments, fintech or high-volume transactional systems experience", "Experience with Kafka, Redis or event-driven architectures", "Open-source contributions"],
+    skills: fe ? ["React","TypeScript","Next.js","CSS","Testing"] : data ? ["Python","SQL","Spark","Airflow","AWS"] : ["Go","Node.js","PostgreSQL","Kafka","AWS","Distributed systems"],
+    perks: ["Competitive salary and equity", "Health, dental and vision coverage", "Remote-friendly with flexible hours", "Learning and development budget"],
+  };
+};
 // =====================================================================
 // Backdoor V1 · Application page — Form / Resume / Cover / Job
 // =====================================================================
@@ -177,7 +191,30 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
                 <span style={{color:rT.muted, fontWeight:600}}>{k}</span><span style={{fontWeight:700}}>{v}</span>
               </div>
             ))}
-            <button className="bd-textlink" style={{marginTop:16, fontSize:13, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>View original posting ↗</button>
+            {(() => {
+              const jd = window.R_JD(job);
+              const Sec = ({t, items}) => (
+                <div style={{marginTop:24}}>
+                  <RLabel>{t}</RLabel>
+                  <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:7}}>
+                    {items.map((x,i)=><li key={i} style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.55}}>{x}</li>)}
+                  </ul>
+                </div>
+              );
+              return (<React.Fragment>
+                <Sec t="WHAT YOU'LL DO" items={jd.do}/>
+                <Sec t="WHAT THEY'RE LOOKING FOR" items={jd.need}/>
+                <Sec t="NICE TO HAVE" items={jd.nice}/>
+                <div style={{marginTop:24}}>
+                  <RLabel>SKILLS</RLabel>
+                  <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
+                    {jd.skills.map(s=><span key={s} style={{fontSize:12, fontWeight:600, color:rT.ink, background:"#F1F3F4", borderRadius:999, padding:"5px 11px"}}>{s}</span>)}
+                  </div>
+                </div>
+                <Sec t="BENEFITS" items={jd.perks}/>
+              </React.Fragment>);
+            })()}
+            <button className="bd-textlink" style={{marginTop:24, fontSize:13, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>View original posting ↗</button>
           </React.Fragment>
         )}
         </div>
