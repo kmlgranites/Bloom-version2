@@ -1399,9 +1399,9 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
     { k:"free", name:"FREE", price:"$0", per:"forever", blurb:"Try Bloom on a few roles.", upTo:"5", unit:"applications total", sub:"One-time trial",
       boxTitle:"Both apply modes", boxText:"Manual apply or Full Auto Apply. Only submitted applications count.", cta:"Current plan" },
     { k:"monthly", name:"MONTHLY", price:"$19", per:"/month", blurb:"For an active job search.", upTo:"300", unit:"applications a month", sub:"Use them any time in the month",
-      boxTitle:"Full Auto Apply", boxText:"Applies to new matches in the background. No opening the app, no clicking apply.", cta:"Choose Monthly", popular:true },
+      boxTitle:"Both apply modes", boxText:"Manual apply or Full Auto Apply. Only submitted applications count.", cta:"Choose Monthly", popular:true },
     { k:"quarterly", name:"QUARTERLY", price:"$49", per:"/3 months", note:"just $0.54/day · save 14%", blurb:"Best value for a full search cycle.", upTo:"300", unit:"applications a month", sub:"900 over 3 months",
-      boxTitle:"Full Auto Apply", boxText:"Applies to new matches in the background. No opening the app, no clicking apply.", cta:"Choose Quarterly" },
+      boxTitle:"Both apply modes", boxText:"Manual apply or Full Auto Apply. Only submitted applications count.", cta:"Choose Quarterly" },
   ];
   const Bolt = ({c}) => <svg width="15" height="15" viewBox="0 0 24 24" style={{flexShrink:0}} fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>;
   const cur = PLANS.find(p=>p.k===plan);
@@ -1421,10 +1421,26 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
           </a>
         </div>
       )}
+      {plan!=="free" && (
+        <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"18px 22px", marginTop:-6}}>
+          <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:10}}>USAGE</div>
+              <div>
+                <div style={{display:"flex", justifyContent:"space-between", gap:12, fontSize:12.5, fontWeight:600, color:dT.ink, marginBottom:6}}>
+                  <span>{42 + used} of 300 applications used this month</span>
+                  <span style={{color:dT.muted, fontWeight:500}}>{Math.max(0, 300 - 42 - used)} left</span>
+                </div>
+                <div role="progressbar" aria-valuemin={0} aria-valuemax={300} aria-valuenow={42 + used} aria-label="Applications used this month"
+                  style={{height:6, borderRadius:999, background:"#DCE6E7", overflow:"hidden"}}>
+                  <div style={{height:"100%", width:`${Math.min(1,(42+used)/300)*100}%`, background:"#0BB3B3", borderRadius:999}}/>
+                </div>
+                <div style={{fontSize:12, fontWeight:500, color:dT.muted, marginTop:6}}>Resets {plan==="quarterly" ? "Nov 1" : "Oct 30"}. Unused applications don't carry over.</div>
+              </div>
+        </div>
+      )}
       <div>
         <div style={{fontFamily:dFD, fontWeight:700, fontSize:20, letterSpacing:"-0.02em"}}>Choose your plan</div>
         <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>
-          {plan==="free" ? `You're on Free · ${Math.min(used,D_FREE_LEFT)} of ${D_FREE_LEFT} used. Only submitted applications count.` : `You're on ${plan==="quarterly" ? "Quarterly" : "Monthly"}. Bloom sends up to 300 a month, on your strongest matches first.`}
+          {plan==="free" ? `You're on Free · ${Math.min(used,D_FREE_LEFT)} of ${D_FREE_LEFT} used.` : `You're on ${plan==="quarterly" ? "Quarterly" : "Monthly"}. Bloom sends up to 300 a month, on your strongest matches first.`}
         </div>
       </div>
       {justPaid && (
@@ -1469,14 +1485,7 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
                 <span style={{fontSize:12, fontWeight:600, color:mute, lineHeight:1.3}}>{p.unit}</span>
               </div>
               {p.sub && <div style={{fontSize:11.5, fontWeight:600, color:mute, marginTop:4}}>{p.sub}</div>}
-              <div style={{marginTop:14, borderRadius:12, padding:"11px 11px",
-                background: d ? "rgba(255,255,255,.06)" : "#F4F8F8", border:`1px solid ${d ? "rgba(255,255,255,.14)" : dT.hairline}`}}>
-                <div style={{display:"flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:700}}>
-                  <Bolt c={d ? "#5AEBEB" : dT.ink}/>{p.boxTitle}
-                </div>
-                <div style={{fontSize:11.5, fontWeight:500, color:mute, lineHeight:1.45, marginTop:4}}>{p.boxText}</div>
-              </div>
-              <div style={{flex:1, minHeight:16}}/>
+              <div style={{flex:1, minHeight:20}}/>
               <button disabled={p.current || (p.k==="free" && plan!=="free")} onClick={()=>!p.current && p.k!=="free" && choose(p.k)} className={p.current ? "" : "bd-cta"} style={{width:"100%", padding:"11px 8px", borderRadius:999, lineHeight:1.25,
                 border: p.current ? `1.5px solid ${dT.hairline}` : "none",
                 background: p.current ? "#fff" : d ? "#fff" : dT.ink, color: p.current ? dT.muted : d ? dT.ink : "#fff",
@@ -1484,6 +1493,17 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
             </div>
           );
         })}
+      </div>
+
+      <div className="bd-plan-perks" style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(200px, 1fr))", background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, overflow:"hidden", marginTop:-8}}>
+        {[["Both apply modes","Manual apply or Full Auto Apply, on every plan."],
+          ["5 free applications","Try Bloom first. No card required."],
+          ["Only submitted count","Pay only for applications that actually go out."]].map(([t,s],i)=>(
+          <div key={t} style={{padding:"18px 22px", borderLeft: i ? `1px solid ${dT.hairline}` : "none", marginLeft:-1}}>
+            <div style={{fontSize:14, fontWeight:700, color:dT.ink}}>{t}</div>
+            <div style={{fontSize:12.5, fontWeight:500, color:dT.muted, marginTop:4, lineHeight:1.45}}>{s}</div>
+          </div>
+        ))}
       </div>
 
       <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"22px 28px"}}>
@@ -2530,7 +2550,7 @@ function ExperienceBullets({ text }) {
 function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfile }) {
   const [sub, setSub] = React.useState(initialSub || "account");
   React.useEffect(()=>{ setSub(initialSub || "account"); }, [initialSub]);
-  const [linked, setLinked] = React.useState({ google:true, linkedin:false });
+  const [linked, setLinked] = React.useState({ linkedin:true });
   return (
     <div style={{flex:1, overflow:"auto", padding:"32px 32px 56px", boxSizing:"border-box", background: title==="Profile" ? "#fff" : undefined}}>
 
@@ -2550,12 +2570,12 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Sign-in</div>
             <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:8}}>How you log in to Bloom.</div>
             <DField label="SIGN-IN EMAIL" value="vinodh@gmail.com"/>
-            <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", padding:"14px 0 4px"}}>SIGN-IN METHODS</div>
-            {[["google","Google","google.com","vinodh@gmail.com"],["linkedin","LinkedIn","linkedin.com","Also imports your work history"]].map(([k,n,dom,sub],i)=>{
+            <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", padding:"14px 0 4px"}}>SIGN-IN METHOD</div>
+            {[["linkedin","LinkedIn","linkedin.com","Also imports your work history"]].map(([k,n,dom,sub],i)=>{
               const on = !!linked[k];
               return (
                 <div key={k} style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"12px 0",
-                  borderBottom: i===0 ? `1px solid ${dT.hairline}` : "none"}}>
+                  borderBottom:"none"}}>
                   <div style={{display:"flex", alignItems:"center", gap:11, minWidth:0}}>
                     <img src={`https://www.google.com/s2/favicons?domain=${dom}&sz=64`} alt="" style={{width:20, height:20, flexShrink:0}}/>
                     <div style={{minWidth:0}}>
@@ -2566,8 +2586,7 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
                   {on ? (
                     <div style={{display:"flex", alignItems:"center", gap:10, flexShrink:0}}>
                       <span style={{fontSize:12, fontWeight:700, color:"#1F6B45", background:"#DFF3E7", borderRadius:999, padding:"4px 10px"}}>Connected</span>
-                      {k!=="google" && <button onClick={()=>setLinked(x=>({...x, [k]:false}))} className="bd-textlink" style={{fontSize:12.5, fontWeight:700,
-                        color:dT.muted, cursor:"pointer", background:"none", border:"none", padding:0}}>Disconnect</button>}
+                      
                     </div>
                   ) : (
                     <button onClick={()=>setLinked(x=>({...x, [k]:true}))} style={{padding:"7px 14px", borderRadius:999, border:`1.5px solid ${dT.hairline}`,
@@ -3039,6 +3058,23 @@ function Dashboard({ st, set, onSignOut }) {
       location:m.location, comp:m.comp, matchPct:m.match, posted:m.posted, about:"", answers:[] }, ...js]);
     setToast({ msg:`Bloom is preparing your ${m.co} application`, undo:()=>{ setUsed(u=>Math.max(0,u-1)); setUpgradeOpen(false); setJobs(js=>js.filter(j=>j.co!==m.co)); setMatches(l=>[m, ...l].sort((a,b)=>b.match-a.match)); } });
   }
+  function applyMany(list) {
+    if (left<=0) { setUpgradeOpen(true); return; }
+    const pick = paid ? list : list.slice(0, left);
+    if (!pick.length) return;
+    const nowUsed = used + pick.length;
+    setUsed(nowUsed);
+    if (!paid && nowUsed >= D_FREE_LEFT) setTimeout(()=>setUpgradeOpen(true), 900);
+    else if (!paid && nowUsed === D_FREE_LEFT - 1) setTimeout(()=>setLastOneOpen(true), 900);
+    const ids = new Set(pick.map(m=>m.id));
+    setMatches(l=>l.filter(x=>!ids.has(x.id)));
+    setJobs(js=>[...pick.map(m=>({ co:m.co, role:m.role, status:"Preparing", statusTone:"blue", resume:"Vinodh_Resume_2026.pdf", applied:"—",
+      location:m.location, comp:m.comp, matchPct:m.match, posted:m.posted, about:"", answers:[] })), ...js]);
+    setBulkOpen(false);
+    setToast({ msg:`Bloom is preparing ${pick.length} applications`, undo:()=>{ setUsed(u=>Math.max(0,u-pick.length)); setUpgradeOpen(false); setLastOneOpen(false);
+      setJobs(js=>js.filter(j=>!pick.some(m=>m.co===j.co))); setMatches(l=>[...pick, ...l].sort((a,b)=>b.match-a.match)); } });
+  }
+  const [bulkOpen, setBulkOpen] = React.useState(false);
   function skipMatch(m, reason) {
     setSkipFor(null);
     setMatches(l=>l.filter(x=>x.id!==m.id));
@@ -3334,13 +3370,48 @@ function Dashboard({ st, set, onSignOut }) {
                 const openQ = (j.answers||[]).filter(a=>a.status==="needs").length;
                 return (
                   <React.Fragment key={j.co}>
-                  {showHead && (
-                    <div style={{display:"flex", alignItems:"baseline", gap:10, padding:"16px 20px 10px", borderBottom:`1px solid ${dT.hairline}`, background:"#fff", flexWrap:"wrap"}}>
-                      <span style={{fontSize:13.5, fontWeight:800, color:dT.ink}}>{head[0]}</span>
-                      <span style={{fontSize:12, fontWeight:700, color:dT.muted}}>{head[1]}</span>
-                      <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>{head[2]}</span>
+                  {showHead && (() => {
+                    const bulk = grp==="m" && !isAuto && !paused;
+                    const shown = rows.filter(r=>r._match).map(r=>r._match);
+                    const all = matches;
+                    const cap = n => paid ? n : Math.min(n, Math.max(left,0));
+                    const nTop = cap(shown.length), nAll = cap(all.length);
+                    return (
+                    <div style={{display:"flex", alignItems:"center", gap:12, padding: bulk ? "12px 20px" : "16px 20px 10px", borderBottom:`1px solid ${dT.hairline}`, background:"#fff", flexWrap:"wrap"}}>
+                      <div style={{display:"flex", alignItems:"baseline", gap:10, flexWrap:"wrap", flex:1, minWidth:0}}>
+                        <span style={{fontSize:13.5, fontWeight:800, color:dT.ink}}>{head[0]}</span>
+                        <span style={{fontSize:12, fontWeight:700, color:dT.muted}}>{head[1]}</span>
+                        <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>{head[2]}</span>
+                      </div>
+                      {bulk && (
+                        <div style={{position:"relative", display:"inline-flex", flexShrink:0}}>
+                          <button onClick={()=> left<=0 && !paid ? setUpgradeOpen(true) : applyMany(shown)} className="bd-cta" style={{display:"inline-flex", alignItems:"center", gap:7, padding:"9px 14px 9px 16px",
+                            borderRadius:"999px 0 0 999px", border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/></svg>
+                            {left<=0 && !paid ? "Upgrade to apply" : `Apply to ${nTop===shown.length ? "all " : "top "}${nTop}`}
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                          </button>
+                          <button onClick={()=>setBulkOpen(o=>!o)} aria-label="More apply options" aria-expanded={bulkOpen} style={{display:"grid", placeItems:"center", width:36,
+                            borderRadius:"0 999px 999px 0", border:"none", borderLeft:"1px solid rgba(255,255,255,.22)", background:dT.ink, color:"#fff", cursor:"pointer"}}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                          </button>
+                          {bulkOpen && (
+                            <div style={{position:"absolute", top:"calc(100% + 6px)", right:0, width:240, background:"#fff", borderRadius:12, border:`1px solid ${dT.hairline}`,
+                              boxShadow:"0 12px 32px rgba(2,47,54,.14)", zIndex:20, overflow:"hidden"}}>
+                              {[[`Apply to the ${shown.length} shown`, shown, nTop], [`Apply to all ${all.length} matches`, all, nAll]].map(([l,list,n],k)=>(
+                                <button key={k} onClick={()=>applyMany(list)} style={{width:"100%", textAlign:"left", padding:"12px 14px", border:"none", borderBottom: k ? "none" : `1px solid ${dT.hairline}`,
+                                  background:"#fff", cursor:"pointer", fontFamily:dFB}}>
+                                  <div style={{fontSize:13, fontWeight:700, color:dT.ink}}>{l}</div>
+                                  {!paid && n<list.length && <div style={{fontSize:11.5, fontWeight:500, color:dT.muted, marginTop:2}}>{n} left on Free, the rest after you upgrade</div>}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  )}
+                    );
+                  })()}
                   <div onClick={e=>{ if(e.target.closest("button")) return; j._match ? setMatchPanel(j._match) : openReview(j); }} className="m-row" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
                     padding:"14px 20px", borderBottom:`1px solid ${dT.hairline}`, alignItems:"center", fontSize:13, cursor:"pointer"}}>
                     <div style={{display:"flex", alignItems:"center", gap:10, minWidth:0}}>
