@@ -3069,16 +3069,61 @@ function Dashboard({ st, set, onSignOut }) {
     const m = s.match(/(\d+)\s*([hdw])/); if (!m) return 0; const n = +m[1]; return m[2]==="h" ? n : m[2]==="d" ? n*24 : n*168; };
   const maxH = D_RANGE_H[dateRange];
   const inRange = j => maxH == null || dAgeH(j.applied) <= maxH;
-  const allRows = (st.mode==="auto" ? [...jobs] : [...matchRows, ...jobs]).filter(inRange);
-  D_TABS.forEach(t => counts[t] = t==="All" ? allRows.length : allRows.filter(j=>j.status===t).length);
-  const rows0 = tab==="All" ? allRows : allRows.filter(j=>j.status===tab);
-  const pri = s => s==="Needs you" ? 0 : s==="Matched" ? 1 : 2;
-  const rowsSorted = tab==="All" ? [...rows0].sort((a,b)=>(a._match?0:1)-(b._match?0:1) || pri(a.status)-pri(b.status)) : rows0;
+  const isManualList = st.mode!=="auto";
+  const appRows = jobs.filter(inRange);
+  D_TABS.forEach(t => counts[t] = t==="All" ? appRows.length : appRows.filter(j=>j.status===t).length);
+  const pri = s => s==="Needs you" ? 0 : 2;
+  const apps0 = tab==="All" ? appRows : appRows.filter(j=>j.status===tab);
+  const appsSorted = tab==="All" ? [...apps0].sort((a,b)=>pri(a.status)-pri(b.status)) : apps0;
   const MATCH_PREVIEW = 5;
-  const totalMatchRows = rowsSorted.filter(r=>r._match).length;
-  const hiddenMatches = (tab==="All" && !showAllMatches) ? Math.max(0, totalMatchRows - MATCH_PREVIEW) : 0;
-  let _mSeen = 0;
-  const rows = hiddenMatches ? rowsSorted.filter(r=>!r._match || (++_mSeen) <= MATCH_PREVIEW) : rowsSorted;
+  const totalMatchRows = isManualList ? matchRows.length : 0;
+  const hiddenMatches = (isManualList && !showAllMatches) ? Math.max(0, totalMatchRows - MATCH_PREVIEW) : 0;
+  const shownMatchRows = isManualList ? (hiddenMatches ? matchRows.slice(0, MATCH_PREVIEW) : matchRows) : [];
+  const rows = [...shownMatchRows, ...appsSorted];
+  const renderFilters = pad => (
+            <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:pad, flexWrap:"wrap"}}>
+              <div style={{display:"flex", gap:8, flexWrap:"wrap"}}>
+                {D_TABS.map(t=>{
+                  const on = tab===t;
+                  return (
+                    <button key={t} onClick={()=>setTab(t)} style={{display:"flex", alignItems:"center", gap:7,
+                      padding:"8px 14px", borderRadius:999, fontFamily:dFB, fontSize:13, fontWeight:700,
+                      border:`1.5px solid ${on ? "#B9D3D6" : dT.hairline}`, background: on ? "#E6F0F1" : "#fff",
+                      color: dT.ink, cursor:"pointer"}}>
+                      {t}
+                      <span style={{fontSize:11, fontWeight:800, opacity:.7}}>{counts[t]}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="m-full" style={{display:"flex", gap:8, alignItems:"center"}}>
+                <DDateFilter value={dateRange} onChange={setDateRange}/>
+                <input placeholder="Search company…" style={{width:200, minWidth:0, flex:"1 1 auto", padding:"8px 12px", borderRadius:8,
+                  border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13, outline:"none"}}/>
+              </div>
+            </div>
+  );
+  const emptyMsg = dateRange!=="All time"
+    ? <React.Fragment>No applications in the {dateRange.toLowerCase()}. <button onClick={()=>setDateRange("All time")} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:"inherit", fontSize:"inherit", fontWeight:700, color:"#0A6E6E", textDecoration:"underline"}}>Show all time</button></React.Fragment>
+    : tab==="Needs you" ? "Nothing needs you right now. Bloom will ping you if an employer asks something new." : tab==="All" ? "No applications yet. Apply to a match above to get started." : "No applications match this filter.";
+  const renderColHead = () => (
+    <div className="m-hide" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
+      padding:"11px 20px", background:"#FAFAF8", borderBottom:`1px solid ${dT.hairline}`,
+      fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>
+      <div>COMPANY</div><div>JOB FIT</div><div style={{textAlign:"right"}}>STATUS</div>
+    </div>
+  );
+  const renderAppsHead = () => (
+    <div style={{borderTop:"10px solid #F4F4F0", background:"#fff"}}>
+      <div style={{display:"flex", alignItems:"baseline", gap:10, flexWrap:"wrap", padding:"16px 20px 0"}}>
+        <span style={{fontSize:13.5, fontWeight:800, color:dT.ink}}>Your applications</span>
+        <span style={{fontSize:12, fontWeight:700, color:dT.muted}}>{appRows.length}</span>
+        <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>What you've sent and where each one stands.</span>
+      </div>
+      {renderFilters("12px 20px 14px")}
+      {renderColHead()}
+    </div>
+  );
 
   function openReview(job) { setReviewJob(job); setView("review"); }
   function approve(co) {
@@ -3298,44 +3343,19 @@ function Dashboard({ st, set, onSignOut }) {
           ) : (<React.Fragment>
           {/* All applications */}
           <div style={{flexShrink:0, border:`1px solid ${dT.hairline}`, borderRadius:14, background:"#fff", overflow:"hidden"}}>
-            <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"18px 20px 14px", flexWrap:"wrap"}}>
-              <div style={{display:"flex", gap:8, flexWrap:"wrap"}}>
-                {D_TABS.map(t=>{
-                  const on = tab===t;
-                  return (
-                    <button key={t} onClick={()=>setTab(t)} style={{display:"flex", alignItems:"center", gap:7,
-                      padding:"8px 14px", borderRadius:999, fontFamily:dFB, fontSize:13, fontWeight:700,
-                      border:`1.5px solid ${on ? "#B9D3D6" : dT.hairline}`, background: on ? "#E6F0F1" : "#fff",
-                      color: dT.ink, cursor:"pointer"}}>
-                      {t}
-                      <span style={{fontSize:11, fontWeight:800, opacity:.7}}>{counts[t]}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="m-full" style={{display:"flex", gap:8, alignItems:"center"}}>
-                <DDateFilter value={dateRange} onChange={setDateRange}/>
-                <input placeholder="Search company…" style={{width:200, minWidth:0, flex:"1 1 auto", padding:"8px 12px", borderRadius:8,
-                  border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13, outline:"none"}}/>
-              </div>
-            </div>
+            {!isManualList && renderFilters("18px 20px 14px")}
 
             <div>
-              <div className="m-hide" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
-                padding:"11px 20px", background:"#FAFAF8", borderBottom:`1px solid ${dT.hairline}`,
-                fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>
-                <div>COMPANY</div><div>JOB FIT</div><div style={{textAlign:"right"}}>STATUS</div>
-              </div>
+              {!isManualList && renderColHead()}
               {rows.length === 0 ? (
                 <div style={{padding:"40px 20px", textAlign:"center", fontSize:13.5, color:dT.muted, fontWeight:600}}>
-                  {dateRange!=="All time" ? <React.Fragment>No applications in the {dateRange.toLowerCase()}. <button onClick={()=>setDateRange("All time")} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:"inherit", fontSize:"inherit", fontWeight:700, color:"#0A6E6E", textDecoration:"underline"}}>Show all time</button></React.Fragment>
-                    : tab==="Needs you" ? "Nothing needs you right now. Bloom will ping you if an employer asks something new." : "No applications match this filter."}
+                  {emptyMsg}
                 </div>
               ) : rows.map((j,idx)=>{
                 const tone = D_TONE[j.statusTone];
                 const grp = j._match ? "m" : "a";
                 const prevGrp = idx>0 ? (rows[idx-1]._match ? "m" : "a") : null;
-                const showHead = tab==="All" && grp!==prevGrp;
+                const showHead = (isManualList || tab==="All") && grp!==prevGrp;
                 const nMatch = totalMatchRows, nApp = rows.filter(r=>!r._match).length;
                 const lastMatch = j._match && !(rows[idx+1] && rows[idx+1]._match);
                 const head = grp==="m"
@@ -3344,7 +3364,8 @@ function Dashboard({ st, set, onSignOut }) {
                 const openQ = (j.answers||[]).filter(a=>a.status==="needs").length;
                 return (
                   <React.Fragment key={j.co}>
-                  {showHead && (() => {
+                  {showHead && grp==="a" && isManualList && renderAppsHead()}
+                  {showHead && !(grp==="a" && isManualList) && (() => {
                     const bulk = grp==="m" && !isAuto && !paused;
                     const shown = rows.filter(r=>r._match).map(r=>r._match);
                     const all = matches;
@@ -3431,7 +3452,7 @@ function Dashboard({ st, set, onSignOut }) {
                       })()}
                     </div>
                   </div>
-                  {lastMatch && tab==="All" && totalMatchRows > MATCH_PREVIEW && (
+                  {lastMatch && isManualList && totalMatchRows > MATCH_PREVIEW && (
                     <button onClick={()=>setShowAllMatches(v=>!v)} style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:6,
                       padding:"11px 20px", border:"none", borderBottom:`1px solid ${dT.hairline}`, background:"#FAFAF8", cursor:"pointer",
                       fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink}}>
@@ -3442,6 +3463,12 @@ function Dashboard({ st, set, onSignOut }) {
                   </React.Fragment>
                 );
               })}
+              {isManualList && appsSorted.length===0 && shownMatchRows.length>0 && (
+                <React.Fragment>
+                  {renderAppsHead()}
+                  <div style={{padding:"32px 20px", textAlign:"center", fontSize:13.5, color:dT.muted, fontWeight:600}}>{emptyMsg}</div>
+                </React.Fragment>
+              )}
             </div>
             <div style={{display:"flex", alignItems:"center", gap:8, padding:"12px 20px", background:"#FAFAF8"}}>
               <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Rows per page</span>
