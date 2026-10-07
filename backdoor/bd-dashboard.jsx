@@ -1190,8 +1190,7 @@ function AboutHelpPanel() {
       <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px"}}>
         <div style={{fontFamily:dFD, fontWeight:700, fontSize:17, marginBottom:8}}>Legal</div>
         <DField label="TERMS OF SERVICE" value="Last updated Apr 2026" action="View" onAction={()=>go("terms")}/>
-        <DField label="PRIVACY POLICY" value="How we handle your data" action="View" onAction={()=>go("privacy")}/>
-        <DField label="DATA EXPORT" value="Download everything Bloom knows" action="Export" last/>
+        <DField label="PRIVACY POLICY" value="How we handle your data" action="View" onAction={()=>go("privacy")} last/>
       </div>
     </div>
   );
@@ -2569,32 +2568,7 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
           <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"24px 28px"}}>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Sign-in</div>
             <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:8}}>How you log in to Bloom.</div>
-            <DField label="SIGN-IN EMAIL" value="vinodh@gmail.com"/>
-            <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", padding:"14px 0 4px"}}>SIGN-IN METHOD</div>
-            {[["linkedin","LinkedIn","linkedin.com","Also imports your work history"]].map(([k,n,dom,sub],i)=>{
-              const on = !!linked[k];
-              return (
-                <div key={k} style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"12px 0",
-                  borderBottom:"none"}}>
-                  <div style={{display:"flex", alignItems:"center", gap:11, minWidth:0}}>
-                    <img src={`https://www.google.com/s2/favicons?domain=${dom}&sz=64`} alt="" style={{width:20, height:20, flexShrink:0}}/>
-                    <div style={{minWidth:0}}>
-                      <div style={{fontSize:14, fontWeight:700, color:dT.ink}}>{n}</div>
-                      <div style={{fontSize:12, fontWeight:600, color:dT.muted}}>{on && k==="linkedin" ? "linkedin.com/in/vinodh" : sub}</div>
-                    </div>
-                  </div>
-                  {on ? (
-                    <div style={{display:"flex", alignItems:"center", gap:10, flexShrink:0}}>
-                      <span style={{fontSize:12, fontWeight:700, color:"#1F6B45", background:"#DFF3E7", borderRadius:999, padding:"4px 10px"}}>Connected</span>
-                      
-                    </div>
-                  ) : (
-                    <button onClick={()=>setLinked(x=>({...x, [k]:true}))} style={{padding:"7px 14px", borderRadius:999, border:`1.5px solid ${dT.hairline}`,
-                      background:"#fff", color:dT.ink, fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer", flexShrink:0}}>Connect</button>
-                  )}
-                </div>
-              );
-            })}
+            <DField label="SIGN-IN EMAIL" value="vinodh@gmail.com" last/>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"12px 14px",
               background:"#F4F8F8", borderRadius:10, marginTop:4}}>
               <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Name, phone and address used on applications live in Profile.</span>

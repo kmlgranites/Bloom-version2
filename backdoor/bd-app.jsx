@@ -115,7 +115,7 @@ function BackdoorOnboarding() {
 
         {/* Card stack */}
         <div ref={scrollRef} style={{flex:1, overflow:"auto", padding: c.bare ? "24px 0 64px" : "20px 0 64px"}}>
-          <div style={{maxWidth: c.bare ? 1034 : 640, margin:"0 auto", padding:"0 36px", display:"flex", flexDirection:"column", gap:14}}>
+          <div className="m-obpad" style={{maxWidth: c.bare ? 1034 : 640, margin:"0 auto", padding:"0 36px", display:"flex", flexDirection:"column", gap:14}}>
             {c.bare ? (
               <div className="bd-framed" style={{background:"#fff", border:`1px solid ${aT.hairline}`, borderRadius:24}}>
                 {step>0 && (

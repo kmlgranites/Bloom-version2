@@ -122,7 +122,7 @@ const H_LEGAL = {
     ["3. What employers see", "Only what an application asks for, and only for jobs Bloom applies to on your behalf. We never sell your data."],
     ["4. Equal employment information", "Gender, disability and veteran answers are optional. They are only shared when an employer's form asks, and they are never used to choose which jobs Bloom applies to."],
     ["5. Messages", "If you choose WhatsApp or iMessage, we use your number only for Bloom updates. You can choose Neither in Settings to get email only."],
-    ["6. Your choices", "You can edit your profile, download a copy of your data, or delete your account in Settings at any time."],
+    ["6. Your choices", "You can edit your profile or delete your account in Settings at any time. To get a copy of your data, email hello@bloom.app and we'll send it to you."],
   ]},
 };
 

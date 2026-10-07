@@ -55,7 +55,7 @@ function NPhone({ country, setCountry, value, onChange, invalid, disabled }) {
         </div>
       </div>
       {open && (
-        <div style={{position:"absolute", zIndex:30, top:"calc(100% + 6px)", left:0, width:280, background:"#fff",
+        <div style={{position:"absolute", zIndex:30, top:"calc(100% + 6px)", left:0, width:"min(280px, 100%)", background:"#fff",
           border:`1px solid ${nT.hairline}`, borderRadius:10, boxShadow:"0 14px 34px rgba(2,47,54,.14)", padding:6}}>
           {N_COUNTRIES.map(c=>(
             <button key={c.code} type="button" onClick={()=>{ setCountry(c); setOpen(false); }}
@@ -96,7 +96,7 @@ function NChannel({ id, title, desc, descWeight, on, onClick, disabled }) {
 
 function ContactRail({ st }) {
   return (
-    <div style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26, width:358, height:689}}>
+    <div className="m-auto" style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26, width:358, height:689}}>
       <div>
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
           <span style={{fontSize:11, fontWeight:800, color:nT.muted, letterSpacing:".07em"}}>RESUME</span>
@@ -193,10 +193,10 @@ function ContactCard({ st, set, locked, onNext, toast }) {
   );
 
   return (
-    <div style={{display:"flex", alignItems:"stretch", justifyContent:"center", background:"#fff",
+    <div className="m-stack" style={{display:"flex", alignItems:"stretch", justifyContent:"center", background:"#fff",
       border:`1px solid ${nT.hairline}`, borderRadius:24, overflow:"hidden"}}>
       <ContactRail st={st}/>
-      <div style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24, width:608, height:685}}>
+      <div className="m-auto" style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24, width:608, height:685}}>
         <div style={{display:"flex", flexDirection:"column", gap:9}}>
           <div style={{fontSize:11, fontWeight:800, color:nT.cyanInk, letterSpacing:".07em"}}>CONTACT</div>
           <div style={{fontFamily:nFD, fontWeight:700, fontSize:28, letterSpacing:"-0.03em", lineHeight:1.12}}>
@@ -282,7 +282,7 @@ function ContactCard({ st, set, locked, onNext, toast }) {
                 <input key={i} ref={el=>boxes.current[i]=el} value={d} inputMode="numeric" maxLength={2}
                   onChange={e=>setDigit(i, e.target.value)}
                   onKeyDown={e=>{ if(e.key==="Backspace" && !d && i>0 && boxes.current[i-1]) boxes.current[i-1].focus(); }}
-                  style={{width:44, height:52, textAlign:"center", borderRadius:8, fontFamily:nFB,
+                  style={{width:44, flex:"0 1 44px", minWidth:0, height:52, boxSizing:"border-box", textAlign:"center", borderRadius:8, fontFamily:nFB,
                     fontSize:19, fontWeight:700, color:nT.ink, background:"#fff", outline:"none",
                     border:`1.5px solid ${otpErr ? nT.blush : (d ? nT.ink : nT.hairline)}`}}/>
               ))}
