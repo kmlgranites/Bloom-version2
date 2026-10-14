@@ -156,5 +156,40 @@ function Note({ tint, ink, icon, children }) {
   );
 }
 
+
+function BdMobileInfo({ resume, pct, why, email }) {
+  const [open, setOpen] = React.useState(false);
+  const done = pct == null || pct >= 100;
+  return (
+    <div className="m-only" style={{padding:"16px 18px 0"}}>
+      <div style={{display:"flex", flexDirection:"column", alignItems:"flex-start", gap:10}}>
+        {resume && (
+          <span style={{display:"inline-flex", alignItems:"center", gap:7, fontSize:12.5, fontWeight:700, borderRadius:999, padding:"6px 12px",
+            color: done ? "#1F6B47" : "#7A5A00", background: done ? "#E4F4EA" : "#FBF1D6"}}>
+            <span style={{width:7, height:7, borderRadius:"50%", background: done ? "#1F8A5B" : "#C99A12"}}/>
+            {done ? "Résumé parsed · Matching jobs" : "Reading your résumé…"}
+          </span>
+        )}
+        {email && (
+          <div style={{fontSize:12.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.5, background:"#F9FAFB", borderRadius:10, padding:"10px 12px", width:"100%", boxSizing:"border-box"}}>
+            Your application email: <b style={{fontWeight:700, color:"#022F36", wordBreak:"break-all"}}>{email}</b>. Bloom uses it to create accounts on job sites for you.
+          </div>
+        )}
+        {why && (
+          <div style={{width:"100%"}}>
+            <button type="button" aria-expanded={open} onClick={()=>setOpen(o=>!o)} style={{display:"inline-flex", alignItems:"center", gap:5, border:"none", background:"none",
+              padding:"4px 0", cursor:"pointer", fontFamily:"inherit", fontSize:12.5, fontWeight:700, color:"#0A6E6E"}}>
+              Why we ask?
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
+                style={{transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            {open && <div style={{fontSize:12.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.55, marginTop:4}}>{why}</div>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 Object.assign(window, { T, FD, FB, Bubble, Mascot, Question, InlineErr, Pill, PillRow,
-  toggleArr, SubCard, Toggle, Field, CTA, KV, ChapterMark, Note });
+  toggleArr, SubCard, Toggle, Field, CTA, KV, ChapterMark, Note, BdMobileInfo });

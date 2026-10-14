@@ -182,7 +182,7 @@ function QSegment({ value, onChange, options }) {
 function ParseRail({ pct }) {
   const done = pct >= 100;
   return (
-    <div style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
+    <div className="m-rail" style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
       <div>
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
           <span style={{fontSize:11, fontWeight:800, color:qT.muted, letterSpacing:".07em"}}>RESUME</span>
@@ -241,6 +241,7 @@ function Card1({ st, set, locked, onNext }) {
   return (
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff",
       border:`1px solid ${qT.hairline}`, borderRadius:24, overflow:"hidden"}}>
+      <window.BdMobileInfo resume pct={pct} why="Every application asks these. Answer once here and I'll fill the forms for you."/>
       <ParseRail pct={pct}/>
       <div style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24}}>
         <div style={{display:"flex", flexDirection:"column", gap:9}}>

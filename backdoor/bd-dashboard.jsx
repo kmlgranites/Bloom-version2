@@ -110,7 +110,7 @@ const D_JOBS = [
       { q:"Cover letter lead", a:"Hey Ramp team — I've owned billing APIs end to end at Cred, from schema to on-call, and I like working close to the metrics a growth team cares about...", status:"drafted" },
       { q:"Walk us through a recent project you led", suggestion:"Groww payouts migration — cut settlement latency 60%", status:"needs" },
       { q:"Years of full-stack experience", a:"6 years", status:"drafted" },
-      { q:"Expected salary", a:"$165,000–200,000", status:"drafted" },
+      { q:"Expected salary", a:"$150,000", status:"drafted" },
       { q:"Notice period at current role", a:"4 weeks", status:"drafted" },
       { q:"Are you legally authorized to work in the United States?", a:"Yes — visa sponsorship required", status:"drafted" },
     ] },
@@ -2246,7 +2246,7 @@ function ProfileView({ st }) {
     phone: st.phone || "+91 72999 11652", location:"Chennai, Tamil Nadu, India",
     linkedin:"linkedin.com/in/vinodhuiux", portfolio:"vkpixelsart.in",
   });
-  const [comp, setComp] = React.useState({ min:"140,000", max:"165,000" });
+  const [comp, setComp] = React.useState({ amount:"150,000" });
   const [workAuth, setWorkAuth] = React.useState({
     authorized:"Yes", country:"United States", sponsor:"No", availability:"Immediately", notice:"2 weeks",
   });
@@ -2413,12 +2413,12 @@ function ProfileView({ st }) {
               <AChip ok>Start {workAuth.availability.toLowerCase()}</AChip>
               <AChip ok>Notice: {workAuth.notice}</AChip>
             </div>
-            <ALabel>EXPECTED COMPENSATION</ALabel>
+            <ALabel>EXPECTED SALARY</ALabel>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginBottom:4}}>
-              <span style={{fontSize:14, fontWeight:700}}>${comp.min} – ${comp.max} / yr</span>
+              <span style={{fontSize:14, fontWeight:700}}>${comp.amount} / yr</span>
               <button onClick={()=>setEditSection("comp")} className="bd-textlink" style={{fontSize:12, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer"}}>Change</button>
             </div>
-            <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Used when an application asks about salary.</div>
+            <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Bloom enters this when an application asks for expected salary.</div>
             <ALabel>LINKS</ALabel>
             <div style={{display:"flex", flexDirection:"column", gap:6}}>
               <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", gap:10}}>
@@ -2498,11 +2498,9 @@ function ProfileView({ st }) {
       )}
 
       {editSection==="comp" && (
-        <DrawerShell title="Edit compensation" onClose={()=>setEditSection(null)} onSave={()=>setEditSection(null)}>
-          <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:14}}>
-            <DField2 label="Minimum ($/yr)" value={comp.min} onChange={v=>setComp(p=>({...p, min:v}))}/>
-            <DField2 label="Maximum ($/yr)" value={comp.max} onChange={v=>setComp(p=>({...p, max:v}))}/>
-          </div>
+        <DrawerShell title="Edit expected salary" onClose={()=>setEditSection(null)} onSave={()=>setEditSection(null)}>
+          <DField2 label="Expected salary ($/yr)" value={comp.amount} onChange={v=>setComp({amount:v})}/>
+          <div style={{fontSize:12, color:dT.muted, fontWeight:500, lineHeight:1.5, marginTop:-4}}>Bloom enters this when an application asks for expected salary. Your minimum salary for matching is in Apply settings.</div>
         </DrawerShell>
       )}
 

@@ -72,7 +72,7 @@ function Card0({ st, set, locked, onNext }) {
       border:`1px solid ${zT.hairline}`, borderRadius:24, overflow:"hidden"}}>
 
       {/* LEFT — getting started */}
-      <div style={{background:"#F9FAFB", color:zT.ink, padding:"52px 38px", display:"flex", flexDirection:"column",
+      <div className="m-rail" style={{background:"#F9FAFB", color:zT.ink, padding:"52px 38px", display:"flex", flexDirection:"column",
         gap:36, position:"relative", overflow:"hidden"}}>
         <div style={{position:"absolute", bottom:-70, right:-70, width:240, height:240, borderRadius:"50%",
           background:"#fff", opacity:.6, filter:"blur(40px)"}}/>

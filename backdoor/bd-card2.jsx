@@ -96,7 +96,7 @@ function NChannel({ id, title, desc, descWeight, on, onClick, disabled }) {
 
 function ContactRail({ st }) {
   return (
-    <div className="m-auto" style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26, width:358, height:689}}>
+    <div className="m-auto m-rail" style={{background:"#F9FAFB", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26, width:358, height:689}}>
       <div>
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
           <span style={{fontSize:11, fontWeight:800, color:nT.muted, letterSpacing:".07em"}}>RESUME</span>
@@ -195,6 +195,7 @@ function ContactCard({ st, set, locked, onNext, toast }) {
   return (
     <div className="m-stack" style={{display:"flex", alignItems:"stretch", justifyContent:"center", background:"#fff",
       border:`1px solid ${nT.hairline}`, borderRadius:24, overflow:"hidden"}}>
+      <window.BdMobileInfo resume why="This is the one place we'll interrupt you: an interview request, a question only you can answer, or a submission that needs your OK. Never marketing."/>
       <ContactRail st={st}/>
       <div className="m-auto" style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24, width:608, height:685}}>
         <div style={{display:"flex", flexDirection:"column", gap:9}}>

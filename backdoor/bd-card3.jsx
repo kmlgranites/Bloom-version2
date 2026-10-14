@@ -186,7 +186,8 @@ function WorkCard({ st, set, locked, onNext }) {
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff",
       border:`1px solid ${wT.hairline}`, borderRadius:24}}>
 
-      <div style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
+      <window.BdMobileInfo resume why="Every application asks these. Answer once here, we fill the forms."/>
+      <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
         <div>
           <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
             <span style={{fontSize:11, fontWeight:800, color:wT.muted, letterSpacing:".07em"}}>RESUME</span>

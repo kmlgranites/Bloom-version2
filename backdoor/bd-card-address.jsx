@@ -69,7 +69,8 @@ function AddressCard({ st, set, onNext }) {
 
   return (
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff", borderRadius:24}}>
-      <div style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
+      <window.BdMobileInfo resume email={((st.p && st.p.name) || "vinodh kumar").toLowerCase().trim().replace(/\s+/g,".") + "@mygrademail.com"} why="Most application forms require a full address. Enter it once here and we'll fill it in every time."/>
+      <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
         <div>
           <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
             <span style={{fontSize:11, fontWeight:800, color:adT.muted, letterSpacing:".07em"}}>RESUME</span>

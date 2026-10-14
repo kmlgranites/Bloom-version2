@@ -82,7 +82,8 @@ function ModeCard({ st, set, locked, onNext, toast }) {
     <div style={{display:"grid", gridTemplateColumns:"32% 68%", background:"#fff",
       border:`1px solid ${mT.hairline}`, borderRadius:24}}>
 
-      <div style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px",
+      <window.BdMobileInfo resume/>
+      <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px",
         display:"flex", flexDirection:"column", gap:26}}>
         <div>
           <div style={{fontSize:13.5, fontWeight:800, color:mT.ink, marginBottom:8}}>Your first 5 are free</div>
