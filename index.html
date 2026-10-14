@@ -34,7 +34,10 @@
 html,body{height:100%}
 body{background:#F6F1E7;-webkit-font-smoothing:antialiased}
 
+.m-only{display:none}
 @media (max-width:760px){
+.m-only{display:block!important}
+.m-rail{display:none!important}
 .m-hide{display:none!important}
 .m-dash{height:100dvh!important}
 .m-side{position:fixed!important;left:0;right:0;bottom:0;width:100%!important;height:62px;z-index:35;border-right:none!important;border-top:1px solid #E8DFCD;flex-direction:row!important;padding-bottom:env(safe-area-inset-bottom)}
