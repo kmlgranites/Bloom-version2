@@ -35,6 +35,13 @@ html,body{height:100%}
 body{background:#F6F1E7;-webkit-font-smoothing:antialiased}
 
 .m-only{display:none}
+.bd-upgrade{transition:box-shadow .15s,transform .15s}.bd-upgrade:hover{box-shadow:0 2px 10px rgba(139,124,246,.28);transform:translateY(-1px)}.bd-upgrade:focus-visible{outline:2px solid #3F87FC;outline-offset:2px}
+.bd-loadmore:hover:not(:disabled){background:#F2F4F6!important}.bd-loadmore:focus-visible{outline:2px solid #022F36;outline-offset:2px}
+.bd-creditpill:hover{background:#F7F8FA!important}.bd-creditpill:focus-visible{outline:2px solid #022F36;outline-offset:2px}
+.bd-menuitem:hover{background:#F4F5F7!important}.bd-acctbtn:hover{background:#ECEEF1!important}.bd-menuitem:focus-visible,.bd-acctbtn:focus-visible{outline:2px solid #022F36;outline-offset:1px}
+.wel-cta{transition:transform .15s}.wel-cta:hover{transform:translateY(-1px)}.wel-video:hover .wel-play{transform:translate(-50%,-50%) scale(1.06)!important}
+@media (max-width:1100px){.u-grid{grid-template-columns:minmax(0,1fr)!important;max-width:640px!important}}
+@media (max-width:1100px){.m-hide-narrow{display:none!important}}
 @media (max-width:760px){
 .m-only{display:block!important}
 .m-rail{display:none!important}
@@ -65,6 +72,9 @@ body{background:#F6F1E7;-webkit-font-smoothing:antialiased}
 [style*="grid-template-columns: 200px 1fr"]>*:first-child>*{flex-shrink:0;width:auto!important;white-space:nowrap}
 [style*="border-right"][style*="width: 220px"],[style*="border-right"][style*="width: 210px"]{display:none!important}
 .m-stack{flex-direction:column!important}
+.u-grid{grid-template-columns:minmax(0,1fr)!important;padding:24px 16px 40px!important;gap:24px!important}.u-grid h1{font-size:34px!important}
+.m-panels{padding:0!important;gap:0!important;background:#F7F8FA!important}.m-panels>.m-side,.m-panels>.m-main{border-radius:0!important;box-shadow:none!important}.m-panels>.m-side{overflow:visible!important}
+.m-stat3{grid-template-columns:minmax(0,1fr)!important}
 .m-auto{width:auto!important;height:auto!important;min-width:0}
 .m-obpad{padding:0 12px!important}
 }
@@ -86,6 +96,8 @@ body{background:#F6F1E7;-webkit-font-smoothing:antialiased}
 <script type="text/babel" src="backdoor/bd-cards2.jsx"></script>
 <script type="text/babel" src="backdoor/bd-applysettings.jsx"></script>
 <script type="text/babel" src="backdoor/bd-help.jsx"></script>
+<script type="text/babel" src="backdoor/bd-upgrade.jsx"></script>
+<script type="text/babel" src="backdoor/bd-credits.jsx"></script>
 <script type="text/babel" src="backdoor/bd-dashboard.jsx"></script>
 <script type="text/babel" src="backdoor/bd-tracker.jsx"></script>
 <script type="text/babel" src="backdoor/bd-review.jsx"></script>
