@@ -104,13 +104,13 @@ function ContactRail({ st }) {
             <span style={{width:7, height:7, borderRadius:"50%", background:"#1F8A5B"}}/>done
           </span>
         </div>
-        <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+        <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
           Parsed. While you finish setup, we're matching jobs for you.
         </div>
       </div>
       <div>
         <div style={{fontSize:13.5, fontWeight:800, color:nT.ink, marginBottom:8}}>Why I ask</div>
-        <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+        <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
           This is the one place I'll interrupt you: an interview request, a question a form asks that only you can
           answer, or a submission that needs your OK. Never marketing.
         </div>
@@ -195,7 +195,7 @@ function ContactCard({ st, set, locked, onNext, toast }) {
   return (
     <div className="m-stack" style={{display:"flex", alignItems:"stretch", justifyContent:"center", background:"#fff",
       border:`1px solid ${nT.hairline}`, borderRadius:24, overflow:"hidden"}}>
-      <window.BdMobileInfo resume why="This is the one place we'll interrupt you: an interview request, a question only you can answer, or a submission that needs your OK. Never marketing."/>
+      <window.BdMobileInfo why="This is the one place we'll interrupt you: an interview request, a question only you can answer, or a submission that needs your OK. Never marketing."/>
       <ContactRail st={st}/>
       <div className="m-auto" style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24, width:608, height:685}}>
         <div style={{display:"flex", flexDirection:"column", gap:9}}>

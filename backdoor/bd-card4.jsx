@@ -22,7 +22,7 @@ function KToggle({ value, onChange, options }) {
           <button key={o} type="button" onClick={()=>onChange(o)}
             style={{padding:"7px 14px", borderRadius:6, fontFamily:kFB, fontSize:13, fontWeight:600,
               cursor:"pointer", border:"none", background: on ? kT.ink : "transparent",
-              color: on ? "#fff" : "#4B5A5E", transition:"all .12s"}}>{o}</button>
+              color: on ? "#fff" : "#374151", transition:"all .12s"}}>{o}</button>
         );
       })}
     </div>
@@ -113,7 +113,7 @@ function ChecklistCard({ st, set, locked, onNext, toast }) {
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff",
       border:`1px solid ${kT.hairline}`, borderRadius:24}}>
 
-      <window.BdMobileInfo resume why="Every application asks these. Answer once here, we fill the forms."/>
+      <window.BdMobileInfo why="Every application asks these. Answer once here, we fill the forms."/>
       <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px",
         display:"flex", flexDirection:"column", gap:26}}>
         <div>
@@ -123,13 +123,13 @@ function ChecklistCard({ st, set, locked, onNext, toast }) {
               <span style={{width:7, height:7, borderRadius:"50%", background:"#1F8A5B"}}/>done
             </span>
           </div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
             <span style={{fontWeight:500}}>Parsed. While you finish setup, we're matching jobs for you.</span>
           </div>
         </div>
         <div>
           <div style={{fontSize:13.5, fontWeight:800, color:kT.ink, marginBottom:8}}>Why we ask</div>
-          <div style={{fontSize:13, fontWeight:500, color:"#4B5A5E", lineHeight:1.55}}>
+          <div style={{fontSize:13, fontWeight:500, color:"#374151", lineHeight:1.55}}>
             Every application asks these. Answer once here, we fill the forms.
           </div>
         </div>

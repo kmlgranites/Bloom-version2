@@ -78,7 +78,7 @@ function AddressCard({ st, set, onNext }) {
               <span style={{width:7, height:7, borderRadius:"50%", background:"#1F8A5B"}}/>done
             </span>
           </div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>Parsed. While you finish setup, we're matching jobs for you.</div>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>Parsed. While you finish setup, we're matching jobs for you.</div>
         </div>
         <div style={{background:"#fff", border:`1px solid ${adT.hairline}`, borderRadius:14, padding:"14px 16px"}}>
           <div style={{display:"flex", alignItems:"center", gap:7, fontSize:11, fontWeight:800, color:adT.muted, letterSpacing:".07em", marginBottom:8}}>
@@ -86,13 +86,13 @@ function AddressCard({ st, set, onNext }) {
             YOUR APPLY EMAIL
           </div>
           <div style={{fontSize:14, fontWeight:700, color:adT.ink, wordBreak:"break-all"}}>{((st.p && st.p.name) || "vinodh kumar").toLowerCase().trim().replace(/\s+/g,".")}@mygrademail.com</div>
-          <div style={{fontSize:12.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.5, marginTop:6}}>
+          <div style={{fontSize:12.5, fontWeight:500, color:"#374151", lineHeight:1.5, marginTop:6}}>
             We made this private address for you. Bloom uses it to create accounts on sites like Workday, so your personal inbox stays clean. Employer replies are forwarded to you.
           </div>
         </div>
         <div>
           <div style={{fontSize:13.5, fontWeight:800, color:adT.ink, marginBottom:8}}>Why we ask</div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>Most application forms require a full address. Enter it once here and we'll fill it in every time.</div>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>Most application forms require a full address. Enter it once here and we'll fill it in every time.</div>
         </div>
       </div>
 

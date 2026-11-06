@@ -25,12 +25,12 @@ const R_ICONS = {
 };
 
 function RLabel({ children }) {
-  return <div style={{fontSize:10.5, fontWeight:800, color:rT.muted, letterSpacing:".07em", marginBottom:8}}>{children}</div>;
+  return <div style={{fontSize:11.5, fontWeight:800, color:rT.muted, letterSpacing:".07em", marginBottom:8}}>{children}</div>;
 }
 
 function RPill({ tone, children }) {
   const t = { green:["#14663F","#DFF6E8"], amber:["#8A6D00","#FBEFCB"], blue:["#0B5FB3","#E1EFFB"], grey:["#5A6366","#F1F3F4"], red:["#A33A2F","#FBE3E0"] }[tone];
-  return <span style={{fontSize:11.5, fontWeight:800, color:t[0], background:t[1], borderRadius:999, padding:"5px 12px", whiteSpace:"nowrap"}}>{children}</span>;
+  return <span style={{fontSize:12.5, fontWeight:800, color:t[0], background:t[1], borderRadius:999, padding:"5px 12px", whiteSpace:"nowrap"}}>{children}</span>;
 }
 
 function ReviewPanel({ job, mode, onBack, onApprove }) {
@@ -53,12 +53,12 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
   return (
     <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", overflow:"hidden", background:"#fff"}}>
       <div style={{padding:"14px 32px", display:"flex", alignItems:"center", gap:14, borderBottom:`1px solid ${rT.hairline}`, flexShrink:0}}>
-        <button onClick={onBack} className="bd-textlink" style={{fontSize:13, fontWeight:700, color:rT.muted, cursor:"pointer", flexShrink:0}}>← Auto Apply</button>
+        <button onClick={onBack} className="bd-textlink" style={{fontSize:14, fontWeight:700, color:rT.muted, cursor:"pointer", flexShrink:0}}>← Auto Apply</button>
         <span style={{width:1, height:22, background:rT.hairline}}/>
         <window.CLogo co={job.co} size={30}/>
         <div style={{minWidth:0}}>
           <div style={{fontSize:14.5, fontWeight:800, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{job.role}</div>
-          <div style={{fontSize:12, color:rT.muted, fontWeight:600}}>{job.co} · {job.location}{job.comp ? ` · ${job.comp}` : ""}</div>
+          <div style={{fontSize:13, color:rT.muted, fontWeight:600}}>{job.co} · {job.location}{job.comp ? ` · ${job.comp}` : ""}</div>
         </div>
         <div style={{marginLeft:"auto", flexShrink:0}}>{statusPill}</div>
       </div>
@@ -87,15 +87,15 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
                 <div style={{fontSize:14.5, fontWeight:800, marginBottom:4}}>
                   {job.co} asked {openQs.length===1 ? "a question" : `${openQs.length} questions`} only you can answer
                 </div>
-                <div style={{fontSize:13, color:"#5C5030", fontWeight:500, lineHeight:1.55}}>
+                <div style={{fontSize:14, color:"#5C5030", fontWeight:500, lineHeight:1.55}}>
                   Everything else is filled. Answer below, or reply to our WhatsApp message and we'll fill it in and submit for you.
                 </div>
-                <div style={{display:"inline-flex", alignItems:"center", gap:7, marginTop:10, fontSize:12, fontWeight:700, color:"#14663F"}}>
+                <div style={{display:"inline-flex", alignItems:"center", gap:7, marginTop:10, fontSize:13, fontWeight:700, color:"#14663F"}}>
                   <span style={{width:6, height:6, borderRadius:"50%", background:"#22A565"}}/>Also sent to your WhatsApp
                 </div>
               </div>
             ) : (
-              <div style={{fontSize:13, color:rT.muted, fontWeight:600, marginBottom:18}}>
+              <div style={{fontSize:14, color:rT.muted, fontWeight:600, marginBottom:18}}>
                 {job.status==="Submitted" ? `This is exactly what Bloom sent to ${job.co}.` : `Bloom is filling this form from your profile.`}
               </div>
             )}
@@ -107,31 +107,31 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
                   <div key={i} style={{padding:"16px 0", borderBottom:`1px solid ${rT.hairline}`}}>
                     <div style={{display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:12, marginBottom:8}}>
                       <div style={{fontSize:14, fontWeight:700, lineHeight:1.45}}>{a.q}</div>
-                      {open ? <RPill tone="amber">Your answer</RPill> : <span style={{fontSize:11.5, fontWeight:700, color:"#14663F", whiteSpace:"nowrap"}}>✓ Filled by Bloom</span>}
+                      {open ? <RPill tone="amber">Your answer</RPill> : <span style={{fontSize:12.5, fontWeight:700, color:"#14663F", whiteSpace:"nowrap"}}>✓ Filled by Bloom</span>}
                     </div>
                     {open ? (
                       <React.Fragment>
                         <textarea value={draft[i]||""} onChange={e=>setDraft(d=>({...d, [i]:e.target.value}))} rows={3}
                           placeholder="Type your answer…" style={{width:"100%", boxSizing:"border-box", padding:"11px 13px", borderRadius:10,
-                          border:`1.5px solid ${(draft[i]||"").trim() ? rT.ink : rT.hairline}`, fontFamily:rFB, fontSize:13.5, fontWeight:500,
+                          border:`1.5px solid ${(draft[i]||"").trim() ? rT.ink : rT.hairline}`, fontFamily:rFB, fontSize:14.5, fontWeight:500,
                           color:rT.ink, lineHeight:1.55, outline:"none", resize:"vertical"}}/>
                         {a.suggestion && !(draft[i]||"").trim() && (
                           <button onClick={()=>setDraft(d=>({...d, [i]:a.suggestion}))} className="bd-textlink"
-                            style={{marginTop:6, fontSize:12.5, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>Use Bloom's draft</button>
+                            style={{marginTop:6, fontSize:13.5, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>Use Bloom's draft</button>
                         )}
                       </React.Fragment>
                     ) : (
-                      <div style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.55}}>{a.a || a.suggestion}</div>
+                      <div style={{fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.55}}>{a.a || a.suggestion}</div>
                     )}
                   </div>
                 );
               })}
-              {answers.length===0 && <div style={{fontSize:13, color:rT.muted, fontWeight:600}}>Standard fields only: name, contact, work authorization. All filled from your profile.</div>}
+              {answers.length===0 && <div style={{fontSize:14, color:rT.muted, fontWeight:600}}>Standard fields only: name, contact, work authorization. All filled from your profile.</div>}
             </div>
 
             {needsYou && (
               <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, marginTop:22}}>
-                <button className="bd-textlink" style={{fontSize:13, fontWeight:700, color:rT.muted, cursor:"pointer"}}>Skip this job</button>
+                <button className="bd-textlink" style={{fontSize:14, fontWeight:700, color:rT.muted, cursor:"pointer"}}>Skip this job</button>
                 <button disabled={!filled} onClick={()=>onApprove(job.co)} style={{padding:"12px 22px", borderRadius:999, border:"none",
                   background: filled ? rT.ink : "#C9D1D3", color:"#fff", fontFamily:rFB, fontSize:14, fontWeight:700,
                   cursor: filled ? "pointer" : "default"}}>Submit application</button>
@@ -145,19 +145,19 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
             <div style={{display:"flex", alignItems:"center", gap:12, padding:"14px 16px", border:`1px solid ${rT.hairline}`, borderRadius:12, marginBottom:22}}>
               <span style={{color:rT.ink}}>{R_ICONS.Resume}</span>
               <div style={{minWidth:0}}>
-                <div style={{fontSize:13.5, fontWeight:700}}>{job.resume || "Vinodh_Resume_2026.pdf"}</div>
-                <div style={{fontSize:12, color:rT.muted, fontWeight:600}}>Tailored for {job.co}</div>
+                <div style={{fontSize:14.5, fontWeight:700}}>{job.resume || "Vinodh_Resume_2026.pdf"}</div>
+                <div style={{fontSize:13, color:rT.muted, fontWeight:600}}>Tailored for {job.co}</div>
               </div>
               <button style={{marginLeft:"auto", padding:"7px 14px", borderRadius:999, border:`1px solid ${rT.hairline}`, background:"#fff",
-                fontFamily:rFB, fontSize:12.5, fontWeight:700, cursor:"pointer"}}>Download</button>
+                fontFamily:rFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Download</button>
             </div>
             <RLabel>WHAT BLOOM CHANGED</RLabel>
             {[`Moved your most relevant role to the top of Experience`, `Put skills from the ${job.co} posting first`, `Rewrote your summary around ${job.role.split(" —")[0]}`].map(x=>(
-              <div key={x} style={{display:"flex", gap:9, fontSize:13.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.5, padding:"6px 0"}}>
+              <div key={x} style={{display:"flex", gap:9, fontSize:14.5, fontWeight:500, color:"#374151", lineHeight:1.5, padding:"6px 0"}}>
                 <span style={{color:"#14663F", fontWeight:800}}>✓</span>{x}
               </div>
             ))}
-            <div style={{fontSize:12.5, color:rT.muted, fontWeight:600, marginTop:12}}>Bloom never adds experience you don't have.</div>
+            <div style={{fontSize:13.5, color:rT.muted, fontWeight:600, marginTop:12}}>Bloom never adds experience you don't have.</div>
           </React.Fragment>
         )}
 
@@ -184,10 +184,10 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
               {job.posted && <RPill tone="grey">Posted {job.posted}</RPill>}
             </div>
             <RLabel>ABOUT THE ROLE</RLabel>
-            <div style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.6, marginBottom:22}}>{job.about || "Full description available on the employer's site."}</div>
+            <div style={{fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.6, marginBottom:22}}>{job.about || "Full description available on the employer's site."}</div>
             <RLabel>AT A GLANCE</RLabel>
             {[["Company",job.co],["Location",job.location],["Compensation",job.comp],["Applied",job.applied]].filter(r=>r[1] && r[1]!=="—").map(([k,v])=>(
-              <div key={k} style={{display:"grid", gridTemplateColumns:"120px minmax(0,1fr)", gap:12, fontSize:13.5, padding:"8px 0", borderBottom:`1px solid ${rT.hairline}`}}>
+              <div key={k} style={{display:"grid", gridTemplateColumns:"120px minmax(0,1fr)", gap:12, fontSize:14.5, padding:"8px 0", borderBottom:`1px solid ${rT.hairline}`}}>
                 <span style={{color:rT.muted, fontWeight:600}}>{k}</span><span style={{fontWeight:700}}>{v}</span>
               </div>
             ))}
@@ -197,7 +197,7 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
                 <div style={{marginTop:24}}>
                   <RLabel>{t}</RLabel>
                   <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:7}}>
-                    {items.map((x,i)=><li key={i} style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.55}}>{x}</li>)}
+                    {items.map((x,i)=><li key={i} style={{fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.55}}>{x}</li>)}
                   </ul>
                 </div>
               );
@@ -208,13 +208,13 @@ function ReviewPanel({ job, mode, onBack, onApprove }) {
                 <div style={{marginTop:24}}>
                   <RLabel>SKILLS</RLabel>
                   <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
-                    {jd.skills.map(s=><span key={s} style={{fontSize:12, fontWeight:600, color:rT.ink, background:"#F1F3F4", borderRadius:999, padding:"5px 11px"}}>{s}</span>)}
+                    {jd.skills.map(s=><span key={s} style={{fontSize:13, fontWeight:600, color:rT.ink, background:"#F1F3F4", borderRadius:999, padding:"5px 11px"}}>{s}</span>)}
                   </div>
                 </div>
                 <Sec t="BENEFITS" items={jd.perks}/>
               </React.Fragment>);
             })()}
-            <button className="bd-textlink" style={{marginTop:24, fontSize:13, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>View original posting ↗</button>
+            <button className="bd-textlink" style={{marginTop:24, fontSize:14, fontWeight:700, color:"#0B7A7A", cursor:"pointer"}}>View original posting ↗</button>
           </React.Fragment>
         )}
         </div>

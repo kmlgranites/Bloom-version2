@@ -104,7 +104,7 @@ function ApplyStack() {
                   <span style={{position:"absolute", inset:0, display:"grid", placeItems:"center", fontSize:13, fontWeight:800, color:"#14663F"}}>{j.fit}</span>
                 </div>
               </div>
-              <div style={{display:"flex", gap:16, marginTop:12, fontSize:12.5, fontWeight:600, color:"#4B5A5E", flexWrap:"wrap"}}>
+              <div style={{display:"flex", gap:16, marginTop:12, fontSize:12.5, fontWeight:600, color:"#374151", flexWrap:"wrap"}}>
                 <span>{j.co}</span><span>· {j.loc}</span><span>· {j.level}</span>
               </div>
               <div style={{position:"relative", marginTop:14, height:44, borderRadius:999, overflow:"hidden", background: front && done ? "#22A565" : "#BFF3F3"}}>

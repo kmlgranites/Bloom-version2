@@ -195,14 +195,14 @@ function ParseRail({ pct }) {
         <div style={{height:5, borderRadius:99, background:"#E6E8EA", overflow:"hidden"}}>
           <div style={{width:`${pct}%`, height:"100%", background:qT.ink, transition:"width .4s linear"}}/>
         </div>
-        <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55, marginTop:12}}>
+        <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55, marginTop:12}}>
           {done ? "Parsed. While you finish setup, we're matching jobs for you."
                 : "Takes 30–60 seconds. I'm pulling your work history and skills while you finish these."}
         </div>
       </div>
       <div>
         <div style={{fontSize:13.5, fontWeight:800, color:qT.ink, marginBottom:8}}>Why I ask</div>
-        <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+        <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
           Every application asks these. Answer once here and I'll fill the forms for you.
         </div>
       </div>
@@ -226,6 +226,7 @@ function Card1({ st, set, locked, onNext }) {
     if (!st.engKinds.length) return setErr("Pick at least one — it's how I match you to the right reqs.");
     if (!st.level.length) return setErr("Pick at least one level.");
     if (!st.setting.length) return setErr("Pick at least one work setting.");
+    if (st.setting.some(x=>x!=="Remote") && st.onsiteScope==="regions" && !(st.regions||[]).length) return setErr("Pick at least one city or state, or choose Anywhere.");
     setErr(null); onNext();
   }
 
@@ -241,7 +242,7 @@ function Card1({ st, set, locked, onNext }) {
   return (
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff",
       border:`1px solid ${qT.hairline}`, borderRadius:24, overflow:"hidden"}}>
-      <window.BdMobileInfo resume pct={pct} why="Every application asks these. Answer once here and I'll fill the forms for you."/>
+      <window.BdMobileInfo resume={pct < 100} pct={pct} why="Every application asks these. Answer once here and I'll fill the forms for you."/>
       <ParseRail pct={pct}/>
       <div style={{padding:"44px 40px 48px", display:"flex", flexDirection:"column", gap:24}}>
         <div style={{display:"flex", flexDirection:"column", gap:9}}>
@@ -277,6 +278,25 @@ function Card1({ st, set, locked, onNext }) {
           <div>
             <QLabel hint="pick all that count">WORK SETTING</QLabel>
             <QChecks values={st.setting} options={Q_SETTING} cols={3} onToggle={v=>set({setting: tog(st.setting, v)})}/>
+            {st.setting.some(x=>x!=="Remote") && (()=>{
+              const ctry = (st.targets && st.targets.length ? st.targets : ["United States"]).filter(x=>x==="United States" || x==="Canada");
+              const where = ctry.length>1 ? "US & Canada" : (ctry[0] || "United States");
+              const scope = st.onsiteScope || "any";
+              const pill = on => ({display:"inline-flex", alignItems:"center", gap:8, padding:"10px 16px", borderRadius:999, cursor:"pointer", fontFamily:qFB,
+                fontSize:14.5, fontWeight:700, border: on ? `1.5px solid ${qT.ink}` : "1.5px solid #E3E7E8", background: on ? qT.ink : "#fff", color: on ? "#fff" : qT.ink});
+              const dot = on => <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{opacity: on ? 1 : .55}}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>;
+              return (
+                <div style={{marginTop:14, border:"1.5px solid #E8ECED", borderRadius:16, padding:"18px 18px 16px", display:"flex", flexDirection:"column", gap:12}}>
+                  <div style={{fontFamily:qFD, fontSize:16, fontWeight:700, color:qT.ink}}>On-site / hybrid jobs</div>
+                  <div role="radiogroup" aria-label="Where for on-site and hybrid jobs" style={{display:"flex", gap:10, flexWrap:"wrap"}}>
+                    <button type="button" role="radio" aria-checked={scope==="any"} onClick={()=>set({onsiteScope:"any"})} style={pill(scope==="any")}>{dot(scope==="any")}Anywhere in {where}</button>
+                    <button type="button" role="radio" aria-checked={scope==="regions"} onClick={()=>set({onsiteScope:"regions", regions: st.regions || []})} style={pill(scope==="regions")}>{dot(scope==="regions")}Specific cities or states</button>
+                  </div>
+                  {scope==="regions" && window.AStatePicker && <window.AStatePicker countries={ctry.length ? ctry : ["United States"]} values={st.regions || []} onChange={v=>set({regions:v})}/>}
+                  {scope==="regions" && <div style={{fontSize:12.5, fontWeight:500, color:qT.muted}}>Remote jobs aren't affected. You can change this anytime in Apply settings.</div>}
+                </div>
+              );
+            })()}
           </div>
         </div>
 

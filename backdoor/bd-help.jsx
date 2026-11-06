@@ -6,7 +6,7 @@ const { T:hT, FD:hFD, FB:hFB } = window;
 function HBack({ onBack, label }) {
   return (
     <button onClick={onBack} style={{display:"inline-flex", alignItems:"center", gap:6, border:"none", background:"none", padding:0, cursor:"pointer",
-      fontFamily:hFB, fontSize:13, fontWeight:700, color:hT.muted, marginBottom:14}}>
+      fontFamily:hFB, fontSize:14, fontWeight:700, color:hT.muted, marginBottom:14}}>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       {label || "About & help"}
     </button>
@@ -52,7 +52,7 @@ function HelpCenterPage({ onBack, onContact }) {
     <div style={{minWidth:0}}>
       <HBack onBack={onBack}/>
       <div style={{fontFamily:hFD, fontWeight:700, fontSize:24, letterSpacing:"-0.02em", color:hT.ink}}>Help center</div>
-      <div style={{fontSize:13.5, fontWeight:500, color:hT.muted, marginTop:4}}>Answers to common questions about Bloom.</div>
+      <div style={{fontSize:14.5, fontWeight:500, color:hT.muted, marginTop:4}}>Answers to common questions about Bloom.</div>
 
       <div style={{position:"relative", marginTop:18, maxWidth:560}}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={hT.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -70,7 +70,7 @@ function HelpCenterPage({ onBack, onContact }) {
               style={{textAlign:"left", padding:"14px 16px", borderRadius:14, cursor:"pointer", fontFamily:hFB,
                 background: on ? "#E0FAFA" : "#fff", border:`1.5px solid ${on ? "#0A6E6E" : hT.hairline}`}}>
               <div style={{fontSize:14, fontWeight:700, color:hT.ink}}>{t.t}</div>
-              <div style={{fontSize:12.5, fontWeight:500, color:hT.muted, marginTop:3}}>{t.d}</div>
+              <div style={{fontSize:13.5, fontWeight:500, color:hT.muted, marginTop:3}}>{t.d}</div>
             </button>
           );
         })}
@@ -78,7 +78,7 @@ function HelpCenterPage({ onBack, onContact }) {
 
       <div style={{background:"#fff", border:`1px solid ${hT.hairline}`, borderRadius:16, padding:"8px 24px", marginTop:20}}>
         {list.length===0 ? (
-          <div style={{padding:"22px 0", fontSize:13.5, fontWeight:500, color:hT.muted}}>No answers match "{q}". Try another word, or contact us below.</div>
+          <div style={{padding:"22px 0", fontSize:14.5, fontWeight:500, color:hT.muted}}>No answers match "{q}". Try another word, or contact us below.</div>
         ) : list.map((f,i)=>{
           const open = openI===i;
           return (
@@ -89,7 +89,7 @@ function HelpCenterPage({ onBack, onContact }) {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                   style={{flexShrink:0, color:hT.muted, transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>
               </button>
-              {open && <div style={{fontSize:13.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.6, padding:"0 0 18px", maxWidth:680}}>{f.a}</div>}
+              {open && <div style={{fontSize:14.5, fontWeight:500, color:"#374151", lineHeight:1.6, padding:"0 0 18px", maxWidth:680}}>{f.a}</div>}
             </div>
           );
         })}
@@ -99,9 +99,9 @@ function HelpCenterPage({ onBack, onContact }) {
         borderRadius:14, background:"#F9FAFB"}}>
         <div>
           <div style={{fontSize:14, fontWeight:700, color:hT.ink}}>Still need help?</div>
-          <div style={{fontSize:12.5, fontWeight:500, color:hT.muted, marginTop:2}}>We usually reply within 4 hours.</div>
+          <div style={{fontSize:13.5, fontWeight:500, color:hT.muted, marginTop:2}}>We usually reply within 4 hours.</div>
         </div>
-        <button onClick={onContact} style={{padding:"10px 18px", borderRadius:999, border:"none", background:hT.ink, color:"#fff", fontFamily:hFB, fontSize:13, fontWeight:700, cursor:"pointer"}}>Email support</button>
+        <button onClick={onContact} style={{padding:"10px 18px", borderRadius:999, border:"none", background:hT.ink, color:"#fff", fontFamily:hFB, fontSize:14, fontWeight:700, cursor:"pointer"}}>Email support</button>
       </div>
     </div>
   );
@@ -133,16 +133,16 @@ function LegalPage({ doc, onBack }) {
       <HBack onBack={onBack}/>
       <div style={{background:"#fff", border:`1px solid ${hT.hairline}`, borderRadius:16, padding:"28px 32px 30px", maxWidth:760}}>
         <div style={{fontFamily:hFD, fontWeight:700, fontSize:24, letterSpacing:"-0.02em", color:hT.ink}}>{L.title}</div>
-        <div style={{fontSize:12.5, fontWeight:600, color:hT.muted, marginTop:4}}>Last updated {L.updated}</div>
+        <div style={{fontSize:13.5, fontWeight:600, color:hT.muted, marginTop:4}}>Last updated {L.updated}</div>
         <div style={{display:"flex", flexDirection:"column", gap:20, marginTop:24}}>
           {L.sections.map(([h,p])=>(
             <div key={h}>
               <div style={{fontSize:15, fontWeight:700, color:hT.ink}}>{h}</div>
-              <div style={{fontSize:13.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.65, marginTop:6, textWrap:"pretty"}}>{p}</div>
+              <div style={{fontSize:14.5, fontWeight:500, color:"#374151", lineHeight:1.65, marginTop:6, textWrap:"pretty"}}>{p}</div>
             </div>
           ))}
         </div>
-        <div style={{fontSize:12.5, fontWeight:500, color:hT.muted, marginTop:26, paddingTop:16, borderTop:`1px solid ${hT.hairline}`}}>
+        <div style={{fontSize:13.5, fontWeight:500, color:hT.muted, marginTop:26, paddingTop:16, borderTop:`1px solid ${hT.hairline}`}}>
           Questions about this page? Email <a href="mailto:hello@bloom.app" style={{color:"#0A6E6E", fontWeight:700}}>hello@bloom.app</a>.
         </div>
       </div>
@@ -165,10 +165,10 @@ function FeatureRequestModal({ onClose }) {
     window.addEventListener("keydown", k); return ()=>window.removeEventListener("keydown", k); }, []);
   const ok = area && title.trim().length>=3 && body.trim().length>=10;
   const submit = ()=>{ setTried(true); if(ok) setSent(true); };
-  const lbl = {fontSize:11, fontWeight:800, color:hT.muted, letterSpacing:".07em", marginBottom:8, display:"block"};
+  const lbl = {fontSize:12, fontWeight:800, color:hT.muted, letterSpacing:".07em", marginBottom:8, display:"block"};
   const input = bad => ({width:"100%", boxSizing:"border-box", padding:"11px 13px", borderRadius:10, border:`1.5px solid ${bad ? "#C1443B" : hT.hairline}`,
     outline:"none", fontFamily:hFB, fontSize:14, fontWeight:500, color:hT.ink, background:"#fff"});
-  const err = t => <div style={{fontSize:12, fontWeight:600, color:"#B03A2E", marginTop:6}}>{t}</div>;
+  const err = t => <div style={{fontSize:13, fontWeight:600, color:"#B03A2E", marginTop:6}}>{t}</div>;
   return (
     <div onMouseDown={e=>{ if(e.target===e.currentTarget) onClose(); }} style={{position:"fixed", inset:0, zIndex:80, background:"rgba(2,30,36,.5)", display:"grid", placeItems:"center", padding:16}}>
       <div role="dialog" aria-modal="true" aria-labelledby="fr-title" style={{position:"relative", width:"100%", maxWidth:520, maxHeight:"92vh", overflow:"auto", background:"#fff",
@@ -183,7 +183,7 @@ function FeatureRequestModal({ onClose }) {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1F8A5B" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
             <div style={{fontFamily:hFD, fontWeight:700, fontSize:21, color:hT.ink, marginTop:14}}>Thanks, we got it</div>
-            <div style={{fontSize:13.5, fontWeight:500, color:hT.muted, lineHeight:1.55, marginTop:6, maxWidth:360, marginInline:"auto"}}>
+            <div style={{fontSize:14.5, fontWeight:500, color:hT.muted, lineHeight:1.55, marginTop:6, maxWidth:360, marginInline:"auto"}}>
               We read every request. If we build it, we'll let you know by email.
             </div>
             <button onClick={onClose} style={{marginTop:20, padding:"11px 26px", borderRadius:999, border:"none", background:hT.ink, color:"#fff", fontFamily:hFB, fontSize:14, fontWeight:700, cursor:"pointer"}}>Done</button>
@@ -191,14 +191,14 @@ function FeatureRequestModal({ onClose }) {
         ) : (
           <React.Fragment>
             <div id="fr-title" style={{fontFamily:hFD, fontWeight:700, fontSize:20, letterSpacing:"-0.02em", color:hT.ink}}>Request a feature</div>
-            <div style={{fontSize:13, fontWeight:500, color:hT.muted, marginTop:4}}>Tell us what would make Bloom better for your job search.</div>
+            <div style={{fontSize:14, fontWeight:500, color:hT.muted, marginTop:4}}>Tell us what would make Bloom better for your job search.</div>
 
             <div style={{marginTop:20}}>
               <span style={lbl}>WHICH PART OF BLOOM?</span>
               <div role="radiogroup" aria-label="Area" style={{display:"flex", flexWrap:"wrap", gap:7}}>
                 {H_AREAS.map((a,i)=>{ const on = area===a; return (
                   <button key={a} ref={i===0 ? first : null} role="radio" aria-checked={on} onClick={()=>setArea(a)}
-                    style={{padding:"7px 13px", borderRadius:999, cursor:"pointer", fontFamily:hFB, fontSize:12.5, fontWeight:700,
+                    style={{padding:"7px 13px", borderRadius:999, cursor:"pointer", fontFamily:hFB, fontSize:13.5, fontWeight:700,
                       background: on ? hT.ink : "#fff", color: on ? "#fff" : hT.ink, border:`1.5px solid ${on ? hT.ink : (tried && !area ? "#C1443B" : hT.hairline)}`}}>{a}</button>
                 ); })}
               </div>
@@ -217,7 +217,7 @@ function FeatureRequestModal({ onClose }) {
                 placeholder="What are you trying to do, and what gets in the way today?" style={{...input(tried && body.trim().length<10), resize:"vertical", lineHeight:1.5}}/>
               <div style={{display:"flex", justifyContent:"space-between", gap:10}}>
                 <span>{tried && body.trim().length<10 && err("A sentence or two helps us understand it.")}</span>
-                <span style={{fontSize:11.5, fontWeight:600, color:hT.muted, marginTop:6}}>{body.length}/1000</span>
+                <span style={{fontSize:12.5, fontWeight:600, color:hT.muted, marginTop:6}}>{body.length}/1000</span>
               </div>
             </div>
 
@@ -226,15 +226,15 @@ function FeatureRequestModal({ onClose }) {
               <div role="radiogroup" aria-label="Importance" style={{display:"grid", gridTemplateColumns:"repeat(3, minmax(0,1fr))", gap:4, background:"#F4F5F5", borderRadius:10, padding:4}}>
                 {H_IMPACT.map(x=>{ const on = impact===x; return (
                   <button key={x} role="radio" aria-checked={on} onClick={()=>setImpact(x)} style={{padding:"9px 6px", borderRadius:7, border:"none", cursor:"pointer",
-                    fontFamily:hFB, fontSize:12.5, fontWeight: on ? 700 : 600, background: on ? "#fff" : "transparent", color: on ? hT.ink : hT.muted,
+                    fontFamily:hFB, fontSize:13.5, fontWeight: on ? 700 : 600, background: on ? "#fff" : "transparent", color: on ? hT.ink : hT.muted,
                     boxShadow: on ? "0 1px 3px rgba(2,47,54,.12)" : "none"}}>{x}</button>
                 ); })}
               </div>
             </div>
 
             <div style={{display:"flex", justifyContent:"flex-end", gap:10, marginTop:22}}>
-              <button onClick={onClose} style={{padding:"11px 20px", borderRadius:999, border:`1.5px solid ${hT.hairline}`, background:"#fff", color:hT.ink, fontFamily:hFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
-              <button onClick={submit} style={{padding:"11px 22px", borderRadius:999, border:"none", background:hT.ink, color:"#fff", fontFamily:hFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Send request</button>
+              <button onClick={onClose} style={{padding:"11px 20px", borderRadius:999, border:`1.5px solid ${hT.hairline}`, background:"#fff", color:hT.ink, fontFamily:hFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+              <button onClick={submit} style={{padding:"11px 22px", borderRadius:999, border:"none", background:hT.ink, color:"#fff", fontFamily:hFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Send request</button>
             </div>
           </React.Fragment>
         )}

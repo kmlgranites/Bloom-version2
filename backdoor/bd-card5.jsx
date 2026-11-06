@@ -9,12 +9,12 @@ function MPipe({ steps, youAt }) {
       {steps.map((s,i)=>(
         <React.Fragment key={s}>
           {i > 0 && (
-            <span style={{position:"relative", width:15, flexShrink:0, display:"inline-flex", justifyContent:"center", color:"#A9B2B4", fontSize:11, lineHeight:1}}>
+            <span style={{position:"relative", width:15, flexShrink:0, display:"inline-flex", justifyContent:"center", color:"#9CA3AF", fontSize:11, lineHeight:1}}>
               →
             </span>
           )}
           <span style={{padding:"4px 8px", borderRadius:6, fontSize:11, fontWeight:700, whiteSpace:"nowrap", flexShrink:0, minWidth:0,
-            background: s===youAt ? "#fff" : "#F1F3F4", color: s===youAt ? mT.ink : "#4B5A5E",
+            background: s===youAt ? "#fff" : "#F1F3F4", color: s===youAt ? mT.ink : "#374151",
             border: s===youAt ? `1.5px solid ${mT.ink}` : "1.5px solid transparent"}}>
             {s}{s===youAt ? " ✓" : ""}
           </span>
@@ -42,7 +42,7 @@ function MOption({ on, onClick, badge, icon, title, desc, steps, youAt }) {
         {icon && <img src={icon} alt="" style={{width:34, height:33, flexShrink:0, display:"block"}}/>}
         <div style={{fontFamily:mFD, fontWeight:700, fontSize:20, letterSpacing:"-0.025em", color:mT.ink}}>{title}</div>
       </div>
-      <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.5}}>{desc}</div>
+      <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.5}}>{desc}</div>
     </button>
   );
 }
@@ -82,12 +82,11 @@ function ModeCard({ st, set, locked, onNext, toast }) {
     <div style={{display:"grid", gridTemplateColumns:"32% 68%", background:"#fff",
       border:`1px solid ${mT.hairline}`, borderRadius:24}}>
 
-      <window.BdMobileInfo resume/>
       <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px",
         display:"flex", flexDirection:"column", gap:26}}>
         <div>
           <div style={{fontSize:13.5, fontWeight:800, color:mT.ink, marginBottom:8}}>Your first 5 are free</div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
             We'll start matching as soon as you finish setup. No card needed until you want more.
           </div>
         </div>

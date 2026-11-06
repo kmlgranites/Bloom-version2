@@ -1,9 +1,15 @@
 // =====================================================================
 // Backdoor V1 · Post-onboarding dashboard — Pipeline
 // =====================================================================
-const { T:dT, FD:dFD, FB:dFB } = window;
+const { FD:dFD, FB:dFB } = window;
+// Neutral, AIApply-style surfaces for the logged-in app: cool grey borders + soft elevation
+const dT = { ...window.T, hairline:"#E6E8EC" };
+const D_CARD = { background:"#fff", border:"1px solid #E7E7E7", borderRadius:24, boxShadow:"0 1px 1px rgba(0,0,0,.03), 0 2px 3px rgba(0,0,0,.06)" };
+// Exact AIApply stat-card elevation (ring replaces border; inset gives the bottom lip)
+const D_STAT = { background:"#fff", border:"none", borderRadius:24,
+  boxShadow:"0 53px 32px #00000005, 0 6px 13px #0000000a, 0 1px 3px #8f8f8f33, 0 0 0 1px #eaeaea, inset 0 -2.4px #3d3d3d0a" };
 
-const D_LOGO = { Stripe:"stripe.com", Vercel:"vercel.com", Ramp:"ramp.com", Notion:"notion.so", Rippling:"rippling.com", Brex:"brex.com", Deel:"deel.com", Amgen:"amgen.com", Wonder:"wonder.com", "Fidelity Investments":"fidelity.com", "OPS Consulting":"opsconsulting.com", Figma:"figma.com", Plaid:"plaid.com", Linear:"linear.app", Mercury:"mercury.com", Retool:"retool.com", Datadog:"datadoghq.com", Gusto:"gusto.com", Airtable:"airtable.com" };
+const D_LOGO = { Discord:"discord.com", Algolia:"algolia.com", Coinbase:"coinbase.com", Cloudflare:"cloudflare.com", HashiCorp:"hashicorp.com", Snowflake:"snowflake.com", Shopify:"shopify.com", Wealthsimple:"wealthsimple.com", Twilio:"twilio.com", Instacart:"instacart.com", Postman:"postman.com", PagerDuty:"pagerduty.com", Chime:"chime.com", Robinhood:"robinhood.com", Affirm:"affirm.com", Figma:"figma.com", Plaid:"plaid.com", Linear:"linear.app", Mercury:"mercury.com", Retool:"retool.com", Datadog:"datadoghq.com", Gusto:"gusto.com", Airtable:"airtable.com", Stripe:"stripe.com", Vercel:"vercel.com", Ramp:"ramp.com", Notion:"notion.so", Rippling:"rippling.com", Brex:"brex.com", Deel:"deel.com", Amgen:"amgen.com", Wonder:"wonder.com", "Fidelity Investments":"fidelity.com", "OPS Consulting":"opsconsulting.com", Figma:"figma.com", Plaid:"plaid.com", Linear:"linear.app", Mercury:"mercury.com", Retool:"retool.com", Datadog:"datadoghq.com", Gusto:"gusto.com", Airtable:"airtable.com" };
 function CLogo({ co, size }) {
   const [broke, setBroke] = React.useState(false);
   const domain = D_LOGO[co];
@@ -68,6 +74,28 @@ const D_MATCHES = [
   { id:"m6", role:"Backend Engineer, Data", co:"Datadog", match:79, posted:"2 days ago", location:"Boston, MA", setting:"Hybrid", comp:"$160–195k", why:"Distributed systems, Go" },
   { id:"m7", role:"Software Engineer II", co:"Gusto", match:76, posted:"3 days ago", location:"Remote, US", setting:"Remote", comp:"$150–185k", why:"Payroll/finance domain overlap" },
   { id:"m8", role:"Senior Engineer, Integrations", co:"Airtable", match:74, posted:"4 days ago", location:"San Francisco, CA", setting:"Onsite", comp:"$175–215k", why:"Integrations and API work" },
+  { id:"m9", role:"Senior Software Engineer", co:"Notion", match:84, posted:"5h ago", location:"San Francisco, CA", setting:"Hybrid", comp:"$180–220k", why:"Product-minded backend, Postgres at scale" },
+  { id:"m10", role:"Backend Engineer", co:"Ramp", match:83, posted:"8h ago", location:"New York, NY", setting:"Hybrid", comp:"$175–215k", why:"Fintech backend and payouts experience" },
+  { id:"m11", role:"Software Engineer, Platform", co:"Vercel", match:82, posted:"1 day ago", location:"Remote, US", setting:"Remote", comp:"$170–210k", why:"Node.js and edge infrastructure" },
+  { id:"m12", role:"Senior Backend Engineer", co:"Brex", match:81, posted:"1 day ago", location:"Remote, US", setting:"Remote", comp:"$180–225k", why:"Card payments and ledger systems" },
+  { id:"m13", role:"Software Engineer II, Payments", co:"Rippling", match:80, posted:"2 days ago", location:"San Francisco, CA", setting:"Hybrid", comp:"$165–200k", why:"Payroll and payments domain" },
+  { id:"m14", role:"Backend Engineer, Core", co:"Deel", match:79, posted:"2 days ago", location:"Remote, US", setting:"Remote", comp:"$160–195k", why:"Global payouts, event-driven services" },
+  { id:"m15", role:"Senior Engineer, Billing", co:"Stripe", match:79, posted:"3 days ago", location:"Seattle, WA", setting:"Hybrid", comp:"$190–235k", why:"Billing and subscriptions at scale" },
+  { id:"m16", role:"Software Engineer, Growth", co:"Discord", match:78, posted:"3 days ago", location:"San Francisco, CA", setting:"Hybrid", comp:"$165–205k", why:"High-traffic APIs, Redis" },
+  { id:"m17", role:"Backend Engineer, Search", co:"Algolia", match:77, posted:"4 days ago", location:"Remote, US", setting:"Remote", comp:"$150–185k", why:"Search infra and Go services" },
+  { id:"m18", role:"Senior Software Engineer", co:"Coinbase", match:76, posted:"4 days ago", location:"Remote, US", setting:"Remote", comp:"$185–230k", why:"Distributed systems and Kafka" },
+  { id:"m19", role:"Software Engineer, Infra", co:"Cloudflare", match:75, posted:"5 days ago", location:"Austin, TX", setting:"Hybrid", comp:"$160–200k", why:"Networking and Go" },
+  { id:"m20", role:"Platform Engineer", co:"HashiCorp", match:74, posted:"5 days ago", location:"Remote, US", setting:"Remote", comp:"$155–190k", why:"Terraform and cloud tooling" },
+  { id:"m21", role:"Backend Engineer, Data Platform", co:"Snowflake", match:73, posted:"6 days ago", location:"San Mateo, CA", setting:"Onsite", comp:"$175–215k", why:"Data pipelines and SQL engines" },
+  { id:"m22", role:"Software Engineer, Payments", co:"Shopify", match:72, posted:"6 days ago", location:"Remote, Canada", setting:"Remote", comp:"CA$150–185k", why:"Checkout and payments" },
+  { id:"m23", role:"Senior Backend Engineer", co:"Wealthsimple", match:71, posted:"1 week ago", location:"Toronto, ON", setting:"Hybrid", comp:"CA$160–195k", why:"Fintech, Canada-based" },
+  { id:"m24", role:"Software Engineer II", co:"Twilio", match:70, posted:"1 week ago", location:"Remote, US", setting:"Remote", comp:"$150–185k", why:"Messaging APIs" },
+  { id:"m25", role:"Backend Engineer", co:"Instacart", match:70, posted:"1 week ago", location:"San Francisco, CA", setting:"Hybrid", comp:"$165–200k", why:"Marketplace and order systems" },
+  { id:"m26", role:"Senior Engineer, API", co:"Postman", match:69, posted:"8 days ago", location:"Remote, US", setting:"Remote", comp:"$160–195k", why:"API platform work" },
+  { id:"m27", role:"Software Engineer, Reliability", co:"PagerDuty", match:68, posted:"9 days ago", location:"Remote, US", setting:"Remote", comp:"$150–185k", why:"SRE and on-call ownership" },
+  { id:"m28", role:"Backend Engineer, Ledger", co:"Chime", match:67, posted:"10 days ago", location:"Chicago, IL", setting:"Hybrid", comp:"$160–195k", why:"Ledger and money movement" },
+  { id:"m29", role:"Software Engineer", co:"Robinhood", match:66, posted:"11 days ago", location:"Menlo Park, CA", setting:"Onsite", comp:"$170–210k", why:"Trading backend, low latency" },
+  { id:"m30", role:"Senior Software Engineer", co:"Affirm", match:65, posted:"12 days ago", location:"Remote, US", setting:"Remote", comp:"$175–215k", why:"Lending and payments" },
 ];
 const D_FREE_LEFT = 5;
 const D_SKIP_REASONS = ["Not my level","Wrong location","Salary too low","Not interested in company","Role isn't a fit"];
@@ -141,11 +169,171 @@ const D_JOBS = [
     answers:[
       { q:"Cover letter lead", a:"Hey Deel team — global payroll compliance is a hard, interesting problem...", status:"drafted" },
     ] },
+  { co:"Coinbase", role:"Senior Software Engineer, Payments", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"2h ago", location:"Remote, US", comp:"$185–230k", matchPct:86, posted:"2h",
+    about:"Coinbase is hiring for Senior Software Engineer, Payments. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$185–230,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Cloudflare", role:"Software Engineer, Workers", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"7h ago", location:"Austin, TX", comp:"$160–200k", matchPct:84, posted:"7h",
+    about:"Cloudflare is hiring for Software Engineer, Workers. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–200,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Shopify", role:"Backend Developer, Checkout", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"9h ago", location:"Remote, Canada", comp:"CA$150–185k", matchPct:83, posted:"9h",
+    about:"Shopify is hiring for Backend Developer, Checkout. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"CA$150–185,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Brex", role:"Backend Engineer, Ledger", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"14h ago", location:"Remote, US", comp:"$180–225k", matchPct:82, posted:"14h",
+    about:"Brex is hiring for Backend Engineer, Ledger. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$180–225,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Plaid", role:"Software Engineer, Transfers", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"1d ago", location:"San Francisco, CA", comp:"$170–210k", matchPct:81, posted:"1d",
+    about:"Plaid is hiring for Software Engineer, Transfers. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$170–210,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Figma", role:"Software Engineer, Platform", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"1d ago", location:"San Francisco, CA", comp:"$185–230k", matchPct:80, posted:"1d",
+    about:"Figma is hiring for Software Engineer, Platform. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$185–230,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Deel", role:"Backend Engineer, Payouts", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"1d ago", location:"Remote, US", comp:"$160–195k", matchPct:79, posted:"1d",
+    about:"Deel is hiring for Backend Engineer, Payouts. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–195,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Mercury", role:"Backend Engineer, Banking", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"2d ago", location:"New York, NY", comp:"$175–215k", matchPct:78, posted:"2d",
+    about:"Mercury is hiring for Backend Engineer, Banking. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$175–215,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Twilio", role:"Software Engineer II, Messaging", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"2d ago", location:"Remote, US", comp:"$150–185k", matchPct:77, posted:"2d",
+    about:"Twilio is hiring for Software Engineer II, Messaging. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$150–185,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Linear", role:"Product Engineer", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"2d ago", location:"Remote, US", comp:"$160–200k", matchPct:76, posted:"2d",
+    about:"Linear is hiring for Product Engineer. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–200,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Datadog", role:"Software Engineer, Metrics", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"3d ago", location:"Boston, MA", comp:"$160–195k", matchPct:76, posted:"3d",
+    about:"Datadog is hiring for Software Engineer, Metrics. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–195,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Wealthsimple", role:"Senior Backend Engineer", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"3d ago", location:"Toronto, ON", comp:"CA$160–195k", matchPct:75, posted:"3d",
+    about:"Wealthsimple is hiring for Senior Backend Engineer. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"CA$160–195,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Retool", role:"Software Engineer, API Platform", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"3d ago", location:"Remote, US", comp:"$165–205k", matchPct:74, posted:"3d",
+    about:"Retool is hiring for Software Engineer, API Platform. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$165–205,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Gusto", role:"Software Engineer, Payroll", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"4d ago", location:"Remote, US", comp:"$150–185k", matchPct:73, posted:"4d",
+    about:"Gusto is hiring for Software Engineer, Payroll. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$150–185,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Instacart", role:"Backend Engineer, Orders", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"4d ago", location:"San Francisco, CA", comp:"$165–200k", matchPct:72, posted:"4d",
+    about:"Instacart is hiring for Backend Engineer, Orders. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$165–200,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Postman", role:"Senior Engineer, API Network", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"5d ago", location:"Remote, US", comp:"$160–195k", matchPct:71, posted:"5d",
+    about:"Postman is hiring for Senior Engineer, API Network. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–195,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Chime", role:"Backend Engineer, Money Movement", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"5d ago", location:"Chicago, IL", comp:"$160–195k", matchPct:70, posted:"5d",
+    about:"Chime is hiring for Backend Engineer, Money Movement. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$160–195,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Affirm", role:"Software Engineer, Lending", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"6d ago", location:"Remote, US", comp:"$175–215k", matchPct:69, posted:"6d",
+    about:"Affirm is hiring for Software Engineer, Lending. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$175–215,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"PagerDuty", role:"Software Engineer, Reliability", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"1w ago", location:"Remote, US", comp:"$150–185k", matchPct:68, posted:"1w",
+    about:"PagerDuty is hiring for Software Engineer, Reliability. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$150–185,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
+  { co:"Snowflake", role:"Backend Engineer, Data Platform", status:"Submitted", statusTone:"green",
+    resume:"Vinodh_Resume_2026.pdf", applied:"1w ago", location:"San Mateo, CA", comp:"$175–215k", matchPct:67, posted:"1w",
+    about:"Snowflake is hiring for Backend Engineer, Data Platform. Bloom matched this role to your backend and payments experience and submitted a tailored application.",
+    answers:[
+      { q:"Years of backend experience", a:"6 years", status:"sent" },
+      { q:"Expected salary", a:"$175–215,000", status:"sent" },
+      { q:"Are you legally authorized to work in this country?", a:"Yes", status:"sent" },
+    ] },
 ];
 
 const D_TONE = {
   green:{fg:"#14663F", bg:"#DFF6E8"}, amber:{fg:"#8A6D00", bg:"#FBEFCB"},
-  red:{fg:"#B3261E", bg:"#FBE3E1"}, teal:{fg:"#0B6E6E", bg:"#DDF5F5"}, blue:{fg:"#0B5FB3", bg:"#E1EFFB"}, grey:{fg:"#7B8B8E", bg:"#F1F3F4"},
+  red:{fg:"#B3261E", bg:"#FBE3E1"}, teal:{fg:"#0B6E6E", bg:"#DDF5F5"}, blue:{fg:"#0B5FB3", bg:"#E1EFFB"}, grey:{fg:"#5B6573", bg:"#F1F3F4"},
 };
 
 const D_TABS = ["All","Needs you","Submitting","Submitted","Failed"];
@@ -157,7 +345,7 @@ function LiveTicker({ steps }) {
     return ()=>clearInterval(t);
   }, [steps.length]);
   return (
-    <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:11.5, fontWeight:600, fontStyle:"italic", color:"#0BB3B3", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"100%"}}>
+    <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:600, fontStyle:"italic", color:"#0BB3B3", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"100%"}}>
       <span style={{width:6, height:6, borderRadius:"50%", background:"#0BB3B3", flexShrink:0, animation:"bdpulse 1.2s ease-in-out infinite"}}/>
       <span style={{overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{steps[i]}</span>
     </span>
@@ -179,13 +367,110 @@ function DSpark({ data, color }) {
 function DStat({ label, value, delta, data, foot, color }) {
   return (
     <div style={{flex:1, minWidth:170, border:`1px solid ${dT.hairline}`, borderRadius:14, background:"#fff", padding:"16px 18px"}}>
-      <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", marginBottom:9}}>{label}</div>
+      <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", marginBottom:9}}>{label}</div>
       <div style={{display:"flex", alignItems:"baseline", gap:8, marginBottom:9}}>
         <span style={{fontFamily:dFD, fontWeight:700, fontSize:26, letterSpacing:"-0.02em", color:dT.ink}}>{value}</span>
-        <span style={{fontSize:11.5, fontWeight:600, color:dT.muted}}>{delta}</span>
+        <span style={{fontSize:12.5, fontWeight:600, color:dT.muted}}>{delta}</span>
       </div>
       <DSpark data={data} color={color}/>
-      <div style={{fontSize:11.5, fontWeight:600, color:dT.muted, marginTop:6}}>{foot}</div>
+      <div style={{fontSize:12.5, fontWeight:600, color:dT.muted, marginTop:6}}>{foot}</div>
+    </div>
+  );
+}
+
+function AccountMenu({ plan, onSettings, onSignOut }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  React.useEffect(()=>{ if(!open) return;
+    const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const k = e => { if (e.key==="Escape") setOpen(false); };
+    document.addEventListener("mousedown", h); document.addEventListener("keydown", k);
+    return ()=>{ document.removeEventListener("mousedown", h); document.removeEventListener("keydown", k); };
+  }, [open]);
+  const planLabel = plan==="monthly" ? "Monthly" : plan==="quarterly" ? "Quarterly" : "Free";
+  const item = {display:"flex", alignItems:"center", gap:12, width:"100%", padding:"10px 12px", border:"none", background:"none", borderRadius:10,
+    fontFamily:dFB, fontSize:15, fontWeight:500, cursor:"pointer", textAlign:"left"};
+  return (
+    <div ref={ref} style={{position:"relative"}}>
+      {open && (
+        <div role="menu" style={{position:"absolute", left:0, right:0, bottom:"calc(100% + 8px)", zIndex:60, background:"#fff", borderRadius:16, padding:6,
+          boxShadow:"0 24px 32px rgba(0,0,0,.04), 0 6px 13px rgba(0,0,0,.06), 0 1px 3px rgba(143,143,143,.2), 0 0 0 1px #EAEAEA"}}>
+          <div style={{padding:"10px 12px 12px", fontSize:14, fontWeight:500, color:"#6B7280", borderBottom:"1px solid #EEF0F2", marginBottom:4,
+            overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>vinodh@gmail.com</div>
+          <button role="menuitem" className="bd-menuitem" onClick={()=>{ setOpen(false); onSettings(); }} style={{...item, color:"#374151"}}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+            Account settings</button>
+          <button role="menuitem" className="bd-menuitem" onClick={()=>{ setOpen(false); onSignOut(); }} style={{...item, color:"#D92D20"}}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+            Sign out</button>
+        </div>
+      )}
+      <button onClick={()=>setOpen(o=>!o)} aria-haspopup="menu" aria-expanded={open} className="bd-acctbtn"
+        style={{display:"flex", alignItems:"center", gap:7, width:"100%", padding:"8px 8px", borderRadius:12, border:"none", background:"#F4F5F7", cursor:"pointer", fontFamily:dFB, textAlign:"left"}}>
+        <span style={{width:26, height:26, borderRadius:"50%", background:"#E5E7EB", display:"grid", placeItems:"center", color:"#4A5464", flexShrink:0}}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+        </span>
+        <span style={{flex:1, minWidth:0, fontSize:14, fontWeight:600, color:"#111827", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>Vinodh Kumar</span>
+        <span style={{fontSize:11, fontWeight:600, color:"#374151", background:"#E5E7EB", borderRadius:999, padding:"2px 7px", flexShrink:0}}>{planLabel}</span>
+      </button>
+    </div>
+  );
+}
+
+function CreditPill({ paid, used, onHold, onDetails }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  React.useEffect(()=>{ if(!open) return;
+    const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const k = e => { if (e.key==="Escape") setOpen(false); };
+    document.addEventListener("mousedown", h); document.addEventListener("keydown", k);
+    return ()=>{ document.removeEventListener("mousedown", h); document.removeEventListener("keydown", k); };
+  }, [open]);
+  const total = paid ? 300 : D_FREE_LEFT;
+  const usedN = paid ? 0 : used;
+  const left = Math.max(0, total - usedN - onHold);
+  const pct = total ? (left/total)*100 : 0;
+  const out = left===0;
+  return (
+    <div ref={ref} style={{position:"relative"}}>
+      <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} aria-haspopup="dialog" className="bd-creditpill"
+        style={{display:"inline-flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:999, border:"1px solid #E3E5E8", background:"#fff",
+        fontFamily:dFB, fontSize:13, fontWeight:600, color: out ? "#B3261E" : dT.ink, cursor:"pointer", whiteSpace:"nowrap"}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/></svg>
+        {left} left{onHold ? <span className="m-hide-narrow"> · {onHold} on hold</span> : null}
+      </button>
+      {open && (
+        <div role="dialog" aria-label="Apply credits" style={{position:"absolute", right:0, top:"calc(100% + 8px)", width:340, maxWidth:"calc(100vw - 24px)", zIndex:80,
+          background:"#fff", borderRadius:16, padding:"18px 18px 16px", boxSizing:"border-box",
+          boxShadow:"0 24px 32px rgba(0,0,0,.04), 0 6px 13px rgba(0,0,0,.06), 0 1px 3px rgba(143,143,143,.2), 0 0 0 1px #EAEAEA"}}>
+          <div style={{display:"flex", alignItems:"center", gap:8, marginBottom:12}}>
+            <span style={{fontFamily:dFD, fontSize:16, fontWeight:700, color:"#111827"}}>Apply credits</span>
+            <span style={{fontSize:12, fontWeight:600, color: out ? "#B3261E" : "#0A6E6E", background: out ? "#FDECEA" : "#DDF8F8", borderRadius:999, padding:"3px 10px"}}>{out ? "Used up" : paid ? "Active" : "Free"}</span>
+            <span style={{marginLeft:"auto", fontSize:11.5, fontWeight:700, letterSpacing:".06em", color:"#6B7280"}}>{paid ? "THIS CYCLE" : "FREE PLAN"}</span>
+          </div>
+          <div style={{display:"flex", alignItems:"baseline", gap:8, marginBottom:10}}>
+            <span style={{fontFamily:dFD, fontSize:34, fontWeight:700, lineHeight:1, color:"#111827"}}>{left}</span>
+            <span style={{fontSize:15, fontWeight:600, color:"#374151"}}>applies left</span>
+          </div>
+          <div role="progressbar" aria-valuenow={left} aria-valuemin={0} aria-valuemax={total} style={{height:8, borderRadius:999, background:"#E9ECEF", overflow:"hidden", marginBottom:10}}>
+            <div style={{height:"100%", width:`${pct}%`, background: out ? "#B3261E" : dT.ink, borderRadius:999}}/>
+          </div>
+          <div style={{fontSize:13.5, fontWeight:500, color:"#6B7280", marginBottom: onHold ? 10 : 14}}>
+            {paid ? `of ${total} applies · resets on Nov 22, 2026` : `of ${total} free applies · no reset`}
+          </div>
+          {onHold > 0 && (
+            <div style={{display:"flex", alignItems:"center", gap:7, fontSize:13.5, fontWeight:600, color:"#B45309", marginBottom:14}}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              {onHold} on hold for applications in progress
+            </div>
+          )}
+          <button onClick={()=>{ setOpen(false); onDetails(); }} style={{width:"100%", padding:"10px 0", borderRadius:999, border:"1px solid #E3E5E8", background:"#fff",
+            fontFamily:dFB, fontSize:14, fontWeight:600, color:"#111827", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:6}}>
+            View details
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -193,12 +478,12 @@ function DStat({ label, value, delta, data, foot, color }) {
 function DNav({ icon, label, badge, active, onClick }) {
   return (
     <button onClick={onClick} className="m-navitem" style={{display:"flex", alignItems:"center", gap:11, padding:"9px 10px", borderRadius:8,
-      background: active ? "#F1EFE9" : "transparent", border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:500,
-      color: active ? dT.ink : "#9AA3A5", cursor:"pointer", width:"100%", textAlign:"left"}}>
-      <span className={active ? "bd-nav-on" : ""} style={{display:"flex", flexShrink:0, color: active ? dT.ink : "#9AA3A5"}}>{icon}</span>
+      background: active ? "#F1EFE9" : "transparent", border:"none", fontFamily:dFB, fontSize:15.5, fontWeight:500,
+      color: active ? dT.ink : "#4A5464", cursor:"pointer", width:"100%", textAlign:"left"}}>
+      <span className={active ? "bd-nav-on" : ""} style={{display:"flex", flexShrink:0, color: active ? dT.ink : "#4A5464"}}>{icon}</span>
       {active && <style>{`.bd-nav-on svg>*{fill:currentColor}.bd-nav-on svg>path:nth-child(3),.bd-nav-on svg>circle:last-child:not(:first-child){fill:#F1EFE9}`}</style>}
       <span className="m-navlabel" style={{flex:1}}>{label}</span>
-      {badge && <span style={{fontSize:11.5, fontWeight:800, color:"#6B5200", background:"#FBEFCB", borderRadius:999,
+      {badge && <span style={{fontSize:12.5, fontWeight:800, color:"#6B5200", background:"#FBEFCB", borderRadius:999,
         minWidth:22, textAlign:"center", padding:"2px 7px"}}>{badge}</span>}
     </button>
   );
@@ -265,7 +550,7 @@ function CheckDropdown({ label, options }) {
   return (
     <div ref={ref} style={{position:"relative"}}>
       <button onClick={()=>setOpen(o=>!o)} style={{padding:"7px 13px", borderRadius:999, background:"#fff", color:dT.ink,
-        border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:12, fontWeight:600, cursor:"pointer", display:"flex",
+        border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13, fontWeight:600, cursor:"pointer", display:"flex",
         alignItems:"center", gap:5, whiteSpace:"nowrap"}}>{label}{sel.length ? ` (${sel.length})` : ""}
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           style={{transform: open ? "rotate(180deg)" : "none", transition:"transform .12s"}}><path d="m6 9 6 6 6-6"/></svg>
@@ -275,7 +560,7 @@ function CheckDropdown({ label, options }) {
           borderRadius:14, boxShadow:"0 12px 28px rgba(2,47,54,.14)", padding:10, minWidth:170, zIndex:20}}>
           {options.map(v=>(
             <label key={v} onClick={()=>tog(v)} style={{display:"flex", alignItems:"center", gap:10, padding:"8px 6px",
-              borderRadius:8, cursor:"pointer", fontFamily:dFB, fontSize:13.5, color:dT.ink}}>
+              borderRadius:8, cursor:"pointer", fontFamily:dFB, fontSize:14.5, color:dT.ink}}>
               <span style={{width:18, height:18, borderRadius:5, border:`1.5px solid ${sel.includes(v) ? dT.ink : dT.hairline}`,
                 background: sel.includes(v) ? dT.ink : "#fff", flexShrink:0, display:"grid", placeItems:"center"}}>
                 {sel.includes(v) && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>}
@@ -317,14 +602,14 @@ function JobDetailPanel({ job, onClose }) {
             <div style={{marginBottom:26}}>
               <div style={{fontFamily:dFD, fontWeight:700, fontSize:15, color:dT.ink, marginBottom:10}}>Skills</div>
               <div style={{display:"flex", gap:8, flexWrap:"wrap"}}>
-                {job.tags.map(t=><span key={t} style={{fontSize:13, fontWeight:600, color:dT.ink, background:"rgba(2,47,54,.06)",
+                {job.tags.map(t=><span key={t} style={{fontSize:14, fontWeight:600, color:dT.ink, background:"rgba(2,47,54,.06)",
                   borderRadius:999, padding:"6px 13px"}}>{t}</span>)}
               </div>
             </div>
           )}
           <div>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:15, color:dT.ink, marginBottom:10}}>Description</div>
-            <div style={{fontSize:14, color:"#4B5A5E", lineHeight:1.65, fontWeight:500}}>
+            <div style={{fontSize:14, color:"#374151", lineHeight:1.65, fontWeight:500}}>
               {job.role} at {job.co}. Location: {job.location}. Bloom found this role a {job.match}% match to your profile based on your résumé, experience, and preferences — apply to have it tailored and submitted for you.
             </div>
           </div>
@@ -333,11 +618,11 @@ function JobDetailPanel({ job, onClose }) {
           justifyContent:"space-between", gap:14, background:"#fff"}}>
           <div style={{display:"flex", alignItems:"center", gap:16}}>
             <button style={{background:"transparent", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:6,
-              fontSize:13, fontWeight:600, color:dT.muted}}>
+              fontSize:14, fontWeight:600, color:dT.muted}}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
               View original
             </button>
-            <button style={{background:"transparent", border:"none", cursor:"pointer", fontSize:13, fontWeight:600, color:dT.muted}}>Not interested</button>
+            <button style={{background:"transparent", border:"none", cursor:"pointer", fontSize:14, fontWeight:600, color:dT.muted}}>Not interested</button>
           </div>
           <div style={{display:"flex", alignItems:"center", gap:10}}>
             <button style={{width:38, height:38, borderRadius:10, background:"#fff", border:`1px solid ${dT.hairline}`, cursor:"pointer",
@@ -346,7 +631,7 @@ function JobDetailPanel({ job, onClose }) {
             </button>
             <div style={{display:"flex", alignItems:"center", borderRadius:999, background:dT.ink, overflow:"hidden"}}>
               <button style={{padding:"11px 20px", background:"transparent", color:"#fff", border:"none",
-                fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Apply</button>
+                fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Apply</button>
               <button style={{padding:"11px 12px", background:"transparent", color:"#fff", border:"none", borderLeft:"1px solid rgba(255,255,255,.25)",
                 cursor:"pointer", display:"flex", alignItems:"center"}}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -362,7 +647,7 @@ function MetaRow({ icon, label }) {
   return (
     <div style={{display:"flex", alignItems:"center", gap:10, color:dT.muted}}>
       <span style={{flexShrink:0, display:"flex"}}>{icon}</span>
-      <span style={{fontSize:13.5, fontWeight:600, color:dT.ink}}>{label}</span>
+      <span style={{fontSize:14.5, fontWeight:600, color:dT.ink}}>{label}</span>
     </div>
   );
 }
@@ -372,16 +657,16 @@ function DField({ label, value, action, last, onAction }) {
     <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16,
       padding:"14px 0", borderBottom: last ? "none" : `1px solid ${dT.hairline}`}}>
       <div>
-        <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:5}}>{label}</div>
+        <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:5}}>{label}</div>
         <div style={{fontSize:14, fontWeight:600, color:dT.ink}}>{value}</div>
       </div>
-      <button className="bd-textlink" onClick={onAction} style={{fontSize:13, fontWeight:700, color:dT.cyanInk, cursor:"pointer", flexShrink:0}}>{action}</button>
+      <button className="bd-textlink" onClick={onAction} style={{fontSize:14, fontWeight:700, color:dT.cyanInk, cursor:"pointer", flexShrink:0}}>{action}</button>
     </div>
   );
 }
 
 function DChip({ children, onRemove }) {
-  return <span style={{fontSize:12.5, fontWeight:700, color:dT.cyanInk, background:"#E3F7F7", borderRadius:999, padding:"6px 8px 6px 13px", display:"inline-flex", alignItems:"center", gap:6}}>{children}
+  return <span style={{fontSize:13.5, fontWeight:700, color:dT.cyanInk, background:"#E3F7F7", borderRadius:999, padding:"6px 8px 6px 13px", display:"inline-flex", alignItems:"center", gap:6}}>{children}
     {onRemove && <button onClick={onRemove} style={{border:"none", background:"none", cursor:"pointer", color:dT.cyanInk, fontSize:14, lineHeight:1, padding:0, display:"flex"}}>×</button>}
   </span>;
 }
@@ -389,8 +674,8 @@ function DChip({ children, onRemove }) {
 function DFieldLabel({ children, hint }) {
   return (
     <div style={{marginBottom:8}}>
-      <div style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>{children}</div>
-      {hint && <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:3}}>{hint}</div>}
+      <div style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>{children}</div>
+      {hint && <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>{hint}</div>}
     </div>
   );
 }
@@ -409,13 +694,13 @@ function DTagInput({ values, onChange, suggestions, placeholder }) {
           onBlur={()=>setTimeout(()=>setOpen(false),120)}
           onKeyDown={e=>{ if(e.key==="Enter"){e.preventDefault(); add(input);} }}
           placeholder={values.length?"":placeholder} style={{flex:1, minWidth:80, border:"none", outline:"none", fontFamily:dFB,
-          fontSize:13.5, color:dT.ink, background:"transparent"}}/>
+          fontSize:14.5, color:dT.ink, background:"transparent"}}/>
       </div>
       {open && filtered.length>0 && (
         <div style={{position:"absolute", top:"100%", left:0, right:0, marginTop:4, background:"#fff", border:`1px solid ${dT.hairline}`,
           borderRadius:9, boxShadow:"0 8px 20px rgba(2,47,54,.12)", zIndex:5, maxHeight:160, overflow:"auto"}}>
           {filtered.map(s=>(
-            <div key={s} onMouseDown={()=>add(s)} style={{padding:"9px 12px", fontSize:13.5, fontWeight:600, color:dT.ink, cursor:"pointer"}}>{s}</div>
+            <div key={s} onMouseDown={()=>add(s)} style={{padding:"9px 12px", fontSize:14.5, fontWeight:600, color:dT.ink, cursor:"pointer"}}>{s}</div>
           ))}
         </div>
       )}
@@ -431,7 +716,7 @@ function DPillOptions({ values, onToggle, options, multi }) {
         return (
           <button key={o} type="button" onClick={()=>onToggle(o)} style={{padding:"8px 15px", borderRadius:999, cursor:"pointer",
             border:`1.5px solid ${on ? dT.ink : dT.hairline}`, background: on ? dT.ink : "#fff", color: on ? "#fff" : dT.ink,
-            fontFamily:dFB, fontSize:13, fontWeight:700}}>{o}</button>
+            fontFamily:dFB, fontSize:14, fontWeight:700}}>{o}</button>
         );
       })}
     </div>
@@ -445,7 +730,7 @@ function DSalarySlider({ value, onChange, min, max, step }) {
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:20, color:dT.ink, marginBottom:10}}>${value}k{value>=max?"+":""} minimum</div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(Number(e.target.value))}
         style={{width:"100%", accentColor:dT.ink}}/>
-      <div style={{display:"flex", justifyContent:"space-between", fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:4}}>
+      <div style={{display:"flex", justifyContent:"space-between", fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:4}}>
         <span>${min}k</span><span>${max}k+</span>
       </div>
     </div>
@@ -456,7 +741,7 @@ function DToggleRow({ label, on, onToggle }) {
   return (
     <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", padding:"11px 0",
       borderBottom:`1px solid ${dT.hairline}`}}>
-      <span style={{fontSize:13.5, fontWeight:600, color:dT.ink}}>{label}</span>
+      <span style={{fontSize:14.5, fontWeight:600, color:dT.ink}}>{label}</span>
       <button onClick={onToggle} style={{width:34, height:19, borderRadius:999, cursor:"pointer", border:"none",
         background: on ? dT.ink : dT.hairline, position:"relative", flexShrink:0}}>
         <span style={{position:"absolute", top:2, left: on ? 17 : 2, width:15, height:15, borderRadius:"50%", background:"#fff", transition:"left .15s"}}/>
@@ -472,14 +757,14 @@ function JobTitleChips({ value, onChange }) {
     <div style={{border:`1.5px solid ${dT.hairline}`, borderRadius:12, padding:"10px 12px", display:"flex", flexWrap:"wrap", gap:8, alignItems:"center"}}>
       {value.map(t=>(
         <span key={t} style={{display:"flex", alignItems:"center", gap:6, background:"#F1EFE9", color:dT.ink, borderRadius:999,
-          padding:"6px 6px 6px 12px", fontSize:13, fontWeight:600}}>{t}
+          padding:"6px 6px 6px 12px", fontSize:14, fontWeight:600}}>{t}
           <button onClick={()=>onChange(value.filter(x=>x!==t))} style={{border:"none", background:"transparent", cursor:"pointer",
             color:dT.muted, fontSize:14, lineHeight:1, padding:2}}>✕</button>
         </span>
       ))}
       <input value={input} onChange={e=>setInput(e.target.value)}
         onKeyDown={e=>{ if(e.key==="Enter"){ e.preventDefault(); add(); } }}
-        placeholder="Add job title" style={{flex:1, minWidth:120, border:"none", outline:"none", fontFamily:dFB, fontSize:13.5, padding:"6px 2px"}}/>
+        placeholder="Add job title" style={{flex:1, minWidth:120, border:"none", outline:"none", fontFamily:dFB, fontSize:14.5, padding:"6px 2px"}}/>
     </div>
   );
 }
@@ -502,7 +787,7 @@ function QuickSettings({ st, set }) {
               border:`1.5px solid ${st.mode===o.k ? dT.ink : dT.hairline}`, background: st.mode===o.k ? "#FFFCF6" : "#fff"}}>
               <div style={{fontSize:18, marginBottom:8}}>{o.icon}</div>
               <div style={{fontWeight:700, fontSize:14, marginBottom:4}}>{o.title}</div>
-              <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, lineHeight:1.4}}>{o.desc}</div>
+              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, lineHeight:1.4}}>{o.desc}</div>
             </button>
           ))}
         </div>
@@ -512,21 +797,21 @@ function QuickSettings({ st, set }) {
         <div style={{fontFamily:dFD, fontWeight:700, fontSize:18, marginBottom:14}}>Quick Edit</div>
         <div style={{display:"flex", flexDirection:"column", gap:20}}>
           <div>
-            <div style={{fontSize:12.5, fontWeight:700, color:dT.ink, marginBottom:8}}>Job title(s)</div>
+            <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:8}}>Job title(s)</div>
             <JobTitleChips value={titles} onChange={setTitles}/>
           </div>
           <div>
-            <div style={{fontSize:12.5, fontWeight:700, color:dT.ink, marginBottom:8}}>Your résumé</div>
+            <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:8}}>Your résumé</div>
             <div style={{display:"flex", alignItems:"center", gap:10, border:`1px solid ${dT.hairline}`, borderRadius:12, padding:"11px 14px"}}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="1.8"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/></svg>
-              <span style={{fontSize:13.5, fontWeight:600, flex:1}}>Your original résumé</span>
-              <span style={{fontSize:11.5, fontWeight:700, color:"#1F8A5B", background:"#E5F4EC", borderRadius:999, padding:"3px 10px"}}>Used in applications</span>
+              <span style={{fontSize:14.5, fontWeight:600, flex:1}}>Your original résumé</span>
+              <span style={{fontSize:12.5, fontWeight:700, color:"#1F8A5B", background:"#E5F4EC", borderRadius:999, padding:"3px 10px"}}>Used in applications</span>
             </div>
           </div>
           <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
             <DToggleRow label="CC me on all emails" on={cc} onToggle={()=>setCc(v=>!v)}/>
             <button style={{padding:"10px 22px", borderRadius:999, background:dT.ink, color:"#fff", border:"none",
-              fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Save settings</button>
+              fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Save settings</button>
           </div>
         </div>
       </div>
@@ -537,7 +822,7 @@ function QuickSettings({ st, set }) {
 function JPField({ label, children }) {
   return (
     <div style={{padding:"18px 0", borderBottom:`1px solid ${dT.hairline}`, display:"grid", gridTemplateColumns:"1fr 1fr", gap:24, alignItems:"start"}}>
-      <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, paddingTop:10}}>{label}</div>
+      <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, paddingTop:10}}>{label}</div>
       <div>{children}</div>
     </div>
   );
@@ -545,7 +830,7 @@ function JPField({ label, children }) {
 function JPSelect({ value }) {
   return (
     <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", border:`1.5px solid ${dT.hairline}`, borderRadius:10,
-      padding:"11px 14px", fontSize:13.5, fontWeight:600, cursor:"pointer"}}>
+      padding:"11px 14px", fontSize:14.5, fontWeight:600, cursor:"pointer"}}>
       {value}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </div>
@@ -555,7 +840,7 @@ function JobPreferencesTab({ st, set }) {
   const [titles] = React.useState(st.jobTitles || ["Software Engineer", "Frontend Engineer"]);
   return (
     <div style={{maxWidth:760}}>
-      <div style={{background:"#F1EFE9", borderRadius:12, padding:"14px 16px", fontSize:12.5, color:dT.muted, fontWeight:600,
+      <div style={{background:"#F1EFE9", borderRadius:12, padding:"14px 16px", fontSize:13.5, color:dT.muted, fontWeight:600,
         lineHeight:1.5, marginBottom:8}}>
         These settings help Bloom find the right jobs for you and complete applications on your behalf.
       </div>
@@ -565,7 +850,7 @@ function JobPreferencesTab({ st, set }) {
       <JPField label="Minimum preferred salary">
         <div style={{border:`1.5px solid ${dT.hairline}`, borderRadius:10, padding:"11px 14px", display:"flex", alignItems:"center", gap:6}}>
           <span style={{color:dT.muted, fontWeight:700}}>$</span>
-          <span style={{fontSize:13.5, fontWeight:600}}>140,000</span>
+          <span style={{fontSize:14.5, fontWeight:600}}>140,000</span>
         </div>
       </JPField>
       <JPField label="Work type"><JPSelect value={st.types ? st.types.join(", ") : "Fulltime"}/></JPField>
@@ -573,13 +858,13 @@ function JobPreferencesTab({ st, set }) {
         <div style={{display:"flex", flexDirection:"column", gap:10}}>
           <JPSelect value={(st.markets && st.markets.length) ? st.markets.join(", ") : "United States"}/>
           <div style={{display:"flex", gap:8}}>
-            <span style={{padding:"7px 14px", borderRadius:999, background:"#F1EFE9", color:dT.ink, fontSize:12.5, fontWeight:700}}>Full remote</span>
-            <span style={{padding:"7px 14px", borderRadius:999, fontSize:12.5, fontWeight:700, color:dT.muted}}>On-site / Hybrid</span>
+            <span style={{padding:"7px 14px", borderRadius:999, background:"#F1EFE9", color:dT.ink, fontSize:13.5, fontWeight:700}}>Full remote</span>
+            <span style={{padding:"7px 14px", borderRadius:999, fontSize:13.5, fontWeight:700, color:dT.muted}}>On-site / Hybrid</span>
           </div>
         </div>
       </JPField>
       <JPField label="Work authorization status">
-        <div style={{border:`1.5px solid ${dT.hairline}`, borderRadius:10, padding:"11px 14px", fontSize:13.5, fontWeight:600}}>
+        <div style={{border:`1.5px solid ${dT.hairline}`, borderRadius:10, padding:"11px 14px", fontSize:14.5, fontWeight:600}}>
           {st.citizenship ? st.citizenship.join(", ") : "US Citizen"}
         </div>
       </JPField>
@@ -591,8 +876,8 @@ function PrefRow({ label, value, sub }) {
   return (
     <div style={{padding:"14px 0", borderBottom:`1px solid ${dT.hairline}`, display:"flex", alignItems:"baseline",
       justifyContent:"space-between", gap:16}}>
-      <span style={{fontSize:12, fontWeight:700, color:dT.muted, letterSpacing:".03em", flexShrink:0, width:150}}>{label}</span>
-      <span style={{fontSize:14.5, fontWeight:700, color:dT.ink, textAlign:"right"}}>{value}{sub && <span style={{display:"block", fontSize:12.5, fontWeight:600, color:dT.muted, marginTop:2}}>{sub}</span>}</span>
+      <span style={{fontSize:13, fontWeight:700, color:dT.muted, letterSpacing:".03em", flexShrink:0, width:150}}>{label}</span>
+      <span style={{fontSize:14.5, fontWeight:700, color:dT.ink, textAlign:"right"}}>{value}{sub && <span style={{display:"block", fontSize:13.5, fontWeight:600, color:dT.muted, marginTop:2}}>{sub}</span>}</span>
     </div>
   );
 }
@@ -606,7 +891,7 @@ const T_QUALITY = [
 function TLabel({ children, right }) {
   return (
     <div style={{display:"flex", alignItems:"baseline", justifyContent:"space-between", gap:12, marginBottom:6}}>
-      <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".09em"}}>{children}</div>{right}
+      <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".09em"}}>{children}</div>{right}
     </div>
   );
 }
@@ -624,15 +909,15 @@ function TInfoTip({ text, title, body }) {
   return (
     <span style={{position:"relative", display:"inline-flex", alignItems:"center", gap:6}}
       onMouseEnter={()=>setShow(true)} onMouseLeave={()=>setShow(false)}>
-      <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>{text}</span>
+      <span style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>{text}</span>
       <button aria-label={title} aria-describedby={show ? id : undefined} onFocus={()=>setShow(true)} onBlur={()=>setShow(false)}
         onClick={()=>setShow(s=>!s)} style={{width:16, height:16, borderRadius:"50%", border:`1.5px solid ${dT.muted}`, background:"none", color:dT.muted,
         fontFamily:dFB, fontSize:10, fontWeight:800, lineHeight:1, cursor:"help", display:"grid", placeItems:"center", padding:0}}>i</button>
       {show && (
         <span role="tooltip" id={id} style={{position:"absolute", bottom:"calc(100% + 10px)", right:-8, width:290, zIndex:40, background:dT.ink, color:"#fff",
           borderRadius:12, padding:"12px 14px", boxShadow:"0 12px 30px rgba(2,47,54,.22)", textAlign:"left"}}>
-          <span style={{display:"block", fontSize:13, fontWeight:700, marginBottom:5}}>{title}</span>
-          <span style={{display:"block", fontSize:12, fontWeight:500, lineHeight:1.5, color:"rgba(255,255,255,.8)"}}>{body}</span>
+          <span style={{display:"block", fontSize:14, fontWeight:700, marginBottom:5}}>{title}</span>
+          <span style={{display:"block", fontSize:13, fontWeight:500, lineHeight:1.5, color:"rgba(255,255,255,.8)"}}>{body}</span>
           <span style={{position:"absolute", bottom:-5, right:16, width:10, height:10, background:dT.ink, transform:"rotate(45deg)"}}/>
         </span>
       )}
@@ -658,10 +943,10 @@ function TFilterChip({ def, value, onChange }) {
       <div style={{display:"inline-flex", alignItems:"center", borderRadius:999, border:`1.5px solid ${on ? dT.ink : dT.hairline}`,
         background: on ? dT.ink : "#fff", color: on ? "#fff" : dT.ink}}>
         <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} aria-haspopup="listbox" style={{display:"flex", alignItems:"center", gap:7,
-          padding: on ? "7px 4px 7px 14px" : "7px 12px 7px 14px", border:"none", background:"none", color:"inherit", cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:600, whiteSpace:"nowrap"}}>
+          padding: on ? "7px 4px 7px 14px" : "7px 12px 7px 14px", border:"none", background:"none", color:"inherit", cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight:600, whiteSpace:"nowrap"}}>
           {def.icon==="pin" && <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>}
           {label}
-          {on && !def.single && <span style={{fontSize:11, fontWeight:800, background:"rgba(255,255,255,.18)", borderRadius:5, padding:"1px 6px"}}>{n}</span>}
+          {on && !def.single && <span style={{fontSize:12, fontWeight:800, background:"rgba(255,255,255,.18)", borderRadius:5, padding:"1px 6px"}}>{n}</span>}
           {!on && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
             style={{transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>}
         </button>
@@ -676,7 +961,7 @@ function TFilterChip({ def, value, onChange }) {
             return (
               <button key={o} role="option" aria-selected={sel} onClick={()=>{ toggle(o); if(def.single) setOpen(false); }}
                 style={{width:"100%", display:"flex", alignItems:"center", gap:11, padding:"10px 10px", borderRadius:8, border:"none", cursor:"pointer",
-                background: sel ? "#F1F5F4" : "transparent", fontFamily:dFB, fontSize:13.5, fontWeight:500, color:dT.ink, textAlign:"left"}}
+                background: sel ? "#F1F5F4" : "transparent", fontFamily:dFB, fontSize:14.5, fontWeight:500, color:dT.ink, textAlign:"left"}}
                 onMouseEnter={e=>{ if(!sel) e.currentTarget.style.background="#F7F8F8"; }} onMouseLeave={e=>{ e.currentTarget.style.background = sel ? "#F1F5F4" : "transparent"; }}>
                 <span style={{width:18, height:18, borderRadius: def.single ? "50%" : 5, flexShrink:0, border:`1.5px solid ${sel ? dT.ink : "#C9CED1"}`,
                   background: sel && !def.single ? dT.ink : "#fff", display:"grid", placeItems:"center"}}>
@@ -715,15 +1000,15 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
   const active = FILTERS.filter(isSet).length + (t.sponsors ? 1 : 0) + (prefs.salaryMin>0 ? 1 : 0);
   const underline = {width:"100%", padding:"8px 0", border:"none", borderBottom:`1.5px solid ${dT.hairline}`, outline:"none", fontFamily:dFB,
     fontSize:14, fontWeight:600, color:dT.ink, background:"transparent", boxSizing:"border-box"};
-  const sel = {padding:"8px 32px 8px 12px", borderRadius:10, border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13.5, fontWeight:600,
+  const sel = {padding:"8px 32px 8px 12px", borderRadius:10, border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14.5, fontWeight:600,
     color:dT.ink, background:"#fff", outline:"none", cursor:"pointer"};
   const sect = {padding:"20px 0", borderTop:`1px solid ${dT.hairline}`};
-  const help = {fontSize:12.5, color:dT.muted, fontWeight:500, lineHeight:1.55};
+  const help = {fontSize:13.5, color:dT.muted, fontWeight:500, lineHeight:1.55};
   const review = st.mode !== "auto";
   return (
     <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"24px 28px 8px"}}>
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:4}}>Auto-apply targeting</div>
-      <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Fine-tune which jobs Bloom applies to, and how many.</div>
+      <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Fine-tune which jobs Bloom applies to, and how many.</div>
 
       <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, paddingBottom:18}}>
         <TInfoTip text={`~${q.week} matches this week`}
@@ -735,8 +1020,8 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
         <button onClick={()=>u({open:!t.open})} aria-expanded={t.open} style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between",
           background:"none", border:"none", padding:0, cursor:"pointer", fontFamily:dFB}}>
           <span style={{display:"flex", alignItems:"baseline", gap:10}}>
-            <span style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".09em"}}>JOB FILTERS</span>
-            <span style={{fontSize:13, color:dT.muted, fontWeight:600}}>{active} active</span>
+            <span style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".09em"}}>JOB FILTERS</span>
+            <span style={{fontSize:14, color:dT.muted, fontWeight:600}}>{active} active</span>
           </span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
             style={{transform: t.open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>
@@ -748,15 +1033,15 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
                 <TFilterChip key={fl.k} def={fl} value={t.f[fl.k]} onChange={v=>uf(fl.k, v)}/>
               ))}
               <button onClick={()=>u({sponsors:!t.sponsors})} aria-pressed={t.sponsors} style={{padding:"7px 14px", borderRadius:999, cursor:"pointer", fontFamily:dFB,
-                fontSize:13, fontWeight:600, border:`1.5px solid ${t.sponsors ? dT.ink : dT.hairline}`, background: t.sponsors ? dT.ink : "#fff", color: t.sponsors ? "#fff" : dT.ink}}>
+                fontSize:14, fontWeight:600, border:`1.5px solid ${t.sponsors ? dT.ink : dT.hairline}`, background: t.sponsors ? dT.ink : "#fff", color: t.sponsors ? "#fff" : dT.ink}}>
                 {t.sponsors ? "✓ " : ""}Sponsors visa</button>
               {active>0 && <button onClick={()=>setT(x=>({...x, sponsors:false, f:{ location:[], jobType:[], workplace:[], role:[], employment:[], degree:[], maxExp:null }}))}
-                className="bd-textlink" style={{border:"none", background:"none", fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.muted, cursor:"pointer", padding:"7px 4px"}}>Clear all</button>}
+                className="bd-textlink" style={{border:"none", background:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.muted, cursor:"pointer", padding:"7px 4px"}}>Clear all</button>}
             </div>
             <div style={{border:`1px solid ${dT.hairline}`, borderRadius:12, padding:"14px 16px", display:"flex", flexDirection:"column", gap:12}}>
               <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap"}}>
-                <div style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>Minimum salary</div>
-                <div style={{fontSize:12, fontWeight:600, color:dT.muted}}>~{q.week} matched · {Math.round(q.week*0.58)} show pay</div>
+                <div style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>Minimum salary</div>
+                <div style={{fontSize:13, fontWeight:600, color:dT.muted}}>~{q.week} matched · {Math.round(q.week*0.58)} show pay</div>
               </div>
               <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap"}}>
                 <div style={{display:"flex", alignItems:"center", border:`1.5px solid ${dT.hairline}`, borderRadius:10, overflow:"hidden", background:"#fff"}}>
@@ -765,7 +1050,7 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
                     value={t.period==="year" ? prefs.salaryMin : Math.round(prefs.salaryMin*1000/2080)}
                     onChange={e=>{ const v = Number(e.target.value)||0; setPrefs(p=>({...p, salaryMin: t.period==="year" ? v : Math.round(v*2080/1000)})); }}
                     style={{width:90, padding:"9px 4px", border:"none", outline:"none", fontFamily:dFB, fontSize:14, fontWeight:700, color:dT.ink}}/>
-                  <span style={{padding:"0 12px 0 0", fontSize:13, fontWeight:700, color:dT.muted}}>{t.period==="year" ? "k" : ""}</span>
+                  <span style={{padding:"0 12px 0 0", fontSize:14, fontWeight:700, color:dT.muted}}>{t.period==="year" ? "k" : ""}</span>
                 </div>
                 <select value={t.currency} onChange={e=>u({currency:e.target.value})} aria-label="Currency" style={sel}>
                   <option value="USD">USD</option><option value="CAD">CAD</option>
@@ -773,20 +1058,20 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
                 <div role="radiogroup" aria-label="Pay period" style={{display:"flex", border:`1.5px solid ${dT.hairline}`, borderRadius:10, overflow:"hidden"}}>
                   {[["year","Per year"],["hour","Per hour"]].map(([k,l])=>(
                     <button key={k} role="radio" aria-checked={t.period===k} onClick={()=>u({period:k})} style={{padding:"8px 14px", border:"none", cursor:"pointer",
-                      fontFamily:dFB, fontSize:13, fontWeight:700, background: t.period===k ? dT.ink : "#fff", color: t.period===k ? "#fff" : dT.ink}}>{l}</button>
+                      fontFamily:dFB, fontSize:14, fontWeight:700, background: t.period===k ? dT.ink : "#fff", color: t.period===k ? "#fff" : dT.ink}}>{l}</button>
                   ))}
                 </div>
               </div>
               <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16}}>
                 <div>
-                  <div style={{fontSize:13, fontWeight:600, color:dT.ink}}>Include jobs that don't list salary</div>
-                  <div style={{fontSize:12, color:dT.muted, fontWeight:500, marginTop:2}}>Many posts leave pay out. Turning this off can cut your matches sharply.</div>
+                  <div style={{fontSize:14, fontWeight:600, color:dT.ink}}>Include jobs that don't list salary</div>
+                  <div style={{fontSize:13, color:dT.muted, fontWeight:500, marginTop:2}}>Many posts leave pay out. Turning this off can cut your matches sharply.</div>
                 </div>
                 <TSwitch on={t.includeNoPay} onToggle={()=>u({includeNoPay:!t.includeNoPay})} label="Include jobs that don't list salary"/>
               </div>
             </div>
             <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap"}}>
-              <label style={{display:"flex", alignItems:"center", gap:9, cursor:"pointer", fontSize:13.5, fontWeight:600, color:dT.ink}}>
+              <label style={{display:"flex", alignItems:"center", gap:9, cursor:"pointer", fontSize:14.5, fontWeight:600, color:dT.ink}}>
                 <input type="checkbox" checked={t.remoteToo} onChange={e=>u({remoteToo:e.target.checked})} style={{width:17, height:17, accentColor:dT.ink, margin:0}}/>
                 Also apply to remote jobs in
               </label>
@@ -797,17 +1082,17 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
             <div style={help}>Bloom applies to matching jobs posted in the last 24 hours and checks several times a day.</div>
             <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(220px, 1fr))", gap:20}}>
               <div>
-                <div style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>Include keywords</div>
+                <div style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>Include keywords</div>
                 <input value={t.include} onChange={e=>u({include:e.target.value})} placeholder="e.g. backend | platform" style={underline}/>
               </div>
               <div>
-                <div style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>Exclude keywords</div>
+                <div style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>Exclude keywords</div>
                 <input value={t.exclude} onChange={e=>u({exclude:e.target.value})} placeholder="e.g. principal | staff" style={underline}/>
               </div>
             </div>
             <div style={help}>Separate terms with <b style={{color:dT.ink}}>|</b>. A job matches if any include term appears, and is skipped if any exclude term appears.</div>
             <div style={{display:"flex", alignItems:"center", gap:12, flexWrap:"wrap"}}>
-              <span style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>Match keywords in</span>
+              <span style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>Match keywords in</span>
               <select value={t.matchIn} onChange={e=>u({matchIn:e.target.value})} style={sel}>
                 <option>Title only</option><option>Title + description</option>
               </select>
@@ -822,9 +1107,9 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
         <div role="radiogroup" aria-label="Minimum match quality" style={{display:"flex", gap:8, flexWrap:"wrap", marginBottom:10}}>
           {T_QUALITY.map(x=>(
             <button key={x.k} role="radio" aria-checked={t.quality===x.k} onClick={()=>u({quality:x.k})} style={{padding:"9px 18px", borderRadius:999, cursor:"pointer",
-              fontFamily:dFB, fontSize:13.5, fontWeight:700, border:`1.5px solid ${t.quality===x.k ? dT.ink : dT.hairline}`,
+              fontFamily:dFB, fontSize:14.5, fontWeight:700, border:`1.5px solid ${t.quality===x.k ? dT.ink : dT.hairline}`,
               background: t.quality===x.k ? dT.ink : "#fff", color: t.quality===x.k ? "#fff" : dT.ink}}>
-              {x.k}<span style={{fontSize:11.5, fontWeight:600, opacity:.65, marginLeft:6}}>{x.min}%+</span>
+              {x.k}<span style={{fontSize:12.5, fontWeight:600, opacity:.65, marginLeft:6}}>{x.min}%+</span>
             </button>
           ))}
         </div>
@@ -838,7 +1123,7 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
           <input type="number" min={1} max={150} value={t.cap} onChange={e=>u({cap:e.target.value})}
             onBlur={()=>u({cap: Math.min(150, Math.max(1, parseInt(t.cap)||1))})}
             aria-label="Daily application cap" style={{...underline, width:90, fontSize:18, fontWeight:700}}/>
-          <span style={{fontSize:13, color:dT.muted, fontWeight:600}}>per day</span>
+          <span style={{fontSize:14, color:dT.muted, fontWeight:600}}>per day</span>
         </div>
       </div>
 
@@ -849,7 +1134,7 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
           placeholder="e.g. Skip crypto companies. Avoid roles that require on-call every week."
           style={{width:"100%", boxSizing:"border-box", padding:"12px 14px", borderRadius:12, border:`1.5px solid ${dT.hairline}`, fontFamily:dFB,
           fontSize:14, color:dT.ink, outline:"none", resize:"vertical", lineHeight:1.5}}/>
-        <div style={{textAlign:"right", fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:4}}>{t.notes.length}/2000</div>
+        <div style={{textAlign:"right", fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:4}}>{t.notes.length}/2000</div>
       </div>
 
       <div style={{...sect, display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:20}}>
@@ -865,7 +1150,7 @@ function TargetingCard({ st, set, prefs, setPrefs, onEditFilters }) {
           <div style={{...help, marginBottom:6}}>Bloom holds these for you even in Auto Apply, because the form itself needs your judgment.</div>
           {[["askQuestions","Has more than 10 questions"],["askEssay","Requires a custom essay"]].map(([k,l])=>(
             <div key={k} style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"10px 0"}}>
-              <span style={{fontSize:13.5, fontWeight:600, color:dT.ink}}>{l}</span>
+              <span style={{fontSize:14.5, fontWeight:600, color:dT.ink}}>{l}</span>
               <TSwitch on={t[k]} onToggle={()=>u({[k]:!t[k]})} label={l}/>
             </div>
           ))}
@@ -888,23 +1173,23 @@ function CopilotPanel({ st, set }) {
     <div style={{display:"flex", flexDirection:"column", gap:20}}>
       <div style={{display:"flex", flexDirection:"column", gap:20, minWidth:0}}>
         <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px"}}>
-          <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:8}}>APPLICATION MODE</div>
+          <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:8}}>APPLICATION MODE</div>
           <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:6}}>How much do you want me to handle?</div>
-          <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginBottom:16}}>Mode changes save immediately — it's a switch, not a setting.</div>
+          <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginBottom:16}}>Mode changes save immediately — it's a switch, not a setting.</div>
           <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:12}}>
             <button onClick={()=>set({mode:"review"})} style={{textAlign:"left", padding:"16px 16px", borderRadius:12, cursor:"pointer",
               border:`1.5px solid ${!isAuto ? dT.ink : dT.hairline}`, background: !isAuto ? "#FFFCF6" : "#fff"}}>
               <div style={{fontSize:19, marginBottom:8}}>✋</div>
               <div style={{fontWeight:700, fontSize:14.5, marginBottom:4}}>Manual apply</div>
-              <div style={{fontSize:12, color:dT.muted, fontWeight:600}}>I draft, you approve. ~90s per app.</div>
+              <div style={{fontSize:13, color:dT.muted, fontWeight:600}}>I draft, you approve. ~90s per app.</div>
             </button>
             <button onClick={()=>set({mode:"auto"})} style={{textAlign:"left", padding:"16px 16px", borderRadius:12, cursor:"pointer", position:"relative",
               border:`1.5px solid ${isAuto ? dT.ink : dT.hairline}`, background: isAuto ? "#E3F7F7" : "#fff"}}>
               {isAuto && <span style={{position:"absolute", top:12, right:12, width:20, height:20, borderRadius:"50%",
-                background:dT.ink, color:"#fff", fontSize:11, fontWeight:800, display:"grid", placeItems:"center"}}>✓</span>}
+                background:dT.ink, color:"#fff", fontSize:12, fontWeight:800, display:"grid", placeItems:"center"}}>✓</span>}
               <div style={{fontSize:19, marginBottom:8}}>🚀</div>
               <div style={{fontWeight:700, fontSize:14.5, marginBottom:4}}>Full Auto Apply</div>
-              <div style={{fontSize:12, color:dT.muted, fontWeight:600}}>I find, fill, and submit. You get a recap.</div>
+              <div style={{fontSize:13, color:dT.muted, fontWeight:600}}>I find, fill, and submit. You get a recap.</div>
             </button>
           </div>
         </div>
@@ -913,16 +1198,16 @@ function CopilotPanel({ st, set }) {
           <div style={{display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:16, marginBottom:16}}>
             <div>
               <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:4}}>Job preferences</div>
-              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>What Bloom should look for on your behalf.</div>
+              <div style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>What Bloom should look for on your behalf.</div>
             </div>
-            <button onClick={()=>setEditingPrefs(true)} className="bd-textlink" style={{fontSize:13.5, fontWeight:700, color:dT.ink, cursor:"pointer",
+            <button onClick={()=>setEditingPrefs(true)} className="bd-textlink" style={{fontSize:14.5, fontWeight:700, color:dT.ink, cursor:"pointer",
               background:"none", border:"none", whiteSpace:"nowrap", flexShrink:0, marginTop:3}}>Edit preferences →</button>
           </div>
 
-          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, background:"#FAF9F5",
+          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, background:"#F7F8FA",
             borderRadius:10, padding:"11px 14px", marginBottom:18}}>
-            <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Based on your profile · 4 yrs experience · Authorized in US · Available immediately</span>
-            <a href="#" className="bd-textlink" style={{fontSize:12.5, fontWeight:700, color:dT.ink, whiteSpace:"nowrap"}}>Edit profile →</a>
+            <span style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>Based on your profile · 4 yrs experience · Authorized in US · Available immediately</span>
+            <a href="#" className="bd-textlink" style={{fontSize:13.5, fontWeight:700, color:dT.ink, whiteSpace:"nowrap"}}>Edit profile →</a>
           </div>
 
           <PrefRow label="TARGET ROLES" value={prefs.roles.join(", ")} sub={prefs.keywordList.join(" · ")}/>
@@ -953,17 +1238,17 @@ function PlanCard({ tag, name, price, per, blurb, features, cta, dark, current }
       background: dark ? dT.ink : "#fff", color: dark ? "#fff" : dT.ink,
       border: dark ? "none" : `1px solid ${dT.hairline}`}}>
       {tag && <div style={{position:"absolute", top:-11, left:22, background:"#5AEBEB", color:dT.ink,
-        fontSize:10.5, fontWeight:800, letterSpacing:".06em", borderRadius:999, padding:"4px 12px"}}>{tag}</div>}
+        fontSize:11.5, fontWeight:800, letterSpacing:".06em", borderRadius:999, padding:"4px 12px"}}>{tag}</div>}
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:8}}>{name}</div>
       <div style={{display:"flex", alignItems:"baseline", gap:6, marginBottom:10}}>
         <span style={{fontFamily:dFD, fontWeight:700, fontSize:34, letterSpacing:"-0.02em"}}>{price}</span>
-        <span style={{fontSize:13, fontWeight:600, opacity:.65}}>{per}</span>
+        <span style={{fontSize:14, fontWeight:600, opacity:.65}}>{per}</span>
       </div>
-      <div style={{fontSize:13, fontWeight:600, opacity:.75, marginBottom:16, lineHeight:1.4}}>{blurb}</div>
+      <div style={{fontSize:14, fontWeight:600, opacity:.75, marginBottom:16, lineHeight:1.4}}>{blurb}</div>
       <div style={{height:1, background: dark ? "rgba(255,255,255,.15)" : dT.hairline, marginBottom:16}}/>
       <div style={{display:"flex", flexDirection:"column", gap:10, marginBottom:22}}>
         {features.map(f=>(
-          <div key={f} style={{display:"flex", gap:9, fontSize:13, fontWeight:600}}>
+          <div key={f} style={{display:"flex", gap:9, fontSize:14, fontWeight:600}}>
             <span style={{color: dark ? "#5AEBEB" : "#1F8A5B", fontWeight:800}}>✓</span>{f}
           </div>
         ))}
@@ -971,7 +1256,7 @@ function PlanCard({ tag, name, price, per, blurb, features, cta, dark, current }
       <button style={{width:"100%", padding:"12px 0", borderRadius:999, border:"none", cursor: current ? "default" : "pointer",
         background: current ? (dark ? "rgba(255,255,255,.15)" : "#F1F3F4") : (dark ? "#fff" : dT.ink),
         color: current ? (dark ? "#fff" : dT.ink) : (dark ? dT.ink : "#fff"),
-        fontFamily:dFB, fontSize:13.5, fontWeight:700}}>{current ? "✓ Current plan" : cta}</button>
+        fontFamily:dFB, fontSize:14.5, fontWeight:700}}>{current ? "✓ Current plan" : cta}</button>
     </div>
   );
 }
@@ -988,38 +1273,38 @@ function ReferralsPanel() {
   const msg = encodeURIComponent("I use Bloom to auto-apply to jobs. Sign up with my link and we both get 50 bonus applications when you subscribe: " + link);
   const share = ()=>{ if(navigator.share){ navigator.share({title:"Bloom", url:link}).catch(()=>{}); } else copy(); };
   const btn = {display:"inline-flex", alignItems:"center", gap:8, padding:"9px 16px", borderRadius:10, border:`1.5px solid ${dT.hairline}`,
-    background:"#fff", fontFamily:dFB, fontSize:13.5, fontWeight:600, color:dT.ink, cursor:"pointer", textDecoration:"none"};
+    background:"#fff", fontFamily:dFB, fontSize:14.5, fontWeight:600, color:dT.ink, cursor:"pointer", textDecoration:"none"};
   return (
     <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px", minWidth:0}}>
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:6}}>Referrals</div>
-      <div style={{fontSize:13, color:dT.muted, fontWeight:500, lineHeight:1.55, marginBottom:24}}>
+      <div style={{fontSize:14, color:dT.muted, fontWeight:500, lineHeight:1.55, marginBottom:24}}>
         Invite a friend. When they subscribe to a paid plan, you both get 50 bonus applications. Works on the Free plan too.
       </div>
 
       <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, marginBottom:8}}>
-        <div style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>Your referral link</div>
+        <div style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>Your referral link</div>
         {!editing && <button onClick={()=>{ setDraft(code); setEditing(true); }} style={{display:"flex", alignItems:"center", gap:6, border:"none", background:"none",
-          cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:600, color:dT.muted}}>
+          cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight:600, color:dT.muted}}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
           Customize code</button>}
       </div>
       {editing ? (
         <div style={{display:"flex", gap:10, flexWrap:"wrap", alignItems:"center"}}>
           <div style={{flex:"1 1 280px", display:"flex", alignItems:"center", border:`1.5px solid ${dT.ink}`, borderRadius:10, overflow:"hidden", background:"#fff"}}>
-            <span style={{padding:"11px 0 11px 14px", fontFamily:"ui-monospace, Menlo, monospace", fontSize:13.5, color:dT.muted}}>bloom.app/?ref=</span>
+            <span style={{padding:"11px 0 11px 14px", fontFamily:"ui-monospace, Menlo, monospace", fontSize:14.5, color:dT.muted}}>bloom.app/?ref=</span>
             <input autoFocus value={draft} maxLength={20} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") saveCode(); if(e.key==="Escape") setEditing(false); }}
               aria-label="Referral code" style={{flex:1, minWidth:0, padding:"11px 14px 11px 0", border:"none", outline:"none", fontFamily:"ui-monospace, Menlo, monospace",
-              fontSize:13.5, color:dT.ink, textTransform:"uppercase"}}/>
+              fontSize:14.5, color:dT.ink, textTransform:"uppercase"}}/>
           </div>
           <button onClick={()=>setEditing(false)} style={btn}>Cancel</button>
           <button onClick={saveCode} disabled={!draftOk} style={{...btn, border:"none", background: draftOk ? dT.ink : "#EEF0F1", color: draftOk ? "#fff" : "#A7AEB1",
             cursor: draftOk ? "pointer" : "not-allowed"}}>Save</button>
-          <div style={{flexBasis:"100%", fontSize:12, color:dT.muted, fontWeight:500}}>4–20 letters, numbers or dashes. Old links stop working when you change it.</div>
+          <div style={{flexBasis:"100%", fontSize:13, color:dT.muted, fontWeight:500}}>4–20 letters, numbers or dashes. Old links stop working when you change it.</div>
         </div>
       ) : (
         <div style={{display:"flex", gap:10, flexWrap:"wrap"}}>
           <div style={{flex:"1 1 280px", minWidth:0, padding:"11px 14px", borderRadius:10, background:"#F7F8F8", border:`1.5px solid ${dT.hairline}`,
-            fontFamily:"ui-monospace, Menlo, monospace", fontSize:13.5, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{link}</div>
+            fontFamily:"ui-monospace, Menlo, monospace", fontSize:14.5, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{link}</div>
           <button onClick={copy} style={{display:"inline-flex", alignItems:"center", gap:8, padding:"11px 20px", borderRadius:10, border:"none",
             background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", minWidth:104, justifyContent:"center"}}>
             {copied
@@ -1044,7 +1329,7 @@ function ReferralsPanel() {
       <div style={{display:"flex", gap:44, flexWrap:"wrap", margin:"30px 0 28px"}}>
         {[["INVITED","0"],["SUBSCRIBED","0"],["BONUS EARNED","0"]].map(([l,v])=>(
           <div key={l}>
-            <div style={{fontSize:11, fontWeight:700, color:dT.muted, letterSpacing:".06em", marginBottom:4}}>{l}</div>
+            <div style={{fontSize:12, fontWeight:700, color:dT.muted, letterSpacing:".06em", marginBottom:4}}>{l}</div>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:32, color:dT.ink, lineHeight:1}}>{v}</div>
           </div>
         ))}
@@ -1052,7 +1337,7 @@ function ReferralsPanel() {
 
       <div style={{borderTop:`1px solid ${dT.hairline}`, paddingTop:20}}>
         <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:12}}>How it works</div>
-        <ol style={{margin:0, paddingLeft:20, display:"flex", flexDirection:"column", gap:9, fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.5}}>
+        <ol style={{margin:0, paddingLeft:20, display:"flex", flexDirection:"column", gap:9, fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.5}}>
           <li>Share your link with a friend.</li>
           <li>They sign up with your link.</li>
           <li>When they subscribe to a paid plan, you both get 50 bonus applications.</li>
@@ -1082,7 +1367,7 @@ function WorkdayPasswordPanel() {
   const save = ()=>{ if(!ok) return; setSaved({ value:pw, date:new Date() }); setPw(""); setShow(false); setEditing(false); setReveal(false); };
   const remove = ()=>{ setSaved(null); setEditing(true); setConfirmRemove(false); setReveal(false); };
   const note = (
-    <div style={{fontSize:12.5, color:dT.muted, fontWeight:500, lineHeight:1.55, marginTop:12, maxWidth:520}}>
+    <div style={{fontSize:13.5, color:dT.muted, fontWeight:500, lineHeight:1.55, marginTop:12, maxWidth:520}}>
       Encrypted before storage, only used to submit applications, and never shared. You can remove it anytime.
     </div>
   );
@@ -1090,7 +1375,7 @@ function WorkdayPasswordPanel() {
   return (
     <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"26px 28px", minWidth:0}}>
       <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, marginBottom:6}}>Workday password</div>
-      <div style={{fontSize:13, color:dT.muted, fontWeight:500, lineHeight:1.55, marginBottom:22}}>
+      <div style={{fontSize:14, color:dT.muted, fontWeight:500, lineHeight:1.55, marginBottom:22}}>
         Store a password for job sites that create an account when you apply, like Workday, iCIMS, and Oracle.
       </div>
 
@@ -1102,19 +1387,19 @@ function WorkdayPasswordPanel() {
           </div>
           <div style={{display:"flex", alignItems:"center", gap:12, marginTop:12, flexWrap:"wrap"}}>
             <button onClick={()=>setReveal(r=>!r)} aria-pressed={reveal} style={{display:"inline-flex", alignItems:"center", gap:7, border:"none", background:"none",
-              padding:0, cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:600, color:dT.muted}}>
+              padding:0, cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight:600, color:dT.muted}}>
               {reveal
                 ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10 10 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.06-5.94M9.9 4.24A9 9 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.16 3.19M1 1l22 22"/></svg>
                 : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}
               {reveal ? "Hide password" : "View password"}
             </button>
-            {reveal && <code style={{fontFamily:"ui-monospace, Menlo, monospace", fontSize:13, padding:"4px 10px", borderRadius:8, background:"#F4F6F6", color:dT.ink}}>{saved.value}</code>}
+            {reveal && <code style={{fontFamily:"ui-monospace, Menlo, monospace", fontSize:14, padding:"4px 10px", borderRadius:8, background:"#F4F6F6", color:dT.ink}}>{saved.value}</code>}
           </div>
           {confirmRemove ? (
             <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", marginTop:20, padding:"12px 14px", borderRadius:12, background:"#FDEDEC"}}>
-              <span style={{fontSize:13, fontWeight:600, color:"#8A2A22", flex:"1 1 220px"}}>Remove this password? Bloom will pause applications on sites that need it.</span>
-              <button onClick={()=>setConfirmRemove(false)} style={{...btn, padding:"8px 14px", fontSize:13, background:"#fff", border:`1.5px solid ${dT.hairline}`, color:dT.ink}}>Cancel</button>
-              <button onClick={remove} style={{...btn, padding:"8px 14px", fontSize:13, background:"#D93A2F", border:"none", color:"#fff"}}>Remove</button>
+              <span style={{fontSize:14, fontWeight:600, color:"#8A2A22", flex:"1 1 220px"}}>Remove this password? Bloom will pause applications on sites that need it.</span>
+              <button onClick={()=>setConfirmRemove(false)} style={{...btn, padding:"8px 14px", fontSize:14, background:"#fff", border:`1.5px solid ${dT.hairline}`, color:dT.ink}}>Cancel</button>
+              <button onClick={remove} style={{...btn, padding:"8px 14px", fontSize:14, background:"#D93A2F", border:"none", color:"#fff"}}>Remove</button>
             </div>
           ) : (
             <div style={{display:"flex", gap:12, flexWrap:"wrap", marginTop:20}}>
@@ -1132,7 +1417,7 @@ function WorkdayPasswordPanel() {
         </div>
       ) : (
         <div>
-          <label htmlFor="wd-pw" style={{display:"block", fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:8}}>{saved ? "New password" : "Application password"}</label>
+          <label htmlFor="wd-pw" style={{display:"block", fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:8}}>{saved ? "New password" : "Application password"}</label>
           <div style={{position:"relative", maxWidth:520}}>
             <input id="wd-pw" type={show ? "text" : "password"} value={pw} onChange={e=>setPw(e.target.value)} autoComplete="new-password" autoFocus={!!saved}
               onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} onKeyDown={e=>{ if(e.key==="Enter") save(); if(e.key==="Escape" && saved){ setEditing(false); setPw(""); } }}
@@ -1145,10 +1430,10 @@ function WorkdayPasswordPanel() {
                 : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>}
             </button>
           </div>
-          <div style={{fontSize:13, fontWeight:700, color:dT.ink, margin:"18px 0 10px"}}>Password requirements:</div>
+          <div style={{fontSize:14, fontWeight:700, color:dT.ink, margin:"18px 0 10px"}}>Password requirements:</div>
           <div style={{display:"flex", flexDirection:"column", gap:9}}>
             {rules.map(([l,met])=>(
-              <div key={l} style={{display:"flex", alignItems:"center", gap:10, fontSize:13.5, fontWeight:500, color: met ? "#1F6B45" : dT.muted}}>
+              <div key={l} style={{display:"flex", alignItems:"center", gap:10, fontSize:14.5, fontWeight:500, color: met ? "#1F6B45" : dT.muted}}>
                 <span style={{width:18, height:18, borderRadius:"50%", background: met ? "#22A565" : "#E3E6E8", display:"grid", placeItems:"center", flexShrink:0, transition:"background .15s"}}>
                   {met && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>}
                 </span>
@@ -1227,13 +1512,13 @@ function LastOneModal({ onClose, onUpgrade }) {
           <img src="assets/bloom-mascot-logo.webp" alt="" style={{position:"absolute", left:"50%", bottom:0, transform:"translateX(-50%)", width:104, height:104, objectFit:"contain"}}/>
         </div>
         <div id="lo-title" style={{fontFamily:dFD, fontWeight:700, fontSize:27, letterSpacing:"-0.025em", color:dT.ink, marginTop:14}}>Just 1 more application to go!</div>
-        <div style={{fontSize:14.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.55, maxWidth:380, margin:"10px auto 0", textWrap:"pretty"}}>
+        <div style={{fontSize:14.5, fontWeight:500, color:"#374151", lineHeight:1.55, maxWidth:380, margin:"10px auto 0", textWrap:"pretty"}}>
           Upgrade to Pro to keep Bloom applying without a pause. Applications that don't go through are never counted.
         </div>
         <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:10, marginTop:22}}>
           <button ref={btn} onClick={onUpgrade} className="bd-cta" style={{padding:"13px 34px", borderRadius:999, border:"none", background:dT.ink, color:"#fff",
             fontFamily:dFB, fontSize:15, fontWeight:700, cursor:"pointer"}}>Upgrade now</button>
-          <button onClick={onClose} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:600, color:dT.muted}}>Not now</button>
+          <button onClick={onClose} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight:600, color:dT.muted}}>Not now</button>
         </div>
         <style>{`@keyframes loFloat{0%,100%{translate:0 0}50%{translate:0 -5px}} @media (prefers-reduced-motion: reduce){[style*="loFloat"]{animation:none!important}}`}</style>
       </div>
@@ -1262,7 +1547,7 @@ function ProfileNudgeModal({ pct, onClose }) {
             The more complete your profile, the better Bloom fills in applications and matches you to roles. Fewer questions, better applications.
           </div>
           <div style={{display:"inline-flex", alignItems:"center", gap:7, marginTop:16, padding:"7px 15px", borderRadius:999, background:"rgba(2,47,54,.78)",
-            color:"#fff", fontSize:13, fontWeight:700}}>
+            color:"#fff", fontSize:14, fontWeight:700}}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
             Complete profiles get matched faster
           </div>
@@ -1296,7 +1581,7 @@ function ProfileNudgeModal({ pct, onClose }) {
         <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:10, marginTop:22}}>
           <button ref={btn} onClick={onClose} className="bd-cta" style={{padding:"13px 34px", borderRadius:999, border:"none", background:dT.ink, color:"#fff",
             fontFamily:dFB, fontSize:15, fontWeight:700, cursor:"pointer"}}>Complete profile</button>
-          <button onClick={onClose} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:600, color:dT.muted}}>Maybe later</button>
+          <button onClick={onClose} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight:600, color:dT.muted}}>Maybe later</button>
         </div>
       </div>
     </div>
@@ -1304,7 +1589,7 @@ function ProfileNudgeModal({ pct, onClose }) {
 }
 
 const D_DATE_OPTS = ["All time","Last 6 hours","Last 24 hours","Last 7 days","Last 14 days","Last 30 days"];
-function DDateFilter({ value, onChange }) {
+function DDateFilter({ value, onChange, opts = D_DATE_OPTS, label = "Date", def = "All time", icon = null, width = 150 }) {
   const [open, setOpen] = React.useState(false);
   const [hi, setHi] = React.useState(-1);
   const box = React.useRef(null);
@@ -1313,30 +1598,30 @@ function DDateFilter({ value, onChange }) {
   const pick = o => { onChange(o); setOpen(false); };
   const onKey = e => {
     if (e.key==="Escape") return setOpen(false);
-    if (e.key==="ArrowDown" || e.key==="ArrowUp") { e.preventDefault(); if(!open){ setOpen(true); setHi(D_DATE_OPTS.indexOf(value)); return; }
-      setHi(h=>(h + (e.key==="ArrowDown"?1:-1) + D_DATE_OPTS.length) % D_DATE_OPTS.length); }
-    if ((e.key==="Enter" || e.key===" ") && open && hi>=0) { e.preventDefault(); pick(D_DATE_OPTS[hi]); }
+    if (e.key==="ArrowDown" || e.key==="ArrowUp") { e.preventDefault(); if(!open){ setOpen(true); setHi(opts.indexOf(value)); return; }
+      setHi(h=>(h + (e.key==="ArrowDown"?1:-1) + opts.length) % opts.length); }
+    if ((e.key==="Enter" || e.key===" ") && open && hi>=0) { e.preventDefault(); pick(opts[hi]); }
   };
-  const active = value !== "All time";
+  const active = value !== def;
   return (
     <div ref={box} style={{position:"relative", flexShrink:0}}>
-      <button type="button" onClick={()=>{ setOpen(o=>!o); setHi(D_DATE_OPTS.indexOf(value)); }} onKeyDown={onKey}
-        aria-haspopup="listbox" aria-expanded={open} aria-label={"Date: " + value}
-        style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, width:150, padding:"8px 12px", borderRadius:8,
-          border:`1px solid ${dT.hairline}`, background:"#fff", cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight: active ? 600 : 500,
+      <button type="button" onClick={()=>{ setOpen(o=>!o); setHi(opts.indexOf(value)); }} onKeyDown={onKey}
+        aria-haspopup="listbox" aria-expanded={open} aria-label={label + ": " + value}
+        style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, width, padding:"8px 12px", borderRadius:8,
+          border:`1px solid ${dT.hairline}`, background:"#fff", cursor:"pointer", fontFamily:dFB, fontSize:14, fontWeight: active ? 600 : 500,
           color: active ? dT.ink : dT.muted, whiteSpace:"nowrap"}}>
-        {active ? value : "Date"}
+        <span style={{display:"inline-flex", alignItems:"center", gap:7}}>{icon}{active ? value : label}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           style={{flexShrink:0, color:dT.muted, transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>
       </button>
       {open && (
-        <div role="listbox" aria-label="Date" style={{position:"absolute", top:"calc(100% + 6px)", left:0, zIndex:30, minWidth:190, background:"#fff",
+        <div role="listbox" aria-label={label} style={{position:"absolute", top:"calc(100% + 6px)", right:0, zIndex:30, minWidth:190, background:"#fff",
           border:`1px solid ${dT.hairline}`, borderRadius:12, boxShadow:"0 12px 32px rgba(2,47,54,.12)", padding:6}}>
-          {D_DATE_OPTS.map((o,i)=>{
+          {opts.map((o,i)=>{
             const sel = o===value;
             return (
               <div key={o} role="option" aria-selected={sel} onMouseEnter={()=>setHi(i)} onMouseDown={e=>{ e.preventDefault(); pick(o); }}
-                style={{display:"flex", alignItems:"center", gap:10, padding:"9px 12px", borderRadius:8, cursor:"pointer", fontSize:13.5,
+                style={{display:"flex", alignItems:"center", gap:10, padding:"9px 12px", borderRadius:8, cursor:"pointer", fontSize:14.5,
                   fontWeight: sel ? 600 : 500, color: sel ? "#0A6E6E" : dT.ink,
                   background: sel ? "#E0FAFA" : i===hi ? "#F4F6F6" : "transparent"}}>
                 <span style={{width:6, height:6, borderRadius:"50%", flexShrink:0, background: sel ? "#0A6E6E" : "transparent"}}/>
@@ -1364,23 +1649,23 @@ function DevScenarios({ st, set, onModal, onLastOne, goPlans }) {
     <div style={{position:"fixed", right:16, bottom:16, zIndex:70, fontFamily:dFB, display:"flex", flexDirection:"column", alignItems:"flex-end"}} className="m-hide">
       {open && (
         <div style={{marginBottom:8, width:250, background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:14, boxShadow:"0 14px 40px rgba(2,47,54,.18)", padding:8}}>
-          <div style={{fontSize:10.5, fontWeight:800, letterSpacing:".08em", color:dT.muted, padding:"6px 8px 8px"}}>PROTOTYPE · PLAN SCENARIOS</div>
+          <div style={{fontSize:11.5, fontWeight:800, letterSpacing:".08em", color:dT.muted, padding:"6px 8px 8px"}}>PROTOTYPE · PLAN SCENARIOS</div>
           {S.map(([k,label,sub,fn])=>(
             <button key={k} onClick={()=>{ fn(); setOpen(false); }} style={{width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", borderRadius:9, border:"none",
               background: cur===k ? "#F1F3F4" : "transparent", cursor:"pointer", textAlign:"left", fontFamily:dFB}}>
               <span style={{width:14, height:14, borderRadius:"50%", flexShrink:0, border: cur===k ? `4px solid ${dT.ink}` : `1.5px solid ${dT.hairline}`, boxSizing:"border-box"}}/>
               <span style={{minWidth:0}}>
-                <span style={{display:"block", fontSize:13, fontWeight:700, color:dT.ink}}>{label}</span>
-                <span style={{display:"block", fontSize:11.5, fontWeight:500, color:dT.muted}}>{sub}</span>
+                <span style={{display:"block", fontSize:14, fontWeight:700, color:dT.ink}}>{label}</span>
+                <span style={{display:"block", fontSize:12.5, fontWeight:500, color:dT.muted}}>{sub}</span>
               </span>
             </button>
           ))}
           <button onClick={()=>{ goPlans(); setOpen(false); }} style={{width:"100%", marginTop:4, padding:"9px 10px", borderRadius:9, border:`1px dashed ${dT.hairline}`, background:"#fff",
-            cursor:"pointer", fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink}}>Open pricing page →</button>
+            cursor:"pointer", fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.ink}}>Open pricing page →</button>
         </div>
       )}
       <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} style={{display:"inline-flex", alignItems:"center", gap:7, padding:"8px 13px", borderRadius:999,
-        border:`1px dashed ${dT.ink}`, background:"#FFFCF6", color:dT.ink, cursor:"pointer", fontFamily:dFB, fontSize:12, fontWeight:700}}>
+        border:`1px dashed ${dT.ink}`, background:"#FFFCF6", color:dT.ink, cursor:"pointer", fontFamily:dFB, fontSize:13, fontWeight:700}}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         Scenarios
       </button>
@@ -1410,21 +1695,21 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap", paddingBottom:18, borderBottom:`1px solid ${dT.hairline}`}}>
           <div>
             <div style={{fontSize:15, fontWeight:700, color:dT.ink}}>Plan</div>
-            <div style={{fontSize:13.5, fontWeight:500, color:dT.muted, marginTop:4}}>
+            <div style={{fontSize:14.5, fontWeight:500, color:dT.muted, marginTop:4}}>
               {plan==="quarterly" ? "Quarterly" : "Monthly"} · {cur.price} {cur.per.replace("/","/ ")} · Renews {plan==="quarterly" ? "Dec 30, 2026" : "Oct 30, 2026"}
             </div>
           </div>
           <a href="https://customer.dodopayments.com" target="_blank" rel="noopener noreferrer" style={{display:"inline-flex", alignItems:"center", gap:7, padding:"10px 20px", borderRadius:999, background:"#F1EFEA", color:dT.ink,
-            fontFamily:dFB, fontSize:13.5, fontWeight:700, textDecoration:"none"}}>Manage billing
+            fontFamily:dFB, fontSize:14.5, fontWeight:700, textDecoration:"none"}}>Manage billing
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
           </a>
         </div>
       )}
       {plan!=="free" && (
         <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"18px 22px", marginTop:-6}}>
-          <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:10}}>USAGE</div>
+          <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".07em", marginBottom:10}}>USAGE</div>
               <div>
-                <div style={{display:"flex", justifyContent:"space-between", gap:12, fontSize:12.5, fontWeight:600, color:dT.ink, marginBottom:6}}>
+                <div style={{display:"flex", justifyContent:"space-between", gap:12, fontSize:13.5, fontWeight:600, color:dT.ink, marginBottom:6}}>
                   <span>{42 + used} of 300 applications used this month</span>
                   <span style={{color:dT.muted, fontWeight:500}}>{Math.max(0, 300 - 42 - used)} left</span>
                 </div>
@@ -1432,78 +1717,24 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
                   style={{height:6, borderRadius:999, background:"#DCE6E7", overflow:"hidden"}}>
                   <div style={{height:"100%", width:`${Math.min(1,(42+used)/300)*100}%`, background:"#0BB3B3", borderRadius:999}}/>
                 </div>
-                <div style={{fontSize:12, fontWeight:500, color:dT.muted, marginTop:6}}>Resets {plan==="quarterly" ? "Nov 1" : "Oct 30"}. Unused applications don't carry over.</div>
+                <div style={{fontSize:13, fontWeight:500, color:dT.muted, marginTop:6}}>Resets {plan==="quarterly" ? "Nov 1" : "Oct 30"}. Unused applications don't carry over.</div>
               </div>
         </div>
       )}
-      <div>
-        <div style={{fontFamily:dFD, fontWeight:700, fontSize:20, letterSpacing:"-0.02em"}}>Choose your plan</div>
-        <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>
-          {plan==="free" ? `You're on Free · ${Math.min(used,D_FREE_LEFT)} of ${D_FREE_LEFT} used.` : `You're on ${plan==="quarterly" ? "Quarterly" : "Monthly"}. Bloom sends up to 300 a month, on your strongest matches first.`}
-        </div>
-      </div>
-      {justPaid && (
-        <div role="status" style={{display:"flex", alignItems:"center", gap:10, padding:"12px 16px", borderRadius:12, background:"#E8F6EE", border:"1px solid #CBE9D8"}}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F8A5B" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          <span style={{fontSize:13, fontWeight:600, color:"#1F5B3E"}}>You're on {justPaid==="quarterly" ? "Quarterly" : "Monthly"}. Bloom is applying again, starting with your best matches.</span>
-        </div>
-      )}
-      {out && !justPaid && (
-        <div style={{display:"flex", alignItems:"flex-start", gap:12, padding:"14px 16px", borderRadius:12, background:"#FDF3DF"}}>
-          <span style={{fontSize:18, lineHeight:1}}>⏸</span>
+      {plan==="free" && (
+        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, flexWrap:"wrap", background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"20px 24px"}}>
           <div>
-            <div style={{fontSize:13.5, fontWeight:800, color:"#6B4A00"}}>You've used all {D_FREE_LEFT} free applications</div>
-            <div style={{fontSize:12.5, fontWeight:600, color:"#6B4A00", marginTop:3, lineHeight:1.5}}>{st.mode==="auto" ? "Bloom has paused applying." : "Apply is locked."} Pick a plan and Bloom picks up where it left off. Your matches and answers are kept.</div>
+            <div style={{fontSize:15, fontWeight:700, color:dT.ink}}>Free plan</div>
+            <div style={{fontSize:14, fontWeight:500, color:dT.muted, marginTop:4}}>{Math.min(used,D_FREE_LEFT)} of {D_FREE_LEFT} free applications used{out ? ". Bloom has paused." : ""}</div>
           </div>
+          <button onClick={()=>window.dispatchEvent(new CustomEvent("bloom:plans"))} className="bd-cta" style={{padding:"10px 20px", borderRadius:999, border:"none", background:dT.ink, color:"#fff",
+            fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
         </div>
       )}
-
-      <div style={{display:"grid", gridTemplateColumns:"repeat(3, minmax(0,1fr))", gap:12, paddingTop:12}}>
-        {PLANS.map(p=>{
-          p = {...p, current: p.k===plan};
-          const d = p.popular;
-          const fg = d ? "#fff" : dT.ink, mute = d ? "rgba(255,255,255,.72)" : dT.muted, line = d ? "rgba(255,255,255,.16)" : dT.hairline;
-          return (
-            <div key={p.k} style={{position:"relative", borderRadius:20, padding:"24px 18px 18px", display:"flex", flexDirection:"column",
-              background: d ? dT.ink : "#fff", border: d ? "none" : `1px solid ${dT.hairline}`, color:fg, minWidth:0}}>
-              {d && <span style={{position:"absolute", top:-12, left:"50%", transform:"translateX(-50%)", display:"inline-flex", alignItems:"center", gap:6,
-                background:dT.ink, color:"#fff", border:"1px solid rgba(255,255,255,.22)", borderRadius:999, padding:"5px 12px",
-                fontSize:10.5, fontWeight:800, letterSpacing:".08em", whiteSpace:"nowrap"}}>
-                <span style={{width:6, height:6, borderRadius:"50%", background:"#5AEBEB"}}/>MOST POPULAR</span>}
-              <div style={{fontSize:11, fontWeight:800, letterSpacing:".14em", color:mute}}>{p.name}</div>
-              <div style={{display:"flex", alignItems:"baseline", gap:"2px 6px", marginTop:10, flexWrap:"wrap"}}>
-                <span style={{fontFamily:dFD, fontWeight:700, fontSize:32, letterSpacing:"-0.03em", lineHeight:1}}>{p.price}</span>
-                <span style={{fontSize:12.5, fontWeight:600, color:mute}}>{p.per}</span>
-              </div>
-              {p.note && <div style={{fontSize:11.5, fontWeight:700, color: d ? "#5AEBEB" : "#0A6E6E", marginTop:6, lineHeight:1.35}}>{p.note}</div>}
-              <div style={{fontSize:12.5, fontWeight:500, color:mute, lineHeight:1.4, marginTop: p.note ? 8 : 10}}>{p.blurb}</div>
-              <div style={{height:1, background:line, margin:"16px 0"}}/>
-              <div style={{fontSize:10.5, fontWeight:800, letterSpacing:".14em", color:mute}}>UP TO</div>
-              <div style={{display:"flex", alignItems:"baseline", gap:7, marginTop:4, flexWrap:"wrap"}}>
-                <span style={{fontFamily:dFD, fontWeight:700, fontSize:26, letterSpacing:"-0.03em", lineHeight:1}}>{p.upTo}</span>
-                <span style={{fontSize:12, fontWeight:600, color:mute, lineHeight:1.3}}>{p.unit}</span>
-              </div>
-              {p.sub && <div style={{fontSize:11.5, fontWeight:600, color:mute, marginTop:4}}>{p.sub}</div>}
-              <div style={{flex:1, minHeight:20}}/>
-              <button disabled={p.current || (p.k==="free" && plan!=="free")} onClick={()=>!p.current && p.k!=="free" && choose(p.k)} className={p.current ? "" : "bd-cta"} style={{width:"100%", padding:"11px 8px", borderRadius:999, lineHeight:1.25,
-                border: p.current ? `1.5px solid ${dT.hairline}` : "none",
-                background: p.current ? "#fff" : d ? "#fff" : dT.ink, color: p.current ? dT.muted : d ? dT.ink : "#fff",
-                fontFamily:dFB, fontSize:13, fontWeight:700, cursor: p.current ? "default" : "pointer", opacity: (p.k==="free" && plan!=="free") ? .5 : 1}}>{p.current ? "Current plan" : p.k==="free" ? "Free plan" : p.cta}</button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="bd-plan-perks" style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(200px, 1fr))", background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, overflow:"hidden", marginTop:-8}}>
-        {[["Both apply modes","Manual apply or Full Auto Apply, on every plan."],
-          ["5 free applications","Try Bloom first. No card required."],
-          ["Only submitted count","Pay only for applications that actually go out."]].map(([t,s],i)=>(
-          <div key={t} style={{padding:"18px 22px", borderLeft: i ? `1px solid ${dT.hairline}` : "none", marginLeft:-1}}>
-            <div style={{fontSize:14, fontWeight:700, color:dT.ink}}>{t}</div>
-            <div style={{fontSize:12.5, fontWeight:500, color:dT.muted, marginTop:4, lineHeight:1.45}}>{s}</div>
-          </div>
-        ))}
-      </div>
+      {plan!=="free" && (
+        <button onClick={()=>window.dispatchEvent(new CustomEvent("bloom:plans"))} className="bd-textlink" style={{alignSelf:"flex-start", border:"none", background:"none", padding:0, cursor:"pointer",
+          fontFamily:dFB, fontSize:14, fontWeight:700, color:"#0A6E6E", marginTop:-8}}>Compare plans →</button>
+      )}
 
       <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"22px 28px"}}>
         <div style={{fontFamily:dFD, fontWeight:700, fontSize:17, marginBottom:6}}>Billing</div>
@@ -1514,18 +1745,18 @@ function BillingPanel({ st = {}, set = ()=>{} }) {
   );
 }
 function DPill({ children, tone }) {
-  const map = { warn:{fg:"#8A6D00", bg:"#FBEFCB"}, ok:{fg:"#7B8B8E", bg:"#F1F3F4"} };
+  const map = { warn:{fg:"#8A6D00", bg:"#FBEFCB"}, ok:{fg:"#5B6573", bg:"#F1F3F4"} };
   const t = map[tone] || map.ok;
-  return <span style={{fontSize:11.5, fontWeight:700, color:t.fg, background:t.bg, borderRadius:999, padding:"4px 11px", display:"inline-flex", alignItems:"center", gap:5}}>{tone==="warn" && "⚠"} {children}</span>;
+  return <span style={{fontSize:12.5, fontWeight:700, color:t.fg, background:t.bg, borderRadius:999, padding:"4px 11px", display:"inline-flex", alignItems:"center", gap:5}}>{tone==="warn" && "⚠"} {children}</span>;
 }
 
 function PRow({ label, value, missing, last }) {
   return (
     <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"12px 0", borderBottom: last ? "none" : `1px solid ${dT.hairline}`}}>
-      <span style={{fontSize:13, fontWeight:600, color:dT.muted}}>{label}</span>
+      <span style={{fontSize:14, fontWeight:600, color:dT.muted}}>{label}</span>
       {missing
-        ? <button style={{fontSize:12, fontWeight:700, color:dT.muted, border:`1.5px dashed ${dT.hairline}`, background:"#fff", borderRadius:999, padding:"5px 12px", cursor:"pointer"}}>Add · optional</button>
-        : <span style={{fontSize:13.5, fontWeight:700, color:dT.ink}}>{value}</span>}
+        ? <button style={{fontSize:13, fontWeight:700, color:dT.muted, border:`1.5px dashed ${dT.hairline}`, background:"#fff", borderRadius:999, padding:"5px 12px", cursor:"pointer"}}>Add · optional</button>
+        : <span style={{fontSize:14.5, fontWeight:700, color:dT.ink}}>{value}</span>}
     </div>
   );
 }
@@ -1538,7 +1769,7 @@ function PSection({ title, icon, count, children, action, last, onEdit }) {
           {icon && <span style={{width:34, height:34, borderRadius:10, background:"#F1F3F4", display:"grid", placeItems:"center", fontSize:15, flexShrink:0}}>{icon}</span>}
           <div>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:16}}>{title}</div>
-            {count && <div style={{fontSize:12, color:dT.muted, fontWeight:500}}>{count}</div>}
+            {count && <div style={{fontSize:13, color:dT.muted, fontWeight:500}}>{count}</div>}
           </div>
         </div>
         {action !== false && <PencilBtn onClick={onEdit}/>}
@@ -1573,12 +1804,12 @@ function EditPersonalDrawer({ data, onSave, onClose }) {
         </div>
         <div style={{flex:1, overflow:"auto", padding:"22px 26px", display:"flex", flexDirection:"column", gap:18}}>
           <div>
-            <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:7}}>Summary</div>
+            <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:7}}>Summary</div>
             <textarea value={f.summary} onChange={e=>upd("summary", e.target.value)} rows={4}
               placeholder="e.g. Senior frontend engineer with 8 years building SaaS interfaces."
               style={{width:"100%", padding:"11px 13px", borderRadius:9, border:`1.5px solid ${dT.hairline}`,
                 fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box", resize:"vertical"}}/>
-            <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:6}}>1-2 lines that introduce you. Shown at the top of your profile.</div>
+            <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:6}}>1-2 lines that introduce you. Shown at the top of your profile.</div>
           </div>
           <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:14}}>
             <DField2 label="First Name" required value={f.first} onChange={v=>upd("first",v)}/>
@@ -1607,9 +1838,9 @@ function EditPersonalDrawer({ data, onSave, onClose }) {
         </div>
         <div style={{padding:"18px 26px", display:"flex", justifyContent:"flex-end", gap:10, borderTop:`1px solid ${dT.hairline}`}}>
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:999, background:"#fff", color:dT.ink,
-            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button onClick={()=>onSave(f)} style={{padding:"10px 20px", borderRadius:999, background:dT.ink, color:"#fff",
-            border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
+            border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
         </div>
       </div>
     </div>
@@ -1683,9 +1914,9 @@ function EditPreferencesDrawer({ data, onSave, onClose }) {
         </div>
         <div style={{padding:"18px 26px", display:"flex", justifyContent:"flex-end", gap:10, borderTop:`1px solid ${dT.hairline}`}}>
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:999, background:"#fff", color:dT.ink,
-            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button onClick={()=>onSave(f)} style={{padding:"10px 20px", borderRadius:999, background:dT.ink, color:"#fff",
-            border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
+            border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
         </div>
       </div>
     </div>
@@ -1695,11 +1926,11 @@ function EditPreferencesDrawer({ data, onSave, onClose }) {
 function DField2({ label, value, onChange, placeholder, required, type, hint }) {
   return (
     <div>
-      <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:7}}>{label}{required && <span style={{color:dT.muted}}> *</span>}</div>
+      <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:7}}>{label}{required && <span style={{color:dT.muted}}> *</span>}</div>
       <input value={value} onChange={e=>onChange(e.target.value)} type={type||"text"} placeholder={placeholder}
         style={{width:"100%", padding:"11px 13px", borderRadius:9, border:`1.5px solid ${dT.hairline}`,
           fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box"}}/>
-      {hint && <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:6}}>{hint}</div>}
+      {hint && <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:6}}>{hint}</div>}
     </div>
   );
 }
@@ -1707,12 +1938,12 @@ function DField2({ label, value, onChange, placeholder, required, type, hint }) 
 function DSelect({ label, value, onChange, options, hint }) {
   return (
     <div>
-      <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:7}}>{label}</div>
+      <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:7}}>{label}</div>
       <select value={value} onChange={e=>onChange(e.target.value)} style={{width:"100%", padding:"11px 13px", borderRadius:9,
         border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box", background:"#fff"}}>
         {options.map(o=><option key={o} value={o}>{o}</option>)}
       </select>
-      {hint && <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:6}}>{hint}</div>}
+      {hint && <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:6}}>{hint}</div>}
     </div>
   );
 }
@@ -1733,9 +1964,9 @@ function DrawerShell({ title, onClose, onSave, children }) {
         </div>
         <div style={{padding:"18px 26px", display:"flex", justifyContent:"flex-end", gap:10, borderTop:`1px solid ${dT.hairline}`}}>
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:999, background:"#fff", color:dT.ink,
-            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button onClick={onSave} style={{padding:"10px 20px", borderRadius:999, background:dT.ink, color:"#fff",
-            border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
+            border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Save Changes</button>
         </div>
       </div>
     </div>
@@ -1758,21 +1989,21 @@ function EditListDrawer({ title, items, onSave, onClose, fields, blank, renderEx
           {renderExtra && renderExtra(it, v=>updAt(i,"bullets",v))}
         </div>
       ))}
-      <button onClick={()=>setList(l=>[...l, blank])} className="bd-textlink" style={{alignSelf:"flex-start", fontSize:13.5, fontWeight:700,
+      <button onClick={()=>setList(l=>[...l, blank])} className="bd-textlink" style={{alignSelf:"flex-start", fontSize:14.5, fontWeight:700,
         color:dT.ink, cursor:"pointer", background:"none", border:"none"}}>+ Add {title.toLowerCase().replace("edit ","")}</button>
     </DrawerShell>
   );
 }
 
 function ALabel({ children }) {
-  return <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", marginBottom:8}}>{children}</div>;
+  return <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", marginBottom:8}}>{children}</div>;
 }
 function AChip({ ok, children }) {
   const neutral = ok===undefined;
   return (
-    <span style={{display:"inline-flex", alignItems:"center", gap:5, fontSize:12, fontWeight:600, borderRadius:999, padding:"5px 11px",
+    <span style={{display:"inline-flex", alignItems:"center", gap:5, fontSize:13, fontWeight:600, borderRadius:999, padding:"5px 11px",
       color: neutral ? dT.ink : ok ? "#1F6B45" : "#5C6668", background: neutral ? "#F1F3F4" : ok ? "#E8F4EC" : "#F1F3F4"}}>
-      {!neutral && <span style={{fontSize:11}}>{ok ? "\u2713" : "\u00d7"}</span>}{children}
+      {!neutral && <span style={{fontSize:12}}>{ok ? "\u2713" : "\u00d7"}</span>}{children}
     </span>
   );
 }
@@ -1789,7 +2020,7 @@ function SkillTagField({ values, onChange }) {
       <div style={{display:"flex", alignItems:"center", gap:8, padding:"8px 12px", borderRadius:10, border:`1.5px solid ${dT.hairline}`, background:"#fff"}}>
         <div style={{display:"flex", flexWrap:"wrap", gap:7, flex:1, minWidth:0}}>
           {values.map(v=>(
-            <span key={v} style={{display:"inline-flex", alignItems:"center", gap:5, fontSize:13, fontWeight:600, color:"#11684D",
+            <span key={v} style={{display:"inline-flex", alignItems:"center", gap:5, fontSize:14, fontWeight:600, color:"#11684D",
               background:"#DDF7EC", borderRadius:8, padding:"5px 10px"}}>{v}
               <button onClick={()=>onChange(values.filter(x=>x!==v))} aria-label={`Remove ${v}`} style={{border:"none", background:"none",
                 color:"#11684D", cursor:"pointer", fontSize:14, lineHeight:1, padding:0}}>×</button>
@@ -1804,7 +2035,7 @@ function SkillTagField({ values, onChange }) {
         </div>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><path d="m6 9 6 6 6-6"/></svg>
       </div>
-      <div style={{fontSize:12, color:dT.muted, fontWeight:500, marginTop:7}}>💡 Tip: You can paste or type multiple items separated by commas</div>
+      <div style={{fontSize:13, color:dT.muted, fontWeight:500, marginTop:7}}>💡 Tip: You can paste or type multiple items separated by commas</div>
     </div>
   );
 }
@@ -1826,17 +2057,17 @@ function EditCertsModal({ certs, onSave, onClose }) {
   const drop = to => { if(dragIdx===null||dragIdx===to) return; setList(l=>{ const n=[...l]; const [m]=n.splice(dragIdx,1); n.splice(to,0,m); return n; }); setDragIdx(null); };
   const inp = err => ({width:"100%", padding:"11px 14px", borderRadius:10, border:`1.5px solid ${err ? "#E0474C" : dT.hairline}`,
     fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box", background:"#fff"});
-  const lab = {fontSize:13.5, fontWeight:600, color:dT.ink, marginBottom:8};
+  const lab = {fontSize:14.5, fontWeight:600, color:dT.ink, marginBottom:8};
   const req = (i,k,label,ph) => { const err = touched[list[i]._k+k] && !list[i][k].trim(); return (
     <div><div style={lab}>{label} *</div>
       <input value={list[i][k]} onChange={e=>upd(i,k,e.target.value)} onBlur={()=>setTouched(t=>({...t,[list[i]._k+k]:true}))} placeholder={ph} style={inp(err)}/>
-      {err && <div style={{fontSize:12, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}</div>); };
+      {err && <div style={{fontSize:13, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}</div>); };
   const dateF = (i,k,label) => (
     <div><div style={lab}>{label}</div>
       <div style={{position:"relative"}}>
         <input value={list[i][k]} onChange={e=>upd(i,k,e.target.value)} placeholder="Mon YYYY" style={{...inp(false), paddingRight:36}}/>
         {list[i][k] && <button onClick={()=>upd(i,k,"")} aria-label={`Clear ${label}`} style={{position:"absolute", right:10, top:"50%", transform:"translateY(-50%)",
-          width:18, height:18, borderRadius:"50%", border:"none", background:"#9CA3AF", color:"#fff", fontSize:11, lineHeight:1, cursor:"pointer", display:"grid", placeItems:"center"}}>×</button>}
+          width:18, height:18, borderRadius:"50%", border:"none", background:"#9CA3AF", color:"#fff", fontSize:12, lineHeight:1, cursor:"pointer", display:"grid", placeItems:"center"}}>×</button>}
       </div></div>);
   return (
     <div style={{position:"fixed", inset:0, zIndex:70, display:"grid", placeItems:"center", padding:24}}>
@@ -1855,7 +2086,7 @@ function EditCertsModal({ certs, onSave, onClose }) {
                   onClick={()=>scrollTo(x._k)} style={{display:"flex", alignItems:"center", gap:9, padding:"10px", borderRadius:8, cursor:"pointer", opacity: dragIdx===i ? .45 : 1}}
                   onMouseEnter={e=>e.currentTarget.style.background="#EEF0F2"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                   <svg width="12" height="16" viewBox="0 0 12 16" fill={dT.muted} style={{flexShrink:0, cursor:"grab"}}><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></svg>
-                  <span style={{fontSize:13.5, fontWeight:500, color: x.name ? dT.ink : dT.muted, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{x.name || `Certification ${i+1}`}</span>
+                  <span style={{fontSize:14.5, fontWeight:500, color: x.name ? dT.ink : dT.muted, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{x.name || `Certification ${i+1}`}</span>
                 </div>
               ))}
             </div>
@@ -1879,15 +2110,15 @@ function EditCertsModal({ certs, onSave, onClose }) {
                 <div><div style={lab}>Credential URL</div><input value={x.url} onChange={e=>upd(i,"url",e.target.value)} placeholder="Optional" style={inp(false)}/></div>
               </div>
             ))}
-            {list.length===0 && <div style={{fontSize:13.5, color:dT.muted, fontWeight:500, textAlign:"center", padding:"40px 0"}}>No certifications. Add one from the left.</div>}
+            {list.length===0 && <div style={{fontSize:14.5, color:dT.muted, fontWeight:500, textAlign:"center", padding:"40px 0"}}>No certifications. Add one from the left.</div>}
           </div>
         </div>
         <div style={{padding:"14px 26px", display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, background:"#F8F9FA", borderTop:`1px solid ${dT.hairline}`}}>
-          {!valid && <span style={{fontSize:12.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
+          {!valid && <span style={{fontSize:13.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:10, background:"#fff", color:dT.ink, border:`1.5px solid ${dT.hairline}`,
-            fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button disabled={!canSave} onClick={()=>onSave(strip(list).map(r=>({...r, name:r.name.trim(), org:r.org.trim()})))}
-            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700,
+            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700,
             cursor: canSave ? "pointer" : "not-allowed", background: canSave ? dT.ink : "#E5E7EB", color: canSave ? "#fff" : "#9CA3AF"}}>Save Changes</button>
         </div>
       </div>
@@ -1911,7 +2142,7 @@ function EditSkillsModal({ cats, onSave, onClose }) {
   const drop = to => { if(dragIdx===null || dragIdx===to) return; setList(l=>{ const n=[...l]; const [m]=n.splice(dragIdx,1); n.splice(to,0,m); return n; }); setDragIdx(null); };
   const inp = err => ({width:"100%", padding:"12px 14px", borderRadius:10, border:`1.5px solid ${err ? "#E0474C" : dT.hairline}`,
     fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box"});
-  const lab = {fontSize:13.5, fontWeight:600, color:dT.ink, marginBottom:8};
+  const lab = {fontSize:14.5, fontWeight:600, color:dT.ink, marginBottom:8};
   return (
     <div style={{position:"fixed", inset:0, zIndex:70, display:"grid", placeItems:"center", padding:24}}>
       <div onClick={onClose} style={{position:"absolute", inset:0, background:"rgba(2,30,36,.45)"}}/>
@@ -1931,7 +2162,7 @@ function EditSkillsModal({ cats, onSave, onClose }) {
                     opacity: dragIdx===i ? .45 : 1, background: dragIdx!==null && dragIdx!==i ? "transparent" : undefined}}
                   onMouseEnter={e=>e.currentTarget.style.background="#EEF0F2"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                   <svg width="12" height="16" viewBox="0 0 12 16" fill={dT.muted} style={{flexShrink:0, cursor:"grab"}}><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></svg>
-                  <span style={{fontSize:13.5, fontWeight:500, color: g.cat ? dT.ink : dT.muted, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{g.cat || `Category ${i+1}`}</span>
+                  <span style={{fontSize:14.5, fontWeight:500, color: g.cat ? dT.ink : dT.muted, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{g.cat || `Category ${i+1}`}</span>
                 </div>
               ))}
             </div>
@@ -1954,7 +2185,7 @@ function EditSkillsModal({ cats, onSave, onClose }) {
                     <div style={lab}>Category Name *</div>
                     <input value={g.cat} onChange={e=>upd(i,{cat:e.target.value})} onBlur={()=>setTouched(t=>({...t,[g._k]:true}))}
                       placeholder="e.g., Programming Languages" style={inp(err)}/>
-                    {err && <div style={{fontSize:12, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}
+                    {err && <div style={{fontSize:13, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}
                   </div>
                   <div>
                     <div style={lab}>Skills</div>
@@ -1964,16 +2195,16 @@ function EditSkillsModal({ cats, onSave, onClose }) {
               );
             })}
             {list.length===0 && (
-              <div style={{fontSize:13.5, color:dT.muted, fontWeight:500, textAlign:"center", padding:"40px 0"}}>No categories yet. Add one to group your skills.</div>
+              <div style={{fontSize:14.5, color:dT.muted, fontWeight:500, textAlign:"center", padding:"40px 0"}}>No categories yet. Add one to group your skills.</div>
             )}
           </div>
         </div>
         <div style={{padding:"14px 26px", display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, background:"#F8F9FA", borderTop:`1px solid ${dT.hairline}`}}>
-          {!valid && <span style={{fontSize:12.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
+          {!valid && <span style={{fontSize:13.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:10, background:"#fff", color:dT.ink, border:`1.5px solid ${dT.hairline}`,
-            fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button disabled={!canSave} onClick={()=>onSave(list.map(({_k,...r})=>({...r, cat:r.cat.trim()})))}
-            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700,
+            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700,
             cursor: canSave ? "pointer" : "not-allowed", background: canSave ? dT.ink : "#E5E7EB", color: canSave ? "#fff" : "#9CA3AF"}}>Save Changes</button>
         </div>
       </div>
@@ -1994,7 +2225,7 @@ function CustomSectionModal({ initial, onSave, onClose }) {
   const valid = title.trim().length>0;
   const inp = err => ({width:"100%", padding:"11px 14px", borderRadius:10, border:`1.5px solid ${err ? "#E0474C" : dT.hairline}`,
     fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", boxSizing:"border-box"});
-  const lab = {fontSize:13.5, fontWeight:600, color:dT.ink, marginBottom:8};
+  const lab = {fontSize:14.5, fontWeight:600, color:dT.ink, marginBottom:8};
   const it = sel>=0 ? items[sel] : null;
   return (
     <div style={{position:"fixed", inset:0, zIndex:70, display:"grid", placeItems:"center", padding:24}}>
@@ -2010,20 +2241,20 @@ function CustomSectionModal({ initial, onSave, onClose }) {
             <div style={{flex:1, overflow:"auto", padding:10, display:"flex", flexDirection:"column", gap:4}}>
               {items.map((x,i)=>(
                 <button key={i} onClick={()=>setSel(i)} style={{textAlign:"left", padding:"9px 11px", borderRadius:8, border:"none", cursor:"pointer",
-                  background: sel===i ? "#fff" : "transparent", fontFamily:dFB, fontSize:13, fontWeight:600, color: x.title ? dT.ink : dT.muted,
+                  background: sel===i ? "#fff" : "transparent", fontFamily:dFB, fontSize:14, fontWeight:600, color: x.title ? dT.ink : dT.muted,
                   boxShadow: sel===i ? "0 1px 2px rgba(0,0,0,.06)" : "none", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>
                   {x.title || `Item ${i+1}`}
                 </button>
               ))}
             </div>
             <button onClick={addItem} style={{display:"flex", alignItems:"center", gap:8, padding:"14px 16px", border:"none", borderTop:`1px solid ${dT.hairline}`,
-              background:"none", cursor:"pointer", fontFamily:dFB, fontSize:13.5, fontWeight:600, color:dT.ink}}>+ Add Item</button>
+              background:"none", cursor:"pointer", fontFamily:dFB, fontSize:14.5, fontWeight:600, color:dT.ink}}>+ Add Item</button>
           </div>
           <div style={{flex:1, minWidth:0, overflow:"auto", padding:"22px 26px", display:"flex", flexDirection:"column", gap:18}}>
             <div>
               <div style={lab}>Section Title *</div>
               <input value={title} onChange={e=>setTitle(e.target.value)} onBlur={()=>setTouched(true)} placeholder="e.g., Volunteer Experience, Languages" style={inp(touched && !valid)}/>
-              {touched && !valid && <div style={{fontSize:12, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}
+              {touched && !valid && <div style={{fontSize:13, color:"#E0474C", fontWeight:600, marginTop:6}}>Required</div>}
             </div>
             <div>
               <div style={lab}>Format</div>
@@ -2031,8 +2262,8 @@ function CustomSectionModal({ initial, onSave, onClose }) {
                 {[["structured","Structured","Title, subtitle, dates, bullets"],["bullets","Bullet List","Simple list of items"]].map(([k,t,d])=>(
                   <button key={k} onClick={()=>setFormat(k)} style={{textAlign:"left", padding:"12px 14px", borderRadius:10, cursor:"pointer", fontFamily:dFB,
                     border:`1.5px solid ${format===k ? "#1FA37A" : dT.hairline}`, background: format===k ? "#ECFBF4" : "#fff"}}>
-                    <div style={{fontSize:13.5, fontWeight:700, color: format===k ? "#11684D" : dT.ink}}>{t}</div>
-                    <div style={{fontSize:12, color:dT.muted, fontWeight:500, marginTop:2}}>{d}</div>
+                    <div style={{fontSize:14.5, fontWeight:700, color: format===k ? "#11684D" : dT.ink}}>{t}</div>
+                    <div style={{fontSize:13, color:dT.muted, fontWeight:500, marginTop:2}}>{d}</div>
                   </button>
                 ))}
               </div>
@@ -2051,7 +2282,7 @@ function CustomSectionModal({ initial, onSave, onClose }) {
                       <textarea value={it.bullets} onChange={e=>upd("bullets", e.target.value)} rows={3} placeholder="Bullets, one per line" style={{...inp(false), resize:"vertical"}}/>
                     </React.Fragment>
                   )}
-                  <button onClick={()=>removeItem(sel)} className="bd-textlink" style={{alignSelf:"flex-start", fontSize:12.5, fontWeight:700, color:"#C1443B", background:"none", border:"none", cursor:"pointer"}}>Remove item</button>
+                  <button onClick={()=>removeItem(sel)} className="bd-textlink" style={{alignSelf:"flex-start", fontSize:13.5, fontWeight:700, color:"#C1443B", background:"none", border:"none", cursor:"pointer"}}>Remove item</button>
                 </div>
               ) : null}
               <button onClick={addItem} style={{width:"100%", padding:"14px 0", borderRadius:12, border:`1.5px dashed ${dT.hairline}`, background:"transparent",
@@ -2060,11 +2291,11 @@ function CustomSectionModal({ initial, onSave, onClose }) {
           </div>
         </div>
         <div style={{padding:"14px 26px", display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, background:"#F8F9FA", borderTop:`1px solid ${dT.hairline}`}}>
-          {!valid && <span style={{fontSize:12.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
+          {!valid && <span style={{fontSize:13.5, color:"#E0474C", fontWeight:600}}>Fill required fields</span>}
           <button onClick={onClose} style={{padding:"10px 18px", borderRadius:10, background:"#fff", color:dT.ink, border:`1.5px solid ${dT.hairline}`,
-            fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
+            fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Cancel</button>
           <button disabled={!valid} onClick={()=>onSave({title:title.trim(), format, items: items.filter(x=>x.title.trim())})}
-            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700,
+            style={{padding:"10px 20px", borderRadius:10, border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700,
             cursor: valid ? "pointer" : "not-allowed", background: valid ? dT.ink : "#E5E7EB", color: valid ? "#fff" : "#9CA3AF"}}>Save Changes</button>
         </div>
       </div>
@@ -2094,7 +2325,7 @@ function ProfileToolbar({ profiles, setProfiles, activeId, setActiveId, defaultI
   const isDefault = defaultId===activeId;
   const iconBtn = (enabled) => ({width:34, height:34, borderRadius:9, border:"none", background:"transparent", display:"grid", placeItems:"center",
     cursor: enabled ? "pointer" : "not-allowed", flexShrink:0});
-  const tabBtn = k => ({padding:"8px 14px", borderRadius:9, border:"none", cursor:"pointer", fontFamily:dFB, fontSize:13.5, fontWeight:600,
+  const tabBtn = k => ({padding:"8px 14px", borderRadius:9, border:"none", cursor:"pointer", fontFamily:dFB, fontSize:14.5, fontWeight:600,
     background: tab===k ? "#E6F2EA" : "transparent", color: tab===k ? "#17362C" : dT.muted});
   return (
     <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", paddingBottom:16, marginBottom:22, borderBottom:`1px solid ${dT.hairline}`}}>
@@ -2116,14 +2347,14 @@ function CreateProfileModal({ profiles, defaultId, onClose, onCreate }) {
   React.useEffect(()=>{ const h=e=>{ if(e.key==="Escape") onClose(); }; window.addEventListener("keydown",h); return ()=>window.removeEventListener("keydown",h); }, []);
   const taken = profiles.some(p=>p.name.toLowerCase()===name.trim().toLowerCase());
   const valid = name.trim() && !taken && (source==="duplicate" || file);
-  const lab = {fontSize:13.5, fontWeight:600, color:dT.ink, marginBottom:8};
+  const lab = {fontSize:14.5, fontWeight:600, color:dT.ink, marginBottom:8};
   const opt = (k, icon, t, d) => (
     <button onClick={()=>setSource(k)} style={{display:"flex", alignItems:"flex-start", gap:12, textAlign:"left", padding:"13px 15px", borderRadius:12, cursor:"pointer",
       fontFamily:dFB, border:`1.5px solid ${source===k ? dT.ink : dT.hairline}`, background: source===k ? "#EEF7F6" : "#fff", width:"100%"}}>
       <span style={{color: source===k ? dT.ink : dT.muted, flexShrink:0, marginTop:1}}>{icon}</span>
       <span>
         <span style={{display:"block", fontSize:14, fontWeight:700, color:dT.ink}}>{t}</span>
-        <span style={{display:"block", fontSize:12.5, color:dT.muted, fontWeight:500, marginTop:2}}>{d}</span>
+        <span style={{display:"block", fontSize:13.5, color:dT.muted, fontWeight:500, marginTop:2}}>{d}</span>
       </span>
     </button>
   );
@@ -2143,7 +2374,7 @@ function CreateProfileModal({ profiles, defaultId, onClose, onCreate }) {
             placeholder="e.g. Software Engineer, Data Scientist"
             style={{width:"100%", padding:"11px 14px", borderRadius:10, boxSizing:"border-box", fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none",
             border:`1.5px solid ${taken ? "#E0474C" : focus ? dT.ink : dT.hairline}`, boxShadow: focus && !taken ? "0 0 0 3px rgba(2,47,54,.08)" : "none"}}/>
-          {taken && <div style={{fontSize:12, color:"#E0474C", fontWeight:600, marginTop:6}}>A profile with this name already exists</div>}
+          {taken && <div style={{fontSize:13, color:"#E0474C", fontWeight:600, marginTop:6}}>A profile with this name already exists</div>}
         </div>
         <div>
           <div style={lab}>Start from</div>
@@ -2173,7 +2404,7 @@ function CreateProfileModal({ profiles, defaultId, onClose, onCreate }) {
             <div style={lab}>Resume file</div>
             <input ref={fileRef} type="file" accept=".pdf,.docx" style={{display:"none"}} onChange={e=>setFile(e.target.files[0] || null)}/>
             <button onClick={()=>fileRef.current && fileRef.current.click()} style={{width:"100%", padding:"14px", borderRadius:10, cursor:"pointer",
-              border:`1.5px dashed ${file ? dT.ink : dT.hairline}`, background: file ? "#EEF7F6" : "#FAFAF9", fontFamily:dFB, fontSize:13.5, fontWeight:600,
+              border:`1.5px dashed ${file ? dT.ink : dT.hairline}`, background: file ? "#EEF7F6" : "#FAFAF9", fontFamily:dFB, fontSize:14.5, fontWeight:600,
               color: file ? dT.ink : dT.muted, textAlign:"center", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>
               {file ? file.name : "Choose a PDF or .docx"}
             </button>
@@ -2194,13 +2425,13 @@ function CreateProfileModal({ profiles, defaultId, onClose, onCreate }) {
 function ResumeTab() {
   return (
     <div style={{border:`1px solid ${dT.hairline}`, borderRadius:18, padding:"22px 24px", background:"#fff", display:"flex", alignItems:"center", gap:16, flexWrap:"wrap"}}>
-      <span style={{width:44, height:52, borderRadius:8, background:"#FDECEC", color:"#C1443B", display:"grid", placeItems:"center", fontSize:11, fontWeight:800, flexShrink:0}}>PDF</span>
+      <span style={{width:44, height:52, borderRadius:8, background:"#FDECEC", color:"#C1443B", display:"grid", placeItems:"center", fontSize:12, fontWeight:800, flexShrink:0}}>PDF</span>
       <div style={{flex:1, minWidth:180}}>
         <div style={{fontSize:14.5, fontWeight:700}}>Vinodh_Resume_2026.pdf</div>
-        <div style={{fontSize:12.5, color:dT.muted, fontWeight:500, marginTop:2}}>Uploaded Sep 12, 2026 · 184 KB · Used for every application in this profile</div>
+        <div style={{fontSize:13.5, color:dT.muted, fontWeight:500, marginTop:2}}>Uploaded Sep 12, 2026 · 184 KB · Used for every application in this profile</div>
       </div>
-      <button style={{padding:"9px 16px", borderRadius:999, background:"#fff", color:dT.ink, border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer"}}>Preview</button>
-      <button style={{padding:"9px 16px", borderRadius:999, background:dT.ink, color:"#fff", border:"none", fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer"}}>Replace résumé</button>
+      <button style={{padding:"9px 16px", borderRadius:999, background:"#fff", color:dT.ink, border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer"}}>Preview</button>
+      <button style={{padding:"9px 16px", borderRadius:999, background:dT.ink, color:"#fff", border:"none", fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer"}}>Replace résumé</button>
     </div>
   );
 }
@@ -2264,29 +2495,29 @@ function ProfileView({ st }) {
         <div style={{minWidth:0, flex:1}}>
           <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap"}}>
             <span style={{fontFamily:dFD, fontWeight:700, fontSize:18, color:"#17362C"}}>{personal.first}</span>
-            <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:11.5, fontWeight:700, color:"#2D7A4F",
+            <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:700, color:"#2D7A4F",
               background:"#E6F2EA", borderRadius:999, padding:"4px 11px", whiteSpace:"nowrap"}}>
               <span style={{width:6, height:6, borderRadius:"50%", background:"#2D7A4F"}}/>Open to work</span>
-            <button style={{fontSize:11.5, fontWeight:600, color:"#C25A00", background:"#FFF8DD", borderRadius:999,
+            <button style={{fontSize:12.5, fontWeight:600, color:"#C25A00", background:"#FFF8DD", borderRadius:999,
               padding:"3px 11px", border:"1px solid #F5DC7A", cursor:"pointer", fontFamily:dFB, whiteSpace:"nowrap"}}>{pct}% complete →</button>
           </div>
-          <div style={{fontSize:12.5, color:dT.muted, fontWeight:500, marginTop:5}}>
+          <div style={{fontSize:13.5, color:dT.muted, fontWeight:500, marginTop:5}}>
             {appInfo.location} · {personal.email} · {appInfo.phone}
           </div>
         </div>
-        <button onClick={()=>setEditing(true)} className="bd-textlink" style={{color:"#2D7A4F", cursor:"pointer", fontSize:13.5, fontWeight:600,
+        <button onClick={()=>setEditing(true)} className="bd-textlink" style={{color:"#2D7A4F", cursor:"pointer", fontSize:14.5, fontWeight:600,
           flexShrink:0, background:"none", border:"none", fontFamily:dFB}}>Edit →</button>
       </div>
 
       <div style={{display:"flex", alignItems:"center", gap:14, marginBottom:4}}>
-        <span style={{fontSize:13.5, fontWeight:600, color:dT.ink, whiteSpace:"nowrap"}}>Profile details</span>
+        <span style={{fontSize:14.5, fontWeight:600, color:dT.ink, whiteSpace:"nowrap"}}>Profile details</span>
         <div style={{flex:1, height:1, background:dT.hairline}}/>
       </div>
 
       <div style={{display:"flex", flexWrap:"wrap", gap:20, alignItems:"flex-start", marginTop:14}}>
         <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:18, padding:"4px 26px", flex:"1.7 1 460px", minWidth:0}}>
           <PSection title="Professional summary" action onEdit={()=>setEditing(true)}>
-            <div style={{fontSize:13.5, color:dT.ink, fontWeight:400, lineHeight:1.6}}>{personal.summary}</div>
+            <div style={{fontSize:14.5, color:dT.ink, fontWeight:400, lineHeight:1.6}}>{personal.summary}</div>
           </PSection>
 
           <PSection title="Education" count={`${education.length} entr${education.length===1?"y":"ies"}`} action onEdit={()=>setEditSection("education")}>
@@ -2294,8 +2525,8 @@ function ProfileView({ st }) {
               {education.map((e,i)=>(
                 <div key={i}>
                   <div style={{fontSize:14, fontWeight:700}}>{e.school}</div>
-                  <div style={{fontSize:12.5, color:dT.muted, fontWeight:500}}>{e.degree}</div>
-                  <div style={{fontSize:11.5, color:dT.muted, fontWeight:500, marginTop:2}}>{e.dates}</div>
+                  <div style={{fontSize:13.5, color:dT.muted, fontWeight:500}}>{e.degree}</div>
+                  <div style={{fontSize:12.5, color:dT.muted, fontWeight:500, marginTop:2}}>{e.dates}</div>
                 </div>
               ))}
             </div>
@@ -2311,7 +2542,7 @@ function ProfileView({ st }) {
                   </div>
                   <div style={{minWidth:0, paddingBottom: i<experience.length-1 ? 4 : 0, fontWeight:400}}>
                     <div style={{fontSize:14, fontWeight:700}}>{e.role}</div>
-                    <div style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>{e.co} · {e.dates}</div>
+                    <div style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>{e.co} · {e.dates}</div>
                     <ExperienceBullets text={e.bullets}/>
                   </div>
                 </div>
@@ -2321,7 +2552,7 @@ function ProfileView({ st }) {
 
           <PSection title="Projects" action onEdit={()=>setEditSection("projects")}>
             {projects.length===0 ? (
-              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, lineHeight:1.5}}>
+              <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, lineHeight:1.5}}>
                 Add side projects, school work, open-source contributions or notable work.
               </div>
             ) : (
@@ -2329,7 +2560,7 @@ function ProfileView({ st }) {
                 {projects.map((p,i)=>(
                   <div key={i}>
                     <div style={{fontSize:14, fontWeight:700}}>{p.name}</div>
-                    <div style={{fontSize:12.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.5}}>{p.desc}</div>
+                    <div style={{fontSize:13.5, color:"#374151", fontWeight:500, lineHeight:1.5}}>{p.desc}</div>
                   </div>
                 ))}
               </div>
@@ -2337,7 +2568,7 @@ function ProfileView({ st }) {
           </PSection>
           <PSection title="Certifications" count={`${certs.length} cert${certs.length===1?"":"s"}`} action onEdit={()=>setCertOpen(true)} last={customs.length===0}>
             {certs.length===0 ? (
-              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, lineHeight:1.5}}>Add licenses or certifications employers may ask about.</div>
+              <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, lineHeight:1.5}}>Add licenses or certifications employers may ask about.</div>
             ) : (
               <div style={{display:"flex", flexDirection:"column", gap:10}}>
                 {certs.map((ct,i)=>(
@@ -2346,11 +2577,11 @@ function ProfileView({ st }) {
                       fontSize:15, fontWeight:800, color:dT.muted, flexShrink:0}}>{(ct.org||ct.name||"?")[0]}</span>
                     <div style={{minWidth:0}}>
                       <div style={{fontSize:14, fontWeight:700}}>{ct.name}</div>
-                      <div style={{fontSize:12.5, color:dT.muted, fontWeight:500}}>{ct.org}</div>
+                      <div style={{fontSize:13.5, color:dT.muted, fontWeight:500}}>{ct.org}</div>
                       <div style={{display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", marginTop:3}}>
-                        {(ct.issue||ct.expiry) && <span style={{fontSize:11.5, color:dT.muted, fontWeight:500}}>{[ct.issue, ct.expiry].filter(Boolean).join(" – ")}</span>}
+                        {(ct.issue||ct.expiry) && <span style={{fontSize:12.5, color:dT.muted, fontWeight:500}}>{[ct.issue, ct.expiry].filter(Boolean).join(" – ")}</span>}
                         {ct.url && <a href={/^https?:/.test(ct.url) ? ct.url : "https://"+ct.url} target="_blank" rel="noopener noreferrer"
-                          style={{display:"inline-flex", alignItems:"center", gap:4, fontSize:12, fontWeight:600, color:"#1F7A55", textDecoration:"none"}}>
+                          style={{display:"inline-flex", alignItems:"center", gap:4, fontSize:13, fontWeight:600, color:"#1F7A55", textDecoration:"none"}}>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Verify</a>}
                       </div>
                     </div>
@@ -2363,11 +2594,11 @@ function ProfileView({ st }) {
             <PSection key={ci} title={cs.title} count={`${cs.items.length} item${cs.items.length===1?"":"s"}`} action onEdit={()=>setCustomOpen(ci)} last={ci===customs.length-1}>
               <div style={{display:"flex", flexDirection:"column", gap:12}}>
                 {cs.items.map((it,ii)=> cs.format==="bullets" ? (
-                  <div key={ii} style={{fontSize:12.5, color:"#4B5A5E", fontWeight:400, lineHeight:1.5, display:"flex", gap:6}}><span>•</span>{it.title}</div>
+                  <div key={ii} style={{fontSize:13.5, color:"#374151", fontWeight:400, lineHeight:1.5, display:"flex", gap:6}}><span>•</span>{it.title}</div>
                 ) : (
                   <div key={ii}>
                     <div style={{fontSize:14, fontWeight:700}}>{it.title}</div>
-                    {(it.subtitle||it.dates) && <div style={{fontSize:12.5, color:dT.muted, fontWeight:500}}>{[it.subtitle,it.dates].filter(Boolean).join(" · ")}</div>}
+                    {(it.subtitle||it.dates) && <div style={{fontSize:13.5, color:dT.muted, fontWeight:500}}>{[it.subtitle,it.dates].filter(Boolean).join(" · ")}</div>}
                     <ExperienceBullets text={it.bullets}/>
                   </div>
                 ))}
@@ -2395,9 +2626,9 @@ function ProfileView({ st }) {
                 <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, flexWrap:"wrap"}}>
                   <span style={{fontSize:14, fontWeight:700, wordBreak:"break-all"}}>vinodh.kumar@mygrademail.com</span>
                   <button onClick={()=>{ try{ navigator.clipboard.writeText("vinodh.kumar@mygrademail.com"); }catch(e){} }} className="bd-textlink"
-                    style={{fontSize:12, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer", padding:0}}>Copy</button>
+                    style={{fontSize:13, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer", padding:0}}>Copy</button>
                 </div>
-                <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginTop:4, lineHeight:1.45}}>Private address Bloom uses to sign up on job sites like Workday. Replies are forwarded to you.</div>
+                <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:4, lineHeight:1.45}}>Private address Bloom uses to sign up on job sites like Workday. Replies are forwarded to you.</div>
               </div>
             </div>
             <ALabel>WORK AUTHORIZATION</ALabel>
@@ -2416,16 +2647,16 @@ function ProfileView({ st }) {
             <ALabel>EXPECTED SALARY</ALabel>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginBottom:4}}>
               <span style={{fontSize:14, fontWeight:700}}>${comp.amount} / yr</span>
-              <button onClick={()=>setEditSection("comp")} className="bd-textlink" style={{fontSize:12, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer"}}>Change</button>
+              <button onClick={()=>setEditSection("comp")} className="bd-textlink" style={{fontSize:13, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer"}}>Change</button>
             </div>
-            <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Bloom enters this when an application asks for expected salary.</div>
+            <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginBottom:18}}>Bloom enters this when an application asks for expected salary.</div>
             <ALabel>LINKS</ALabel>
             <div style={{display:"flex", flexDirection:"column", gap:6}}>
               <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", gap:10}}>
-                <span style={{fontSize:13, fontWeight:600, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{appInfo.linkedin}</span>
-                <button onClick={()=>setEditSection("appinfo")} className="bd-textlink" style={{fontSize:12, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer", flexShrink:0}}>Change</button>
+                <span style={{fontSize:14, fontWeight:600, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{appInfo.linkedin}</span>
+                <button onClick={()=>setEditSection("appinfo")} className="bd-textlink" style={{fontSize:13, fontWeight:700, color:dT.muted, background:"none", border:"none", cursor:"pointer", flexShrink:0}}>Change</button>
               </div>
-              <span style={{fontSize:13, fontWeight:600, color:dT.ink}}>{appInfo.portfolio}</span>
+              <span style={{fontSize:14, fontWeight:600, color:dT.ink}}>{appInfo.portfolio}</span>
             </div>
           </PSection>
 
@@ -2433,10 +2664,10 @@ function ProfileView({ st }) {
             <div style={{display:"flex", flexDirection:"column", gap:14}}>
               {skillCats.filter(g=>g.items.length).map(g=>(
                 <div key={g.cat} style={{display:"grid", gridTemplateColumns:"120px minmax(0,1fr)", gap:12, alignItems:"start"}}>
-                  <div style={{fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", textTransform:"uppercase", lineHeight:1.45, paddingTop:5}}>{g.cat}</div>
+                  <div style={{fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".08em", textTransform:"uppercase", lineHeight:1.45, paddingTop:5}}>{g.cat}</div>
                   <div style={{display:"flex", flexWrap:"wrap", gap:7}}>
                     {g.items.map(s=>(
-                      <span key={s} style={{fontSize:12.5, fontWeight:600, color:"#1F6B45", background:"#E8F4EC", borderRadius:999, padding:"5px 12px"}}>{s}</span>
+                      <span key={s} style={{fontSize:13.5, fontWeight:600, color:"#1F6B45", background:"#E8F4EC", borderRadius:999, padding:"5px 12px"}}>{s}</span>
                     ))}
                   </div>
                 </div>
@@ -2472,10 +2703,10 @@ function ProfileView({ st }) {
         fields={[{key:"role",label:"Role"},{key:"co",label:"Company"},{key:"dates",label:"Dates"}]}
         renderExtra={(it,onChange)=>(
           <div>
-            <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:7}}>Highlights</div>
+            <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginBottom:7}}>Highlights</div>
             <textarea value={it.bullets||""} onChange={e=>onChange(e.target.value)} rows={3} placeholder="One per line"
               style={{width:"100%", padding:"11px 13px", borderRadius:9, border:`1.5px solid ${dT.hairline}`,
-                fontFamily:dFB, fontSize:13.5, color:dT.ink, outline:"none", boxSizing:"border-box", resize:"vertical"}}/>
+                fontFamily:dFB, fontSize:14.5, color:dT.ink, outline:"none", boxSizing:"border-box", resize:"vertical"}}/>
           </div>
         )}
         onClose={()=>setEditSection(null)} onSave={(l)=>{ setExperience(l); setEditSection(null); }}/>}
@@ -2500,7 +2731,7 @@ function ProfileView({ st }) {
       {editSection==="comp" && (
         <DrawerShell title="Edit expected salary" onClose={()=>setEditSection(null)} onSave={()=>setEditSection(null)}>
           <DField2 label="Expected salary ($/yr)" value={comp.amount} onChange={v=>setComp({amount:v})}/>
-          <div style={{fontSize:12, color:dT.muted, fontWeight:500, lineHeight:1.5, marginTop:-4}}>Bloom enters this when an application asks for expected salary. Your minimum salary for matching is in Apply settings.</div>
+          <div style={{fontSize:13, color:dT.muted, fontWeight:500, lineHeight:1.5, marginTop:-4}}>Bloom enters this when an application asks for expected salary. Your minimum salary for matching is in Apply settings.</div>
         </DrawerShell>
       )}
 
@@ -2533,12 +2764,12 @@ function ExperienceBullets({ text }) {
   return (
     <div style={{marginTop:6}}>
       {shown.map((b,i)=>(
-        <div key={i} style={{fontSize:12.5, color:"#4B5A5E", fontWeight:400, lineHeight:1.5, display:"flex", gap:6}}>
+        <div key={i} style={{fontSize:13.5, color:"#374151", fontWeight:400, lineHeight:1.5, display:"flex", gap:6}}>
           <span style={{flexShrink:0}}>•</span>{b}
         </div>
       ))}
       {!expanded && lines.length>2 && (
-        <button onClick={()=>setExpanded(true)} className="bd-textlink" style={{fontSize:12, fontWeight:700, color:dT.ink,
+        <button onClick={()=>setExpanded(true)} className="bd-textlink" style={{fontSize:13, fontWeight:700, color:dT.ink,
           cursor:"pointer", background:"none", border:"none", marginTop:2}}>+{lines.length-2} more</button>
       )}
     </div>
@@ -2565,19 +2796,19 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
         <div style={{display:"flex", flexDirection:"column", gap:20, minWidth:0}}>
           <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"24px 28px"}}>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Sign-in</div>
-            <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:8}}>How you log in to Bloom.</div>
+            <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:8}}>How you log in to Bloom.</div>
             <DField label="SIGN-IN EMAIL" value="vinodh@gmail.com" last/>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:"12px 14px",
               background:"#F4F8F8", borderRadius:10, marginTop:4}}>
-              <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Name, phone and address used on applications live in Profile.</span>
-              <button onClick={onGoProfile} className="bd-textlink" style={{fontSize:13, fontWeight:700, color:dT.cyanInk, cursor:"pointer", flexShrink:0,
+              <span style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>Name, phone and address used on applications live in Profile.</span>
+              <button onClick={onGoProfile} className="bd-textlink" style={{fontSize:14, fontWeight:700, color:dT.cyanInk, cursor:"pointer", flexShrink:0,
                 background:"none", border:"none", padding:0}}>Edit in Profile →</button>
             </div>
           </div>
 
           <div style={{background:"#fff", border:`1px solid ${dT.hairline}`, borderRadius:16, padding:"24px 28px"}}>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Notifications</div>
-            <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:14}}>Where Bloom messages you when an application is sent or needs you.</div>
+            <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginTop:3, marginBottom:14}}>Where Bloom messages you when an application is sent or needs you.</div>
             <div role="radiogroup" aria-label="Message channel" style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(150px, 1fr))", gap:9}}>
               {[["whatsapp","WhatsApp","Threaded updates you can reply to."],["imessage","iMessage / SMS","Arrives as a normal text."],["email","Neither","No texts. Email updates only."]].map(([k,t,d])=>{
                 const on = (st.channel || "whatsapp") === k;
@@ -2588,13 +2819,13 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
                     <span style={{width:16, height:16, borderRadius:"50%", marginTop:2, flexShrink:0, display:"grid", placeItems:"center",
                       border:`1.5px solid ${on ? dT.ink : "#C9CFD1"}`, background: on ? dT.ink : "#fff"}}>
                       {on && <span style={{width:6, height:6, borderRadius:"50%", background:"#fff"}}/>}</span>
-                    <span><span style={{display:"block", fontSize:13.5, fontWeight:700, color:dT.ink}}>{t}</span>
-                      <span style={{display:"block", fontSize:12, fontWeight:500, color:dT.muted, marginTop:2}}>{d}</span></span>
+                    <span><span style={{display:"block", fontSize:14.5, fontWeight:700, color:dT.ink}}>{t}</span>
+                      <span style={{display:"block", fontSize:13, fontWeight:500, color:dT.muted, marginTop:2}}>{d}</span></span>
                   </button>
                 );
               })}
             </div>
-            <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:12}}>
+            <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginTop:12}}>
               {st.channel==="email" ? `No texts. Updates go to ${st.email||"your account email"}.` : <React.Fragment>Sent to {st.phone ? `${st.dial||"+1"} ${st.phone}` : "the phone number in your Profile"}. We'll always email you too.</React.Fragment>}
             </div>
           </div>
@@ -2603,10 +2834,10 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
             display:"flex", alignItems:"center", justifyContent:"space-between", gap:20}}>
             <div>
               <div style={{fontFamily:dFD, fontWeight:700, fontSize:17}}>Sign out</div>
-              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginTop:3}}>Bloom keeps working on your applications while you're signed out.</div>
+              <div style={{fontSize:13.5, color:dT.muted, fontWeight:600, marginTop:3}}>Bloom keeps working on your applications while you're signed out.</div>
             </div>
             <button onClick={onSignOut} className="bd-signout" style={{padding:"10px 18px", borderRadius:10, border:"1.5px solid #F0D2CE",
-              background:"#fff", color:"#C1443B", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer", display:"flex",
+              background:"#fff", color:"#C1443B", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer", display:"flex",
               alignItems:"center", gap:8, flexShrink:0}}>Sign out
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
             </button>
@@ -2616,10 +2847,10 @@ function SettingsView({ st, set, onBack, title, initialSub, onSignOut, onGoProfi
             display:"flex", alignItems:"center", justifyContent:"space-between", gap:20}}>
             <div>
               <div style={{fontFamily:dFD, fontWeight:700, fontSize:17, marginBottom:4}}>Delete account</div>
-              <div style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Removes your profile and all application history. This can't be undone.</div>
+              <div style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>Removes your profile and all application history. This can't be undone.</div>
             </div>
             <button style={{padding:"10px 18px", borderRadius:999, background:"#FBE3E1", color:"#B3261E",
-              border:"1.5px solid #F3C6C1", fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", flexShrink:0, whiteSpace:"nowrap"}}>Delete account</button>
+              border:"1.5px solid #F3C6C1", fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", flexShrink:0, whiteSpace:"nowrap"}}>Delete account</button>
           </div>
         </div>
         )}
@@ -2676,8 +2907,8 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
           <div style={{display:"flex", alignItems:"center", gap:14, padding:"14px 16px", borderRadius:14, background:"#EEF7F3"}}>
             <div style={{fontFamily:dFD, fontWeight:700, fontSize:24, color:"#1F6B45", lineHeight:1}}>{m.match}%</div>
             <div style={{minWidth:0}}>
-              <div style={{fontSize:13, fontWeight:700, color:"#1F6B45"}}>{m.match>=85 ? "Strong fit" : m.match>=75 ? "Good fit" : "Fair fit"}</div>
-              <div style={{fontSize:12.5, color:"#2F5A45", fontWeight:500}}>{m.why}</div>
+              <div style={{fontSize:14, fontWeight:700, color:"#1F6B45"}}>{m.match>=85 ? "Strong fit" : m.match>=75 ? "Good fit" : "Fair fit"}</div>
+              <div style={{fontSize:13.5, color:"#2F5A45", fontWeight:500}}>{m.why}</div>
             </div>
           </div>
 
@@ -2694,7 +2925,7 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
             <div style={{fontSize:15, fontWeight:700, color:dT.ink, marginBottom:10}}>Education</div>
             <div style={{display:"flex", flexWrap:"wrap", gap:8}}>
               {edu.map(([d,r])=>(
-                <span key={d} style={{fontSize:13, fontWeight:600, color:dT.ink, background:"#F1F3F4", borderRadius:999, padding:"6px 13px"}}>{d} <span style={{color:dT.muted, fontWeight:500}}>({r})</span></span>
+                <span key={d} style={{fontSize:14, fontWeight:600, color:dT.ink, background:"#F1F3F4", borderRadius:999, padding:"6px 13px"}}>{d} <span style={{color:dT.muted, fontWeight:500}}>({r})</span></span>
               ))}
             </div>
           </div>
@@ -2702,23 +2933,23 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
           <div>
             <div style={{fontSize:15, fontWeight:700, color:dT.ink, marginBottom:10}}>Key requirements</div>
             <div style={{display:"flex", flexDirection:"column", gap:7}}>
-              {reqs.map(r=><div key={r} style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.5, display:"flex", gap:8}}><span style={{color:"#1F6B45"}}>✓</span>{r}</div>)}
+              {reqs.map(r=><div key={r} style={{fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.5, display:"flex", gap:8}}><span style={{color:"#1F6B45"}}>✓</span>{r}</div>)}
             </div>
           </div>
 
           <div>
             <div style={{fontSize:15, fontWeight:700, color:dT.ink, marginBottom:10}}>Description</div>
-            <div style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.65, display:"flex", flexDirection:"column", gap:10,
+            <div style={{fontSize:14.5, color:"#374151", fontWeight:500, lineHeight:1.65, display:"flex", flexDirection:"column", gap:10,
               maxHeight: more ? "none" : 260, overflow:"hidden", position:"relative"}}>
-              <div style={{display:"flex", flexWrap:"wrap", gap:"4px 16px", fontSize:12.5, color:dT.muted, fontWeight:600}}>
+              <div style={{display:"flex", flexWrap:"wrap", gap:"4px 16px", fontSize:13.5, color:dT.muted, fontWeight:600}}>
                 <span>Career category: <b style={{color:dT.ink}}>Information Systems</b></span>
                 <span>Location: <b style={{color:dT.ink}}>US - California - Thousand Oaks · Remote</b></span>
               </div>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>About Amgen</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>About Amgen</div>
               <p style={{margin:0}}>Since 1980, Amgen has pioneered biotech in the fight against serious illness, focusing on Oncology, Inflammation, General Medicine and Rare Disease, and reaching millions of patients each year. The culture is collaborative, innovative and science-based.</p>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>What you will do</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>What you will do</div>
               <p style={{margin:0}}>Support, design, develop and maintain software applications and systems (Salesforce, Power BI, AI). Work with the team to implement system functionality, troubleshoot technical issues, and keep applications performant and scalable.</p>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>Basic qualifications</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>Basic qualifications</div>
               <p style={{margin:0}}>Any one of:</p>
               <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:5}}>
                 <li>Doctorate degree</li>
@@ -2727,7 +2958,7 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
                 <li>Associate's degree and 8 years of software engineering experience</li>
                 <li>High school diploma / GED and 10 years of software engineering experience</li>
               </ul>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>Preferred qualifications</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>Preferred qualifications</div>
               <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:5}}>
                 <li>Developing, maintaining or improving software and reporting configurations, processes or lifecycle programs</li>
                 <li>Supporting technology transfers, new product introductions, site start-ups, platform standardization or process improvements</li>
@@ -2736,36 +2967,36 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
                 <li>Spotting incremental improvements in processes, designs, tools and documentation</li>
                 <li>Strong project management, technical writing and problem-solving skills</li>
               </ul>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>What you can expect</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>What you can expect</div>
               <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:5}}>
                 <li>Retirement and savings plan with generous company contributions</li>
                 <li>Medical, dental and vision coverage, life and disability insurance, flexible spending accounts</li>
                 <li>Discretionary annual bonus and stock-based long-term incentives</li>
                 <li>Award-winning time off and flexible work models where possible</li>
               </ul>
-              <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:4}}>Salary range</div>
+              <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:4}}>Salary range</div>
               <p style={{margin:0}}><b style={{color:dT.ink}}>USD 112,483 – 152,183</b> per year. Actual salary varies with skills, experience and qualifications.</p>
               <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(180px, 1fr))", gap:12, marginTop:4}}>
                 <div style={{padding:"11px 13px", borderRadius:10, background:"#F7F8F8"}}>
-                  <div style={{fontSize:11, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>APPLICATION DEADLINE</div>
-                  <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:3}}>Sep 24 · may extend</div>
+                  <div style={{fontSize:12, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>APPLICATION DEADLINE</div>
+                  <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:3}}>Sep 24 · may extend</div>
                 </div>
                 <div style={{padding:"11px 13px", borderRadius:10, background:"#FDF3DF"}}>
-                  <div style={{fontSize:11, fontWeight:800, color:"#8A5A00", letterSpacing:".06em"}}>SPONSORSHIP</div>
-                  <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginTop:3}}>Not guaranteed</div>
+                  <div style={{fontSize:12, fontWeight:800, color:"#8A5A00", letterSpacing:".06em"}}>SPONSORSHIP</div>
+                  <div style={{fontSize:14.5, fontWeight:700, color:dT.ink, marginTop:3}}>Not guaranteed</div>
                 </div>
               </div>
-              <p style={{margin:0}}><span style={{fontSize:12.5, color:dT.muted}}>Amgen is an Equal Opportunity employer. You may redact age-identifying information (such as dates of birth or graduation) from your materials, and reasonable accommodation is available on request.</span></p>
+              <p style={{margin:0}}><span style={{fontSize:13.5, color:dT.muted}}>Amgen is an Equal Opportunity employer. You may redact age-identifying information (such as dates of birth or graduation) from your materials, and reasonable accommodation is available on request.</span></p>
               {!more && <div style={{position:"absolute", left:0, right:0, bottom:0, height:56, background:"linear-gradient(rgba(255,255,255,0), #fff)"}}/>}
             </div>
             <button onClick={()=>setMore(v=>!v)} className="bd-textlink" style={{marginTop:8, border:"none", background:"none", padding:0, cursor:"pointer",
-              fontFamily:dFB, fontSize:13, fontWeight:700, color:dT.ink}}>{more ? "Show less" : "Read full description"}</button>
+              fontFamily:dFB, fontSize:14, fontWeight:700, color:dT.ink}}>{more ? "Show less" : "Read full description"}</button>
           </div>
         </div>
 
         <div style={{padding:"14px 26px", borderTop:`1px solid ${dT.hairline}`, display:"flex", alignItems:"center", gap:12}}>
           <a href={`https://www.google.com/search?q=${encodeURIComponent(m.co+" "+m.role+" job")}`} target="_blank" rel="noopener noreferrer"
-            style={{display:"flex", alignItems:"center", gap:7, fontSize:13.5, fontWeight:600, color:dT.ink, textDecoration:"none", flex:1, minWidth:0}}>
+            style={{display:"flex", alignItems:"center", gap:7, fontSize:14.5, fontWeight:600, color:dT.ink, textDecoration:"none", flex:1, minWidth:0}}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
             View original posting
           </a>
@@ -2773,13 +3004,13 @@ function MatchDetailPanel({ m, isAuto, paused, onClose, onApply, onSkip }) {
             background:"#fff", cursor:"pointer", display:"grid", placeItems:"center", color:dT.ink}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? dT.ink : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.5.87l-4.5-2.58a2 2 0 0 0-2 0l-4.5 2.58A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"/></svg>
           </button>
-          <button onClick={onSkip} style={{padding:"10px 16px", borderRadius:999, border:`1.5px solid ${dT.hairline}`, background:"#fff", fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.ink, cursor:"pointer"}}>Skip</button>
+          <button onClick={onSkip} style={{padding:"10px 16px", borderRadius:999, border:`1.5px solid ${dT.hairline}`, background:"#fff", fontFamily:dFB, fontSize:14.5, fontWeight:700, color:dT.ink, cursor:"pointer"}}>Skip</button>
           {isAuto ? (
-            <span style={{fontSize:12.5, fontWeight:700, color:dT.ink, display:"flex", alignItems:"center", gap:6, whiteSpace:"nowrap"}}>
+            <span style={{fontSize:13.5, fontWeight:700, color:dT.ink, display:"flex", alignItems:"center", gap:6, whiteSpace:"nowrap"}}>
               <span style={{width:6, height:6, borderRadius:"50%", background: paused ? "#F2B84B" : "#22A565"}}/>{paused ? "Queued · paused" : "Queued"}
             </span>
           ) : (
-            <button onClick={onApply} style={{padding:"10px 22px", borderRadius:999, border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Apply</button>
+            <button onClick={onApply} style={{padding:"10px 22px", borderRadius:999, border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Apply</button>
           )}
         </div>
       </aside>
@@ -2797,15 +3028,9 @@ function ModePill({ mode, onChange, dark, paused }) {
   }, []);
   return (
     <div ref={box} style={{position:"relative", flexShrink:0}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex", alignItems:"center", gap:9, padding:"7px 8px 7px 12px", borderRadius:999,
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex", alignItems:"center", gap:9, padding:"8px 10px 8px 14px", borderRadius:999,
         background: dark ? "rgba(255,255,255,.1)" : "#fff", border: dark ? "1.5px solid rgba(255,255,255,.16)" : `1.5px solid ${dT.hairline}`, cursor:"pointer", fontFamily:dFB}}>
-        <span style={{display:"flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:700, color: dark ? "#fff" : dT.ink}}>
-          <span style={{width:7, height:7, borderRadius:"50%", background: paused ? "#F2B84B" : "#5AEBEB", flexShrink:0,
-            boxShadow: paused ? "0 0 0 3px rgba(242,184,75,.22)" : dark ? "0 0 0 3px rgba(90,235,235,.22)" : "0 0 0 3px rgba(44,182,125,.18)"}}/>
-          {paused ? "Agent paused" : "Agent running"}
-        </span>
-        <span style={{width:1, height:14, background: dark ? "rgba(255,255,255,.2)" : dT.hairline}}/>
-        <span style={{fontSize:12.5, fontWeight:700, color: dark ? "#fff" : dT.ink}}>{isAuto ? "Auto Apply" : "Manual apply"}</span>
+        <span style={{fontSize:13.5, fontWeight:700, color: dark ? "#fff" : dT.ink}}>{isAuto ? "Auto Apply" : "Manual apply"}</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={dark ? "rgba(255,255,255,.7)" : dT.muted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       {open && (
@@ -2814,15 +3039,15 @@ function ModePill({ mode, onChange, dark, paused }) {
           {[["review","Manual apply","Bloom fills each application. You review and send."],
             ["auto","Auto Apply","Bloom fills and sends applications for you."]].map(([k,label,desc])=>(
             <button key={k} onClick={()=>{onChange(k); setOpen(false);}} style={{width:"100%", textAlign:"left", padding:"13px 16px",
-              background: mode===k ? "#FAF9F5" : "#fff", border:"none", borderBottom:`1px solid ${dT.hairline}`, cursor:"pointer",
+              background: mode===k ? "#F2FAFA" : "#fff", border:"none", borderBottom:`1px solid ${dT.hairline}`, cursor:"pointer", fontFamily:dFB,
               display:"flex", alignItems:"flex-start", gap:10}}>
               <span style={{width:16, height:16, borderRadius:"50%", border:`1.5px solid ${mode===k ? dT.ink : dT.hairline}`,
                 background: mode===k ? dT.ink : "#fff", flexShrink:0, marginTop:2, display:"grid", placeItems:"center"}}>
                 {mode===k && <span style={{width:6, height:6, borderRadius:"50%", background:"#fff"}}/>}
               </span>
               <span>
-                <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:2}}>{label}</div>
-                <div style={{fontSize:12, color:dT.muted, fontWeight:600, lineHeight:1.4}}>{desc}</div>
+                <div style={{fontFamily:dFD, fontSize:15, fontWeight:700, color:dT.ink, marginBottom:3, letterSpacing:"-0.01em"}}>{label}</div>
+                <div style={{fontFamily:dFB, fontSize:13.5, color:"#5B6573", fontWeight:400, lineHeight:1.45}}>{desc}</div>
               </span>
             </button>
           ))}
@@ -2837,11 +3062,11 @@ function FitBar({ label, value }) {
   const color = pct===100 ? "#2CB67D" : pct===66 ? "#C9871F" : "#B3261E";
   return (
     <div style={{display:"flex", alignItems:"center", gap:10}}>
-      <span style={{fontSize:12.5, fontWeight:600, color:dT.muted, width:92, flexShrink:0}}>{label}</span>
+      <span style={{fontSize:13.5, fontWeight:600, color:dT.muted, width:92, flexShrink:0}}>{label}</span>
       <div style={{flex:1, height:5, borderRadius:999, background:"#F1F3F4", overflow:"hidden"}}>
         <div style={{height:"100%", width:pct+"%", background:color, borderRadius:999}}/>
       </div>
-      <span style={{fontSize:12, fontWeight:700, color:dT.ink, width:52, flexShrink:0, textAlign:"right"}}>{value}</span>
+      <span style={{fontSize:13, fontWeight:700, color:dT.ink, width:52, flexShrink:0, textAlign:"right"}}>{value}</span>
     </div>
   );
 }
@@ -2870,7 +3095,7 @@ function JobSidePanel({ job, mode, onClose, onApprove }) {
               <CLogo co={job.co} size={30}/>
               <div style={{minWidth:0}}>
                 <div style={{fontFamily:dFD, fontWeight:700, fontSize:16, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{job.role}</div>
-                <div style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>{job.co} · {job.location||""}{job.comp ? " · "+job.comp : ""}</div>
+                <div style={{fontSize:13.5, color:dT.muted, fontWeight:600}}>{job.co} · {job.location||""}{job.comp ? " · "+job.comp : ""}</div>
               </div>
             </div>
             <button onClick={onClose} style={{background:"transparent", border:"none", cursor:"pointer", color:dT.muted, flexShrink:0, padding:4}}>
@@ -2880,7 +3105,7 @@ function JobSidePanel({ job, mode, onClose, onApprove }) {
           <div style={{display:"flex", gap:18, borderBottom:`1px solid ${dT.hairline}`}}>
             {["Overview","Application","Job Fit"].map(t=>(
               <button key={t} onClick={()=>setTab(t)} style={{padding:"0 0 11px", background:"transparent", border:"none",
-                borderBottom: tab===t ? `2px solid ${dT.ink}` : "2px solid transparent", fontFamily:dFB, fontSize:13.5,
+                borderBottom: tab===t ? `2px solid ${dT.ink}` : "2px solid transparent", fontFamily:dFB, fontSize:14.5,
                 fontWeight:700, color: tab===t ? dT.ink : dT.muted, cursor:"pointer"}}>{t}</button>
             ))}
           </div>
@@ -2897,19 +3122,19 @@ function JobSidePanel({ job, mode, onClose, onApprove }) {
               {job.about && (
                 <div>
                   <div style={{fontFamily:dFD, fontWeight:700, fontSize:14.5, color:dT.ink, marginBottom:8}}>Summary</div>
-                  <div style={{fontSize:13.5, color:"#4B5A5E", lineHeight:1.6, fontWeight:500}}>{job.about}</div>
+                  <div style={{fontSize:14.5, color:"#374151", lineHeight:1.6, fontWeight:500}}>{job.about}</div>
                 </div>
               )}
-              <div style={{background:"#FAF9F5", borderRadius:12, padding:"14px 16px"}}>
-                <div style={{fontSize:11, fontWeight:800, color:dT.muted, letterSpacing:".05em", marginBottom:6}}>SIGNAL</div>
-                <div style={{fontSize:13, fontWeight:600, color:dT.ink}}>{job.matchPct}% match to your job preferences · {job.status}</div>
+              <div style={{background:"#F7F8FA", borderRadius:12, padding:"14px 16px"}}>
+                <div style={{fontSize:12, fontWeight:800, color:dT.muted, letterSpacing:".05em", marginBottom:6}}>SIGNAL</div>
+                <div style={{fontSize:14, fontWeight:600, color:dT.ink}}>{job.matchPct}% match to your job preferences · {job.status}</div>
               </div>
               {mode==="auto" ? (
                 <button onClick={()=>onApprove(job.co)} style={{padding:"12px 0", borderRadius:999, background:dT.ink, color:"#fff",
-                  border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Apply now</button>
+                  border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Apply now</button>
               ) : (
                 <button onClick={()=>setTab("Application")} style={{padding:"12px 0", borderRadius:999, background:dT.ink, color:"#fff",
-                  border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Review application</button>
+                  border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Review application</button>
               )}
             </div>
           )}
@@ -2917,29 +3142,29 @@ function JobSidePanel({ job, mode, onClose, onApprove }) {
             <div style={{display:"flex", flexDirection:"column", gap:16}}>
               {job.status==="Needs you" ? (
                 <div style={{background:"#FBEFCB", borderRadius:12, padding:"14px 16px"}}>
-                  <div style={{fontSize:13.5, fontWeight:700, color:"#8A6D00", marginBottom:4}}>Bloom needs you</div>
-                  <div style={{fontSize:12.5, color:"#7A6000", fontWeight:600, lineHeight:1.5}}>
+                  <div style={{fontSize:14.5, fontWeight:700, color:"#8A6D00", marginBottom:4}}>Bloom needs you</div>
+                  <div style={{fontSize:13.5, color:"#7A6000", fontWeight:600, lineHeight:1.5}}>
                     {needsEyes.length ? `${needsEyes[0].q} — Bloom doesn't have a confident answer.` : "One or more fields need your input before this can send."}
                   </div>
                 </div>
               ) : job.status==="Submitted" ? (
-                <div style={{fontSize:12.5, fontWeight:700, color:"#14663F", background:"#DFF6E8", borderRadius:999, padding:"8px 14px", display:"inline-block"}}>✓ Submitted — {job.applied}</div>
+                <div style={{fontSize:13.5, fontWeight:700, color:"#14663F", background:"#DFF6E8", borderRadius:999, padding:"8px 14px", display:"inline-block"}}>✓ Submitted — {job.applied}</div>
               ) : job.status==="Failed" ? (
-                <div style={{fontSize:12.5, fontWeight:700, color:"#B3261E", background:"#FBE3E1", borderRadius:999, padding:"8px 14px", display:"inline-block"}}>Bloom couldn't finish submitting this</div>
+                <div style={{fontSize:13.5, fontWeight:700, color:"#B3261E", background:"#FBE3E1", borderRadius:999, padding:"8px 14px", display:"inline-block"}}>Bloom couldn't finish submitting this</div>
               ) : (
-                <div style={{fontSize:12.5, fontWeight:700, color:tone.fg, background:tone.bg, borderRadius:999, padding:"8px 14px", display:"inline-block"}}>{job.status}</div>
+                <div style={{fontSize:13.5, fontWeight:700, color:tone.fg, background:tone.bg, borderRadius:999, padding:"8px 14px", display:"inline-block"}}>{job.status}</div>
               )}
               {job.answers && job.answers.map((a,i)=>(
                 <div key={i} style={{paddingBottom:14, borderBottom:`1px solid ${dT.hairline}`}}>
-                  <div style={{fontSize:12.5, fontWeight:700, color:dT.ink, marginBottom:5}}>{a.q}</div>
-                  <div style={{fontSize:13, color: a.status==="needs" ? "#8A6D00" : "#4B5A5E", fontWeight:500, lineHeight:1.55}}>
+                  <div style={{fontSize:13.5, fontWeight:700, color:dT.ink, marginBottom:5}}>{a.q}</div>
+                  <div style={{fontSize:14, color: a.status==="needs" ? "#8A6D00" : "#374151", fontWeight:500, lineHeight:1.55}}>
                     {a.status==="needs" ? `Suggested: ${a.suggestion}` : a.a}
                   </div>
                 </div>
               ))}
               {job.status==="Needs you" && (
                 <button onClick={()=>onApprove(job.co)} style={{padding:"13px 0", borderRadius:999, background:dT.ink, color:"#fff",
-                  border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>Approve & send</button>
+                  border:"none", fontFamily:dFB, fontSize:14.5, fontWeight:700, cursor:"pointer"}}>Approve & send</button>
               )}
             </div>
           )}
@@ -2947,16 +3172,16 @@ function JobSidePanel({ job, mode, onClose, onApprove }) {
             <div style={{display:"flex", flexDirection:"column", gap:22}}>
               <div style={{textAlign:"center"}}>
                 <div style={{fontFamily:dFD, fontWeight:700, fontSize:40, color:dT.ink, lineHeight:1}}>{job.matchPct}%</div>
-                <div style={{fontSize:13, fontWeight:700, color:dT.muted, marginTop:4}}>{job.matchPct>=85?"Strong match":job.matchPct>=70?"Good match":"Fair match"}</div>
+                <div style={{fontSize:14, fontWeight:700, color:dT.muted, marginTop:4}}>{job.matchPct>=85?"Strong match":job.matchPct>=70?"Good match":"Fair match"}</div>
               </div>
               <div style={{display:"flex", flexDirection:"column", gap:10}}>
                 {fitSignals.map(([l,v])=><FitBar key={l} label={l} value={v}/>)}
               </div>
               <div>
-                <div style={{fontSize:11, fontWeight:800, color:dT.muted, letterSpacing:".05em", marginBottom:10}}>WHY BLOOM THINKS THIS IS A MATCH</div>
+                <div style={{fontSize:12, fontWeight:800, color:dT.muted, letterSpacing:".05em", marginBottom:10}}>WHY BLOOM THINKS THIS IS A MATCH</div>
                 <div style={{display:"flex", flexDirection:"column", gap:8}}>
                   {["Matches your target role","Matches your preferred remote setup","Salary meets your minimum","Your experience matches key requirements"].map(r=>(
-                    <div key={r} style={{display:"flex", gap:8, fontSize:13, color:dT.ink, fontWeight:600}}><span style={{color:"#2CB67D", flexShrink:0}}>✓</span>{r}</div>
+                    <div key={r} style={{display:"flex", gap:8, fontSize:14, color:dT.ink, fontWeight:600}}><span style={{color:"#2CB67D", flexShrink:0}}>✓</span>{r}</div>
                   ))}
                 </div>
               </div>
@@ -2982,7 +3207,9 @@ function Dashboard({ st, set, onSignOut }) {
   const [prefTab, setPrefTab] = React.useState("Quick Settings");
   const [browseJob, setBrowseJob] = React.useState(null);
   const [pendingSub, setPendingSub] = React.useState("account");
-  const goPlans = () => { setPendingSub("billing"); setView("settings"); };
+  const [plansOpen, setPlansOpen] = React.useState(false);
+  const goPlans = () => setPlansOpen(true);
+  React.useEffect(()=>{ const h = ()=>setPlansOpen(true); window.addEventListener("bloom:plans", h); return ()=>window.removeEventListener("bloom:plans", h); }, []);
   const [tab, setTab] = React.useState("All");
   const [jobs, setJobs] = React.useState(D_JOBS);
   const [hasData, setHasData] = React.useState(false);
@@ -3056,11 +3283,20 @@ function Dashboard({ st, set, onSignOut }) {
   const [panelJob, setPanelJob] = React.useState(null);
   const isAuto = st.mode === "auto";
   const needCount = hasData ? jobs.filter(j=>j.status==="Needs you").length : 0;
+  const needAll = jobs.filter(j=>j.status==="Needs you" || j.status==="Failed").length;
   const sentToday = hasData ? jobs.filter(j=>j.status==="Submitted").length : 0;
 
   const counts = {};
-  const [showAllMatches, setShowAllMatches] = React.useState(false);
   const [dateRange, setDateRange] = React.useState("All time");
+  const [q, setQ] = React.useState("");
+  const [sortBy, setSortBy] = React.useState("Recommended");
+  const LOAD_STEP = 10;
+  const [shown, setShown] = React.useState(LOAD_STEP);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const setPage = () => setShown(LOAD_STEP);
+  React.useEffect(()=>{ const need = jobs.some(j=>j.status==="Needs you" || j.status==="Failed");
+    setTab(need ? "Needs you" : st.mode==="auto" ? "Applied" : "To review"); setPage(0); }, [st.mode]);
+  React.useEffect(()=>{ setShown(LOAD_STEP); }, [tab, dateRange, q, sortBy]);
   const matchRows = matches.map((m,i)=>({ co:m.co, role:m.role, status:"Matched", statusTone:"teal", matchPct:m.match, applied:m.posted, _match:m, _rank:i }));
   const D_RANGE_H = {"Last 6 hours":6, "Last 24 hours":24, "Last 7 days":168, "Last 14 days":336, "Last 30 days":720};
   const dAgeH = s => { s = String(s||"").toLowerCase(); if (/just now|now|min/.test(s)) return 0;
@@ -3068,55 +3304,79 @@ function Dashboard({ st, set, onSignOut }) {
   const maxH = D_RANGE_H[dateRange];
   const inRange = j => maxH == null || dAgeH(j.applied) <= maxH;
   const isManualList = st.mode!=="auto";
+  const TABS = isManualList ? ["All","Needs you","To review","Applied"] : ["All","Needs you","Applied"];
+  const inTab = (t, j) => t==="Needs you" ? (j.status==="Needs you" || j.status==="Failed") : t==="Applied" ? (j.status==="Submitting" || j.status==="Submitted") : true;
   const appRows = jobs.filter(inRange);
-  D_TABS.forEach(t => counts[t] = t==="All" ? appRows.length : appRows.filter(j=>j.status===t).length);
+  const reviewRows = isManualList ? matchRows : [];
+  ["All","Needs you","Applied"].forEach(t => counts[t] = t==="All" ? appRows.length + reviewRows.length : appRows.filter(j=>inTab(t,j)).length);
+  counts["To review"] = reviewRows.length;
   const pri = s => s==="Needs you" ? 0 : 2;
-  const apps0 = tab==="All" ? appRows : appRows.filter(j=>j.status===tab);
+  const apps0 = tab==="All" ? appRows : appRows.filter(j=>inTab(tab,j));
   const appsSorted = tab==="All" ? [...apps0].sort((a,b)=>pri(a.status)-pri(b.status)) : apps0;
-  const MATCH_PREVIEW = 5;
-  const totalMatchRows = isManualList ? matchRows.length : 0;
-  const hiddenMatches = (isManualList && !showAllMatches) ? Math.max(0, totalMatchRows - MATCH_PREVIEW) : 0;
-  const shownMatchRows = isManualList ? (hiddenMatches ? matchRows.slice(0, MATCH_PREVIEW) : matchRows) : [];
-  const rows = [...shownMatchRows, ...appsSorted];
+  const totalMatchRows = reviewRows.length;
+  const allRows0 = tab==="To review" ? reviewRows
+    : tab==="All" ? [...appsSorted.filter(j=>j.status==="Needs you"), ...reviewRows, ...appsSorted.filter(j=>j.status!=="Needs you")]
+    : appsSorted;
+  const ql = q.trim().toLowerCase();
+  const allRows = allRows0.filter(j => !ql || (j.co+" "+j.role).toLowerCase().includes(ql));
+  if (sortBy==="Best match") allRows.sort((a,b)=>(b.matchPct||0)-(a.matchPct||0));
+  else if (sortBy==="Newest first") allRows.sort((a,b)=>dAgeH(a._match ? a._match.posted : a.applied)-dAgeH(b._match ? b._match.posted : b.applied));
+  else if (sortBy==="Company A–Z") allRows.sort((a,b)=>a.co.localeCompare(b.co));
+  const rows = allRows.slice(0, shown);
+  const hasMore = shown < allRows.length;
+  const loadMore = () => { if (loadingMore) return; setLoadingMore(true); setTimeout(()=>{ setShown(n=>n+LOAD_STEP); setLoadingMore(false); }, 450); };
+  const shownMatchRows = rows.filter(r=>r._match);
   const renderFilters = pad => (
-            <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:16, padding:pad, flexWrap:"wrap"}}>
-              <div style={{display:"flex", gap:8, flexWrap:"wrap"}}>
-                {D_TABS.map(t=>{
-                  const on = tab===t;
+            <div style={{display:"flex", alignItems:"flex-end", justifyContent:"space-between", gap:16, padding:pad, flexWrap:"wrap", borderBottom:`1px solid ${dT.hairline}`}}>
+              <div role="tablist" aria-label="Applications" style={{display:"flex", gap:26, flexWrap:"wrap", alignSelf:"stretch", alignItems:"flex-end"}}>
+                {TABS.map(t=>{
+                  const on = tab===t, alert = t==="Needs you" && counts[t]>0;
                   return (
-                    <button key={t} onClick={()=>setTab(t)} style={{display:"flex", alignItems:"center", gap:7,
-                      padding:"8px 14px", borderRadius:999, fontFamily:dFB, fontSize:13, fontWeight:700,
-                      border:`1.5px solid ${on ? "#B9D3D6" : dT.hairline}`, background: on ? "#E6F0F1" : "#fff",
-                      color: dT.ink, cursor:"pointer"}}>
+                    <button key={t} role="tab" aria-selected={on} onClick={()=>setTab(t)} style={{display:"flex", alignItems:"center", gap:7,
+                      padding:"6px 0 13px", marginBottom:-1, background:"transparent", border:"none", borderBottom:`2px solid ${on ? dT.ink : "transparent"}`,
+                      fontFamily:dFB, fontSize:14, fontWeight: on ? 700 : 600, color: on ? dT.ink : "#5B6573", cursor:"pointer", whiteSpace:"nowrap"}}>
                       {t}
-                      <span style={{fontSize:11, fontWeight:800, opacity:.7}}>{counts[t]}</span>
+                      <span style={{fontSize:12.5, fontWeight:800, minWidth:20, height:20, padding:"0 6px", borderRadius:999, display:"inline-grid", placeItems:"center", boxSizing:"border-box",
+                        background: alert ? "#FBEFCB" : on ? "#E6F0F1" : "#F1F3F4", color: alert ? "#7A5A00" : on ? dT.ink : "#5B6573"}}>{counts[t]}</span>
                     </button>
                   );
                 })}
               </div>
-              <div className="m-full" style={{display:"flex", gap:8, alignItems:"center"}}>
-                <DDateFilter value={dateRange} onChange={setDateRange}/>
-                <input placeholder="Search company…" style={{width:200, minWidth:0, flex:"1 1 auto", padding:"8px 12px", borderRadius:8,
-                  border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13, outline:"none"}}/>
+              <div className="m-full" style={{display:"flex", gap:8, alignItems:"center", paddingBottom:10}}>
+                <label style={{position:"relative", display:"flex", alignItems:"center", flex:"1 1 auto", minWidth:0}}>
+                  <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search jobs or companies…" aria-label="Search jobs or companies"
+                    style={{width:240, minWidth:0, flex:"1 1 auto", padding:"8px 34px 8px 14px", borderRadius:999, boxSizing:"border-box",
+                    border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14, color:dT.ink, outline:"none", background:"#fff"}}/>
+                  {q ? <button onClick={()=>setQ("")} aria-label="Clear search" style={{position:"absolute", right:8, width:22, height:22, border:"none", borderRadius:"50%", background:"#F1F3F4", cursor:"pointer", display:"grid", placeItems:"center", color:dT.muted}}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                  : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={dT.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{position:"absolute", right:12, pointerEvents:"none"}}><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>}
+                </label>
+                <DDateFilter value={dateRange} onChange={setDateRange} width={124}
+                  icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>}/>
+                <DDateFilter value={sortBy} onChange={setSortBy} opts={["Recommended","Best match","Newest first","Company A–Z"]} label="Sort" def="Recommended" width={128}
+                  icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/></svg>}/>
               </div>
             </div>
   );
   const emptyMsg = dateRange!=="All time"
     ? <React.Fragment>No applications in the {dateRange.toLowerCase()}. <button onClick={()=>setDateRange("All time")} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:"inherit", fontSize:"inherit", fontWeight:700, color:"#0A6E6E", textDecoration:"underline"}}>Show all time</button></React.Fragment>
-    : tab==="Needs you" ? "Nothing needs you right now. Bloom will ping you if an employer asks something new." : tab==="All" ? "No applications yet. Apply to a match above to get started." : "No applications match this filter.";
+    : ql ? <React.Fragment>No results for "{q}". <button onClick={()=>setQ("")} style={{border:"none", background:"none", padding:0, cursor:"pointer", fontFamily:"inherit", fontSize:"inherit", fontWeight:700, color:"#0A6E6E", textDecoration:"underline"}}>Clear search</button></React.Fragment>
+    : tab==="To review" ? "No new matches to review. Bloom adds more as it finds them."
+    : tab==="Applied" ? "Nothing sent yet."
+    : tab==="Needs you" ? "Nothing needs you right now. Bloom will ping you if an employer asks something new." : tab==="All" ? "No applications yet." : "No applications match this filter.";
   const renderColHead = () => (
     <div className="m-hide" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
-      padding:"11px 20px", background:"#FAFAF8", borderBottom:`1px solid ${dT.hairline}`,
-      fontSize:10.5, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>
+      padding:"11px 20px", background:"#F7F8FA", borderBottom:`1px solid ${dT.hairline}`,
+      fontSize:11.5, fontWeight:800, color:dT.muted, letterSpacing:".06em"}}>
       <div>COMPANY</div><div>JOB FIT</div><div style={{textAlign:"right"}}>STATUS</div>
     </div>
   );
   const renderAppsHead = () => (
     <div style={{borderTop:"10px solid #F4F4F0", background:"#fff"}}>
       <div style={{display:"flex", alignItems:"baseline", gap:10, flexWrap:"wrap", padding:"16px 20px 0"}}>
-        <span style={{fontSize:13.5, fontWeight:800, color:dT.ink}}>Your applications</span>
-        <span style={{fontSize:12, fontWeight:700, color:dT.muted}}>{appRows.length}</span>
-        <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>What you've sent and where each one stands.</span>
+        <span style={{fontSize:14.5, fontWeight:800, color:dT.ink}}>Your applications</span>
+        <span style={{fontSize:13, fontWeight:700, color:dT.muted}}>{appRows.length}</span>
+        <span style={{fontSize:13.5, fontWeight:500, color:dT.muted}}>What you've sent and where each one stands.</span>
       </div>
       {renderFilters("12px 20px 14px")}
       {renderColHead()}
@@ -3131,74 +3391,68 @@ function Dashboard({ st, set, onSignOut }) {
   }
 
   return (
-    <div className="m-dash" style={{height:"100vh", display:"flex", background:"#FFFCF6", fontFamily:dFB, color:dT.ink, overflow:"hidden"}}>
+    <div className="m-dash m-panels" style={{height:"100vh", display:"flex", gap:12, padding:12, boxSizing:"border-box", background:"#F1F1F1", fontFamily:dFB, color:dT.ink, overflow:"hidden"}}>
+      {plansOpen && window.UpgradePage && <window.UpgradePage plan={plan} onClose={()=>setPlansOpen(false)}
+        onChoose={k=>{ set({plan:k}); setPlansOpen(false); }}/>}
       {lastOneOpen && <LastOneModal onClose={()=>setLastOneOpen(false)} onUpgrade={()=>{ setLastOneOpen(false); goPlans(); }}/>}
       {profileNudge && <ProfileNudgeModal pct={90} onClose={()=>setProfileNudge(false)}/>}
       <DevScenarios st={st} set={set} onModal={()=>{ setView("pipeline"); setTimeout(()=>setUpgradeOpen(true), 60); }}
         onLastOne={()=>{ setView("pipeline"); setTimeout(()=>setLastOneOpen(true), 60); }} goPlans={goPlans}/>
       {/* Sidebar */}
-      <div className="m-side" style={{width:188, flexShrink:0, borderRight:`1px solid ${dT.hairline}`, background:"#fff",
+      <div className="m-side" style={{width:228, flexShrink:0, borderRadius:20, background:"#fff", boxShadow:"0 6px 13px rgba(0,0,0,.04), 0 1px 3px rgba(143,143,143,.18), 0 0 0 1px #EAEAEA", overflow:"hidden",
         display:"flex", flexDirection:"column"}}>
         <div className="m-hide" style={{height:68, flexShrink:0, display:"flex", alignItems:"center", borderBottom:`1px solid ${dT.hairline}`, padding:"0 16px"}}>
           <img src="assets/bloom-logo.svg" alt="bloom" style={{height:20, width:"auto", display:"block"}}/>
         </div>
         <div className="m-sidein" style={{paddingTop:16, paddingLeft:16, paddingRight:16, display:"flex", flexDirection:"column", flex:1}}>
         <div className="m-navlist" style={{display:"flex", flexDirection:"column", gap:2}}>
-          <DNav icon={<DIconPipeline/>} label="Auto Apply" badge={needCount || null} active={view==="pipeline"} onClick={()=>setView("pipeline")}/>
+          <DNav icon={<DIconPipeline/>} label="Auto Apply" badge={(hasData ? needAll : 0) || null} active={view==="pipeline"} onClick={()=>setView("pipeline")}/>
           <DNav icon={<DIconAuto/>} label="Apply settings" active={view==="autoapply"} onClick={()=>setView("autoapply")}/>
           <DNav icon={<DIconProfile/>} label="Profile" active={view==="profile"} onClick={()=>{ setView("profile"); if(!st.profileNudged){ set({profileNudged:true}); setProfileNudge(true); } }}/>
           <DNav icon={<DIconSettings/>} label="Settings" active={view==="settings"} onClick={()=>{ setPendingSub("account"); setView("settings"); }}/>
         </div>
         <div className="m-hide" style={{marginTop:"auto", display:"flex", flexDirection:"column", gap:10, paddingTop:16, paddingBottom:20, borderTop:`1px solid ${dT.hairline}`}}>
           <button style={{width:"100%", padding:"10px 0", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`,
-            fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center",
+            fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center",
             justifyContent:"center", gap:7}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.03 2 11c0 2.4 1.05 4.57 2.77 6.17-.14 1.06-.6 2.16-1.19 3.03a.5.5 0 0 0 .55.77c1.7-.5 3.13-1.28 4-1.86.9.24 1.86.36 2.87.36 5.52 0 10-4.03 10-9S17.52 2 12 2Z"/></svg>
             Talk to us
           </button>
-          <div style={{background:"#F4F8F8", border:`1px solid ${dT.hairline}`, borderRadius:14, padding:"14px 14px 12px", display:"flex", flexDirection:"column", gap:10}}>
-            <div style={{display:"flex", alignItems:"center", gap:8}}>
-              <div style={{width:26, height:26, borderRadius:"50%", background:"#D9D2FF", color:"#3A2E80", display:"grid",
-                placeItems:"center", fontSize:11.5, fontWeight:800, flexShrink:0}}>V</div>
-              <span style={{fontSize:12.5, fontWeight:700, color:dT.ink, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>Vinodh</span>
-            </div>
-            <div>
-              <div style={{fontSize:11, color:dT.muted, fontWeight:600, marginBottom:5, display:"flex", gap:6,
-                justifyContent:"space-between"}}>
-                {paid ? <React.Fragment><span>{plan==="quarterly" ? "Quarterly" : "Monthly"} · used this month</span><span>{42 + used}/300</span></React.Fragment>
-                  : <React.Fragment><span>{used>=D_FREE_LEFT ? "Free applications used up" : "Free applications used"}</span><span>{used}/{D_FREE_LEFT}</span></React.Fragment>}
-              </div>
-              {<div style={{height:5, borderRadius:999, background:"#DCE6E7", overflow:"hidden"}}>
-                <div style={{height:"100%", width: paid ? `${Math.min(1,(42+used)/300)*100}%` : `${Math.min(1,used/D_FREE_LEFT)*100}%`, background: !paid && used>=D_FREE_LEFT ? "#E0A21B" : "#0BB3B3", borderRadius:999}}/>
-              </div>}
-            </div>
-            {!paid && <button onClick={goPlans} style={{width:"100%", padding:"9px 0", borderRadius:999, background:dT.ink, color:"#fff",
-              border:"none", fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center",
-              justifyContent:"center", gap:5}}>Upgrade to Pro
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>}
-          </div>
-          <div style={{textAlign:"center", fontSize:11, color:dT.muted, fontWeight:600}}>v1.0.0</div>
+          <AccountMenu plan={plan} onSettings={()=>setView("settings")} onSignOut={onSignOut}/>
+          <div style={{textAlign:"center", fontSize:12, color:dT.muted, fontWeight:600}}>v1.0.0</div>
         </div>
         </div>
       </div>
 
       {/* Main */}
-      <div className="m-main" style={{flex:1, minWidth:0, minHeight:0, display:"flex", flexDirection:"column"}}>
+      <div className="m-main" style={{flex:1, minWidth:0, minHeight:0, display:"flex", flexDirection:"column", borderRadius:20, background:"#fff", boxShadow:"0 6px 13px rgba(0,0,0,.04), 0 1px 3px rgba(143,143,143,.18), 0 0 0 1px #EAEAEA", overflow:"hidden", background:"#F7F8FA"}}>
         <div className="m-topbar" style={{padding:"0 32px", height:68, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"space-between",
           borderBottom:`1px solid ${dT.hairline}`, background:"#fff"}}>
-          <div style={{display:"flex", alignItems:"center", gap:12}}>
-            <div style={{fontSize:16, fontWeight:800, letterSpacing:"-0.01em"}}>{{pipeline:"Auto Apply", tracker:"Tracker", autoapply:"Apply settings", profile:"Profile", settings:"Settings", review:"Auto Apply"}[view] || "Auto Apply"}</div>
+          <div style={{display:"flex", alignItems:"center", gap:12, minWidth:0}}>
+            <div style={{fontFamily:dFD, fontSize:18, fontWeight:700, letterSpacing:"-0.015em", whiteSpace:"nowrap", flexShrink:0}}>{{pipeline:"Auto Apply", tracker:"Tracker", autoapply:"Apply settings", profile:"Profile", settings:"Settings", review:"Auto Apply"}[view] || "Auto Apply"}</div>
             {(view==="pipeline" || view==="review") && (
-              <span style={{display:"inline-flex", alignItems:"center", gap:6, padding:"4px 10px", borderRadius:999, background: paused ? "#FDF3DF" : "#EAF7EF",
-                fontSize:11.5, fontWeight:700, color: paused ? "#8A5A00" : "#1F6B45", whiteSpace:"nowrap"}}>
+              <span title={st.mode==="auto" ? "Bloom fills and sends applications for you" : "Bloom fills each application. You review and send"} style={{minWidth:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"inline-flex", alignItems:"center", gap:6, padding:"4px 10px", borderRadius:999, background: paused ? "#FDF3DF" : "#EAF7EF",
+                fontSize:12.5, fontWeight:700, color: paused ? "#8A5A00" : "#1F6B45", whiteSpace:"nowrap"}}>
                 <span className={paused ? "" : "bd-live-dot"} style={{width:6, height:6, borderRadius:"50%", background: paused ? "#F2B84B" : "#22A565"}}/>
-                {paused ? "Paused" : "Applying now"}
+                {!hasData ? (st.mode==="auto" ? "Searching for jobs" : "Finding your matches") : paused ? "Paused" : st.mode==="auto" ? "Applying now" : "Bloom is running"}
+                
               </span>
             )}
           </div>
-          <div style={{display:"flex", alignItems:"center", gap:12}}>
-            <button onClick={onSignOut} className="bd-textlink" style={{fontSize:13.5, fontWeight:700, color:dT.ink, cursor:"pointer"}}>Sign out</button>
+          <div style={{display:"flex", alignItems:"center", gap:12, flexShrink:0}}>
+            <CreditPill paid={paid} used={used} onHold={hasData ? jobs.filter(j=>j.status==="Submitting" || j.status==="Needs you").length : 0} onDetails={()=>setView("credits")}/>
+            {!paid && (
+              <div className="bd-upbar" style={{display:"inline-flex", alignItems:"center", gap:10, padding:"3px 3px 3px 12px", borderRadius:999,
+                background:"#fff", border:"1px solid #ECECEC", boxShadow:"0 1px 2px rgba(0,0,0,.04)"}}>
+                <span className="m-hide-narrow" style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:13, fontWeight:500, color:"#1F2937", whiteSpace:"nowrap"}}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0643C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+                  <span><b style={{fontWeight:700}}>300</b> applies for <b style={{fontWeight:700}}>$19</b></span>
+                </span>
+                <button onClick={goPlans} className="bd-upgrade" style={{padding:"6px 14px", borderRadius:999, cursor:"pointer", whiteSpace:"nowrap",
+                  border:"2px solid transparent", background:"linear-gradient(#fff,#fff) padding-box, linear-gradient(90deg,#3FD6E8 0%,#8B7CF6 55%,#F0643C 100%) border-box",
+                  fontFamily:dFD, fontSize:13.5, fontWeight:700, color:dT.ink}}>Upgrade Now</button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -3214,7 +3468,7 @@ function Dashboard({ st, set, onSignOut }) {
                   <div style={{display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:10}}>
                     <div>
                       <div style={{fontFamily:dFB, fontWeight:500, fontSize:14, color:dT.ink}}>{m.location}</div>
-                      <div style={{fontSize:12, color:"#5C7580", fontWeight:500, marginTop:2}}>{m.posted}</div>
+                      <div style={{fontSize:13, color:"#4A5464", fontWeight:500, marginTop:2}}>{m.posted}</div>
                     </div>
                     <div style={{width:52, height:52, borderRadius:"50%", flexShrink:0, position:"relative", display:"flex",
                       alignItems:"center", justifyContent:"center"}}>
@@ -3229,17 +3483,17 @@ function Dashboard({ st, set, onSignOut }) {
                   </div>
                   <div style={{fontFamily:dFB, fontWeight:600, fontSize:17, lineHeight:1.25, color:dT.ink, margin:"12px 0 12px"}}>{m.role}</div>
                   <div style={{display:"flex", gap:6, flexWrap:"wrap", marginBottom:12, flex:1, alignContent:"flex-start"}}>
-                    {m.tags.map(t=><span key={t} style={{fontSize:11.5, fontWeight:600, color:dT.ink, background:"rgba(2,47,54,.08)",
+                    {m.tags.map(t=><span key={t} style={{fontSize:12.5, fontWeight:600, color:dT.ink, background:"rgba(2,47,54,.08)",
                       borderRadius:999, padding:"4px 10px"}}>{t}</span>)}
                   </div>
                   <div style={{display:"flex", borderTop:"1px solid rgba(2,47,54,.1)", margin:"0 -16px"}}>
                     <button style={{flex:1, padding:"9px 0", background:"transparent", border:"none", borderRight:"1px solid rgba(2,47,54,.1)",
-                      fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink, cursor:"pointer", display:"flex", alignItems:"center",
+                      fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.ink, cursor:"pointer", display:"flex", alignItems:"center",
                       justifyContent:"center", gap:6}}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"/></svg>
                       Save</button>
                     <button style={{flex:1, padding:"9px 0", background:"transparent", border:"none",
-                      fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink, cursor:"pointer", display:"flex", alignItems:"center",
+                      fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.ink, cursor:"pointer", display:"flex", alignItems:"center",
                       justifyContent:"center", gap:6}}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="#022F36"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2l.117 .007a1 1 0 0 1 .876 .876l.007 .117v4l.005 .15a2 2 0 0 0 1.838 1.844l.157 .006h4l.117 .007a1 1 0 0 1 .876 .876l.007 .117v9a3 3 0 0 1 -2.824 2.995l-.176 .005h-10a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-14a3 3 0 0 1 2.824 -2.995l.176 -.005zm3 14h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0 -2m0 -4h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0 -2"/><path d="M19 7h-4l-.001 -4.001z"/></svg>
                       Details</button>
@@ -3249,9 +3503,9 @@ function Dashboard({ st, set, onSignOut }) {
                   <CLogo co={m.co} size={28}/>
                   <span style={{fontSize:14, color:dT.ink, fontWeight:700, flex:1, minWidth:0}}>{m.co}</span>
                   <button style={{padding:"9px 16px", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`,
-                    fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Pass</button>
+                    fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Pass</button>
                   <button style={{padding:"9px 18px", borderRadius:999, background:dT.ink, color:"#fff", border:"none",
-                    fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Apply</button>
+                    fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>Apply</button>
                 </div>
               </div>
             ))}
@@ -3259,64 +3513,78 @@ function Dashboard({ st, set, onSignOut }) {
         </div>
         {browseJob && <JobDetailPanel job={browseJob} onClose={()=>setBrowseJob(null)}/>}
         </React.Fragment>
-        ) : view==="autoapply" ? (
+        ) : view==="credits" ? <window.CreditsPage st={st} onBack={()=>setView("pipeline")} goPlans={goPlans}/>
+        : view==="autoapply" ? (
         <div style={{flex:1, overflow:"auto", padding:"32px 32px 56px", boxSizing:"border-box"}}>
           <window.ApplySettingsPanel st={st} set={set} goProfile={()=>setView("profile")}/>
         </div>
         ) : (view==="settings" || view==="profile") ? <SettingsView onSignOut={onSignOut} onGoProfile={()=>setView("profile")} st={st} set={set} title={view==="profile" ? "Profile" : "Settings"} initialSub={pendingSub} onBack={()=>setView("pipeline")}/> : (
-        <div style={{flex:1, overflow:"auto", padding:"32px 32px 56px", boxSizing:"border-box", display:"flex", flexDirection:"column", gap:28}}>
+        <div style={{flex:1, overflow:"auto", padding:"16px 32px 56px", boxSizing:"border-box", display:"flex", flexDirection:"column", gap:20}}>
 
           {/* Command header */}
-          <div style={{border:`1px solid ${dT.ink}`, borderRadius:16, background:dT.ink, padding:"20px 26px",
-            display:"flex", alignItems:"center", justifyContent:"space-between", gap:20, flexShrink:0, flexWrap:"wrap"}}>
-            <div style={{display:"flex", flexDirection:"column", gap:6}}>
-              <div style={{fontFamily:dFD, fontWeight:700, fontSize:12, letterSpacing:".09em", color:"rgba(255,255,255,.55)"}}>{isAuto ? "AUTO APPLY" : "MANUAL APPLY"}</div>
-              <div style={{display:"flex", alignItems:"baseline", gap:18, flexWrap:"wrap"}}>
-                {!hasData ? (
-                  <span style={{fontSize:14.5, fontWeight:700, color:"#fff"}}>{isAuto ? "Searching and applying for you…" : "Finding your best matches…"}</span>
-                ) : isAuto
-                  ? <span style={{fontSize:14.5, fontWeight:700, color:"#fff"}}>{jobs.length} in progress</span>
-                  : <span style={{fontSize:14.5, fontWeight:700, color:"#fff"}}>{matches.length} matches to review</span>}
-                {needCount>0 && (
-                  <span style={{fontSize:14.5, fontWeight:800, color:"#5AEBEB"}}>{needCount} need your attention</span>
-                )}
-                {hasData && <span style={{fontSize:13, fontWeight:600, color:"rgba(255,255,255,.55)"}}>{sentToday} submitted</span>}
-              </div>
-              <div style={{fontSize:12, fontWeight:600, color:"rgba(255,255,255,.55)", display:"flex", alignItems:"center", gap:7}}>
-                <span style={{width:6, height:6, borderRadius:"50%", background: paused ? "#F2B84B" : "#5AEBEB"}}/>
-                {isAuto ? (paused ? "Paused · Bloom won't send until you resume" : "Bloom fills and sends applications for you · last scan 12 min ago") : "Bloom fills each application. You review and send · last scan 12 min ago"}
-              </div>
-            </div>
-            <div className="m-wrap" style={{display:"flex", alignItems:"center", gap:10}}>
-              {needCount>0 && (
-                <button onClick={()=>{ setMainTab("applications"); setTab("Needs you"); }} style={{padding:"10px 18px", borderRadius:999, background:"#5AEBEB", color:dT.ink,
-                  border:"none", fontFamily:dFB, fontSize:13, fontWeight:800, cursor:"pointer", whiteSpace:"nowrap"}}>Review {needCount} →</button>
-              )}
-              {isAuto && <button onClick={()=>setPaused(p=>!p)} style={{padding:"10px 16px", borderRadius:999, background:"transparent", color:"#fff",
-                border:"1.5px solid rgba(255,255,255,.25)", fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap",
+
+          <div style={{display:"flex", flexDirection:"column", gap:14, flexShrink:0}}>
+            <div style={{display:"flex", alignItems:"center", justifyContent:"flex-end", gap:12, flexWrap:"wrap"}}>
+              <div className="m-wrap" style={{display:"flex", alignItems:"center", gap:10}}>
+                {isAuto && <button onClick={()=>setPaused(p=>!p)} style={{padding:"10px 16px", borderRadius:999, background:"#fff", color:dT.ink,
+                border:`1.5px solid ${dT.hairline}`, fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap",
                 display:"flex", alignItems:"center", gap:7}}>
                 {paused
                   ? <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>
                   : <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>}
                 {paused ? "Resume" : "Pause"}
               </button>}
-              <ModePill mode={st.mode} onChange={m=>{ set({mode:m}); if(m!=="auto") setPaused(false); }} dark paused={isAuto && paused}/>
+                <ModePill mode={st.mode} onChange={m=>{ set({mode:m}); if(m!=="auto") setPaused(false); }} paused={isAuto && paused}/>
+              </div>
+            </div>
+            <div className="m-stat3" style={{display:"grid", gridTemplateColumns:"minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)", gap:12}}>
+              {(()=>{
+                const need = hasData ? needAll : 0;
+                const st0 = !hasData ? { dot:"#9CA3AF", t: isAuto ? "Searching for jobs" : "Finding your matches", s:"This can take up to an hour" }
+                  : need ? { dot:"#E0A21B", t:`${need} need your attention`, s:"Answer or retry to keep them moving", go:"Needs you" }
+                  : paused ? { dot:"#E0A21B", t:"Paused", s:"Bloom won't send until you resume" }
+                  : { dot:"#22A565", t:"Matches found", s:"Review your results below", go: isAuto ? "All" : "To review" };
+                return (
+                  <button onClick={()=>{ if(st0.go){ setMainTab("applications"); setTab(st0.go); } }} style={{...D_STAT, textAlign:"left", cursor: st0.go ? "pointer" : "default", minHeight:92,
+                    padding:"20px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, fontFamily:dFB}}>
+                    <span style={{display:"flex", flexDirection:"column", gap:3, minWidth:0}}>
+                      <span style={{display:"flex", alignItems:"center", gap:8, fontSize:15, fontWeight:700, color:dT.ink}}>
+                        <span style={{width:7, height:7, borderRadius:"50%", background:st0.dot, flexShrink:0}}/>{st0.t}</span>
+                      <span style={{fontSize:13, fontWeight:500, color:dT.muted, paddingLeft:15}}>{st0.s}</span>
+                    </span>
+                    <span role="link" tabIndex={0} aria-label="Apply settings" title="Apply settings" onClick={e=>{ e.stopPropagation(); setView("autoapply"); }}
+                      style={{width:34, height:34, borderRadius:10, display:"grid", placeItems:"center", color:"#4A5464", flexShrink:0, background:"#F7F8FA"}}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+                    </span>
+                  </button>
+                );
+              })()}
+              {[
+                { k:"sent", label:"Applications submitted", n: hasData ? jobs.filter(j=>j.status==="Submitted").length : 0, tab:"Applied" },
+                { k:"found", label:"Job matches found", n: hasData ? 136 : 0, tab:"All" }, // demo total: jobs Bloom scanned that fit the user's settings
+              ].map(c=>(
+                <button key={c.k} onClick={()=>{ setMainTab("applications"); setTab(c.tab); }}
+                  style={{...D_STAT, textAlign:"left", cursor:"pointer", padding:"20px 20px", minHeight:92, display:"flex", flexDirection:"column", gap:4, fontFamily:dFB}}>
+                  <span style={{fontSize:15, fontWeight:500, color:"#111", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis"}}>{c.label}</span>
+                  <span style={{fontFamily:dFD, fontSize:28, fontWeight:700, lineHeight:1.1, color:"#111", marginTop:"auto"}}>{c.n}</span>
+                </button>
+              ))}
             </div>
           </div>
 
 
           {!paid && left===1 && (
             <div style={{display:"flex", alignItems:"center", gap:12, padding:"10px 16px", borderRadius:12, background:"#F4F8F8", border:`1px solid ${dT.hairline}`, flexShrink:0, flexWrap:"wrap"}}>
-              <span style={{fontSize:13, fontWeight:600, color:dT.ink, flex:"1 1 260px"}}>1 free application left. Upgrade now so Bloom doesn't stop.</span>
-              <button onClick={goPlans} style={{padding:"7px 14px", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
+              <span style={{fontSize:14, fontWeight:600, color:dT.ink, flex:"1 1 260px"}}>1 free application left. Upgrade now so Bloom doesn't stop.</span>
+              <button onClick={goPlans} style={{padding:"7px 14px", borderRadius:999, background:"#fff", color:dT.ink, border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
             </div>
           )}
           {left<=0 && (
             <div style={{display:"flex", alignItems:"center", gap:12, padding:"12px 16px", borderRadius:12, background:"#FDF3DF", flexShrink:0, flexWrap:"wrap"}}>
-              <span style={{fontSize:13, fontWeight:600, color:"#6B4A00", flex:"1 1 260px"}}>
+              <span style={{fontSize:14, fontWeight:600, color:"#6B4A00", flex:"1 1 260px"}}>
                 You've used your {D_FREE_LEFT} free applications. {isAuto ? "Bloom has paused applying until you upgrade." : "Upgrade to keep applying."}
               </span>
-              <button onClick={goPlans} style={{padding:"8px 16px", borderRadius:999, background:dT.ink, color:"#fff", border:"none", fontFamily:dFB, fontSize:12.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
+              <button onClick={goPlans} style={{padding:"8px 16px", borderRadius:999, background:dT.ink, color:"#fff", border:"none", fontFamily:dFB, fontSize:13.5, fontWeight:700, cursor:"pointer"}}>See plans</button>
             </div>
           )}
           {!hasData ? (
@@ -3326,34 +3594,47 @@ function Dashboard({ st, set, onSignOut }) {
                 <img src="assets/empty-dashboard.svg" alt="" style={{display:"block", width:"100%", height:"100%", objectFit:"contain"}}/>
               </div>
               <div style={{fontFamily:dFD, fontWeight:700, fontSize:19, color:dT.ink, marginTop:4}}>Hang tight. Bloom is finding jobs for you.</div>
-              <div style={{fontSize:13.5, color:dT.muted, fontWeight:400, lineHeight:1.55, maxWidth:620, textWrap:"balance"}}>
+              <div style={{fontSize:14.5, color:dT.muted, fontWeight:400, lineHeight:1.55, maxWidth:620, textWrap:"balance"}}>
                 We're matching roles to your résumé and preferences now. Applications will show up here, and we'll message you on {(st.channel==="email" ? "email" : "WhatsApp or iMessage")}.
               </div>
-              <div style={{display:"flex", alignItems:"center", gap:8, fontSize:12.5, fontWeight:700, color:dT.ink, background:"#F1F3F4",
+              <div style={{display:"flex", alignItems:"center", gap:8, fontSize:13.5, fontWeight:700, color:dT.ink, background:"#F1F3F4",
                 borderRadius:999, padding:"6px 13px", marginTop:4}}>
                 <span style={{width:6, height:6, borderRadius:"50%", background:"#22A565"}}/>Usually takes under an hour
               </div>
               <button onClick={()=>setHasData(true)} style={{marginTop:14, padding:"8px 14px", borderRadius:8, background:"transparent",
-                border:`1px dashed ${dT.hairline}`, fontFamily:dFB, fontSize:12, fontWeight:700, color:dT.muted, cursor:"pointer"}}>
+                border:`1px dashed ${dT.hairline}`, fontFamily:dFB, fontSize:13, fontWeight:700, color:dT.muted, cursor:"pointer"}}>
                 Prototype: view as existing user →
               </button>
             </div>
           ) : (<React.Fragment>
           {/* All applications */}
-          <div style={{flexShrink:0, border:`1px solid ${dT.hairline}`, borderRadius:14, background:"#fff", overflow:"hidden"}}>
-            {!isManualList && renderFilters("18px 20px 14px")}
+          <div style={{...D_CARD, flexShrink:0, overflow:"hidden"}}>
+            {renderFilters("14px 20px 0")}
 
             <div>
-              {!isManualList && renderColHead()}
+              {tab==="To review" && !paused && rows.length>0 && (()=>{
+                const cap = n => paid ? n : Math.min(n, Math.max(left,0));
+                const shown = rows.map(r=>r._match), n = cap(shown.length);
+                return (
+                  <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap", padding:"12px 20px", background:"#fff"}}>
+                    <span style={{fontSize:14, fontWeight:600, color:"#374151"}}>Apply to the ones you want. Nothing is sent without you.</span>
+                    <button onClick={()=> left<=0 && !paid ? setUpgradeOpen(true) : applyMany(shown)} className="bd-cta" style={{display:"inline-flex", alignItems:"center", gap:7, padding:"9px 16px",
+                      borderRadius:999, border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>
+                      {left<=0 && !paid ? "Upgrade to apply" : `Apply to ${n===shown.length ? "all " : "top "}${n}`}
+                    </button>
+                  </div>
+                );
+              })()}
+              {renderColHead()}
               {rows.length === 0 ? (
-                <div style={{padding:"40px 20px", textAlign:"center", fontSize:13.5, color:dT.muted, fontWeight:600}}>
+                <div style={{padding:"40px 20px", textAlign:"center", fontSize:14.5, color:dT.muted, fontWeight:600}}>
                   {emptyMsg}
                 </div>
               ) : rows.map((j,idx)=>{
                 const tone = D_TONE[j.statusTone];
                 const grp = j._match ? "m" : "a";
                 const prevGrp = idx>0 ? (rows[idx-1]._match ? "m" : "a") : null;
-                const showHead = (isManualList || tab==="All") && grp!==prevGrp;
+                const showHead = false;
                 const nMatch = totalMatchRows, nApp = rows.filter(r=>!r._match).length;
                 const lastMatch = j._match && !(rows[idx+1] && rows[idx+1]._match);
                 const head = grp==="m"
@@ -3372,14 +3653,14 @@ function Dashboard({ st, set, onSignOut }) {
                     return (
                     <div style={{display:"flex", alignItems:"center", gap:12, padding: bulk ? "12px 20px" : "16px 20px 10px", borderBottom:`1px solid ${dT.hairline}`, background:"#fff", flexWrap:"wrap"}}>
                       <div style={{display:"flex", alignItems:"baseline", gap:10, flexWrap:"wrap", flex:1, minWidth:0}}>
-                        <span style={{fontSize:13.5, fontWeight:800, color:dT.ink}}>{head[0]}</span>
-                        <span style={{fontSize:12, fontWeight:700, color:dT.muted}}>{head[1]}</span>
-                        <span style={{fontSize:12.5, fontWeight:500, color:dT.muted}}>{head[2]}</span>
+                        <span style={{fontSize:14.5, fontWeight:800, color:dT.ink}}>{head[0]}</span>
+                        <span style={{fontSize:13, fontWeight:700, color:dT.muted}}>{head[1]}</span>
+                        <span style={{fontSize:13.5, fontWeight:500, color:dT.muted}}>{head[2]}</span>
                       </div>
                       {bulk && (
                         <div style={{position:"relative", display:"inline-flex", flexShrink:0}}>
                           <button onClick={()=> left<=0 && !paid ? setUpgradeOpen(true) : applyMany(shown)} className="bd-cta" style={{display:"inline-flex", alignItems:"center", gap:7, padding:"9px 14px 9px 16px",
-                            borderRadius:"999px 0 0 999px", border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>
+                            borderRadius:"999px 0 0 999px", border:"none", background:dT.ink, color:"#fff", fontFamily:dFB, fontSize:14, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap"}}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/></svg>
                             {left<=0 && !paid ? "Upgrade to apply" : `Apply to ${nTop===shown.length ? "all " : "top "}${nTop}`}
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -3394,8 +3675,8 @@ function Dashboard({ st, set, onSignOut }) {
                               {[[`Apply to the ${shown.length} shown`, shown, nTop], [`Apply to all ${all.length} matches`, all, nAll]].map(([l,list,n],k)=>(
                                 <button key={k} onClick={()=>applyMany(list)} style={{width:"100%", textAlign:"left", padding:"12px 14px", border:"none", borderBottom: k ? "none" : `1px solid ${dT.hairline}`,
                                   background:"#fff", cursor:"pointer", fontFamily:dFB}}>
-                                  <div style={{fontSize:13, fontWeight:700, color:dT.ink}}>{l}</div>
-                                  {!paid && n<list.length && <div style={{fontSize:11.5, fontWeight:500, color:dT.muted, marginTop:2}}>{n} left on Free, the rest after you upgrade</div>}
+                                  <div style={{fontSize:14, fontWeight:700, color:dT.ink}}>{l}</div>
+                                  {!paid && n<list.length && <div style={{fontSize:12.5, fontWeight:500, color:dT.muted, marginTop:2}}>{n} left on Free, the rest after you upgrade</div>}
                                 </button>
                               ))}
                             </div>
@@ -3406,22 +3687,23 @@ function Dashboard({ st, set, onSignOut }) {
                     );
                   })()}
                   <div onClick={e=>{ if(e.target.closest("button")) return; j._match ? setMatchPanel(j._match) : openReview(j); }} className="m-row" style={{display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,.8fr) minmax(260px,1.5fr)", gap:12,
-                    padding:"14px 20px", borderBottom:`1px solid ${dT.hairline}`, alignItems:"center", fontSize:13, cursor:"pointer"}}>
+                    padding:"16px 20px", borderBottom:`1px solid ${dT.hairline}`, alignItems:"center", fontSize:14.5, cursor:"pointer"}}>
                     <div style={{display:"flex", alignItems:"center", gap:10, minWidth:0}}>
                       <CLogo co={j.co}/>
                       <div style={{minWidth:0}}>
-                        <div style={{fontWeight:700, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.co}</div>
-                        <div style={{fontSize:11.5, color:dT.muted, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.role}{j._match ? <span style={{fontWeight:500}}> · Posted {j.applied||"recently"}</span> : null}</div>
+                        <div style={{fontSize:15.5, fontWeight:700, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{j.co}</div>
+                        <div style={{fontSize:14, color:dT.muted, fontWeight:500, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", marginTop:2}}>{j.role}{j._match ? <span style={{fontWeight:500}}> · Posted {j.applied||"recently"}</span> : null}</div>
                       </div>
                     </div>
-                    <div style={{fontWeight:700, color: j.matchPct>=85 ? "#1F6B45" : dT.ink}}>{j.matchPct ? j.matchPct+"%" : "—"}<span style={{fontSize:11.5, color:dT.muted, fontWeight:600, marginLeft:6}}>{j.matchPct>=85 ? "Strong" : j.matchPct>=75 ? "Good" : "Fair"}</span></div>
+                    <div style={{fontWeight:700, color: j.matchPct>=85 ? "#1F6B45" : dT.ink}}>{j.matchPct ? j.matchPct+"%" : "—"}<span style={{fontSize:12.5, color:dT.muted, fontWeight:600, marginLeft:6}}>{j.matchPct>=85 ? "Strong" : j.matchPct>=75 ? "Good" : "Fair"}</span></div>
                     <div style={{display:"flex", flexDirection:"column", alignItems:"flex-end", gap:5, minWidth:0}}>
                       {(() => {
-                        const pill = (label=j.status) => <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:11.5, fontWeight:600, color:tone.fg, background:tone.bg,
+                        const pill = (label=j.status) => <span style={{display:"inline-flex", alignItems:"center", gap:6, fontSize:12.5, fontWeight:600, color:tone.fg, background:tone.bg,
                           borderRadius:999, padding:"4px 10px", whiteSpace:"nowrap"}}><span style={{width:6, height:6, borderRadius:"50%", background:tone.fg}}/>{label}</span>;
-                        const sub = (t, extra) => <span style={{fontSize:12, fontWeight:500, color:dT.muted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"100%", ...extra}}>{t}</span>;
-                        const btn = (label, onClick, dark) => <button onClick={onClick} style={{padding:"7px 14px", borderRadius:999, whiteSpace:"nowrap", cursor:"pointer",
-                          fontFamily:dFB, fontSize:12, fontWeight:700, background: dark ? dT.ink : "#fff", color: dark ? "#fff" : dT.ink, border: dark ? "none" : `1px solid ${dT.hairline}`}}>{label}</button>;
+                        const sub = (t, extra) => <span style={{fontSize:13, fontWeight:500, color:dT.muted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"100%", ...extra}}>{t}</span>;
+                        const btn = (label, onClick, kind) => { const k = kind===true ? "apply" : kind || "ghost"; const S = {apply:["#fff",dT.ink,`1.5px solid ${dT.ink}`], amber:["#FBEFCB","#7A5A00","1.5px solid #F0D88A"], ghost:["transparent",dT.muted,"1.5px solid transparent"]}[k];
+                          return <button onClick={onClick} style={{padding:"9px 18px", borderRadius:999, whiteSpace:"nowrap", cursor:"pointer",
+                          fontFamily:dFB, fontSize:14, fontWeight:700, background:S[0], color:S[1], border:S[2]}}>{label}</button>; };
                         if (j._match) return (
                           <React.Fragment>
                             <span style={{display:"inline-flex", gap:6}}>
@@ -3432,11 +3714,10 @@ function Dashboard({ st, set, onSignOut }) {
                         );
                         if (j.status==="Needs you") return (
                           <span style={{display:"inline-flex", alignItems:"center", gap:8}}>
-                            {btn(`Answer ${openQ||1} question${openQ>1?"s":""} →`, ()=>openReview(j), true)}
-                            {pill()}
+                            {btn(`Answer ${openQ||1} question${openQ>1?"s":""} →`, ()=>openReview(j), "amber")}
                           </span>
                         );
-                        if (j.status==="Submitting") return (<React.Fragment>{pill(<span style={{fontWeight:400}}>Submitting</span>)}<span style={{fontSize:12, maxWidth:"100%", overflow:"hidden"}}><LiveTicker steps={D_INFLIGHT_STEPS}/></span></React.Fragment>);
+                        if (j.status==="Submitting") return (<React.Fragment>{pill(<span style={{fontWeight:400}}>Submitting</span>)}<span style={{fontSize:13, maxWidth:"100%", overflow:"hidden"}}><LiveTicker steps={D_INFLIGHT_STEPS}/></span></React.Fragment>);
                         if (j.status==="Preparing") return (<React.Fragment>{pill()}{sub("Tailoring résumé…")}</React.Fragment>);
                         if (j.status==="Submitted") return (<React.Fragment>{pill()}{sub("Submitted " + j.applied)}</React.Fragment>);
                         if (j.status==="Failed") return (
@@ -3450,35 +3731,75 @@ function Dashboard({ st, set, onSignOut }) {
                       })()}
                     </div>
                   </div>
-                  {lastMatch && isManualList && totalMatchRows > MATCH_PREVIEW && (
+                  {false && (
                     <button onClick={()=>setShowAllMatches(v=>!v)} style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:6,
-                      padding:"11px 20px", border:"none", borderBottom:`1px solid ${dT.hairline}`, background:"#FAFAF8", cursor:"pointer",
-                      fontFamily:dFB, fontSize:12.5, fontWeight:700, color:dT.ink}}>
-                      {showAllMatches ? "Show top 5 only" : `Show ${hiddenMatches} more matches`}
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{transform: showAllMatches ? "rotate(180deg)" : "none"}}><path d="m6 9 6 6 6-6"/></svg>
+                      padding:"11px 20px", border:"none", borderBottom:`1px solid ${dT.hairline}`, background:"#F7F8FA", cursor:"pointer",
+                      fontFamily:dFB, fontSize:13.5, fontWeight:700, color:dT.ink}}>
+                      Show more
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{transform: false ? "rotate(180deg)" : "none"}}><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                   )}
                   </React.Fragment>
                 );
               })}
-              {isManualList && appsSorted.length===0 && shownMatchRows.length>0 && (
-                <React.Fragment>
-                  {renderAppsHead()}
-                  <div style={{padding:"32px 20px", textAlign:"center", fontSize:13.5, color:dT.muted, fontWeight:600}}>{emptyMsg}</div>
-                </React.Fragment>
-              )}
+
             </div>
-            <div style={{display:"flex", alignItems:"center", gap:8, padding:"12px 20px", background:"#FAFAF8"}}>
-              <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Rows per page</span>
-              <select style={{padding:"6px 10px", borderRadius:8, border:`1px solid ${dT.hairline}`, fontFamily:dFB, fontSize:12.5,
-                fontWeight:700, color:dT.ink, background:"#fff", outline:"none"}} defaultValue="50">
-                <option>25</option><option>50</option><option>100</option>
-              </select>
-              <span style={{fontSize:12.5, color:dT.muted, fontWeight:600}}>Showing 1–{rows.length} of {rows.length}</span>
-            </div>
+            {hasMore && (
+              <div style={{display:"flex", justifyContent:"center", padding:"14px 20px 18px", borderTop:`1px solid ${dT.hairline}`}}>
+                <button onClick={loadMore} disabled={loadingMore} aria-label={`Load more, ${allRows.length - rows.length} remaining`} className="bd-loadmore"
+                  style={{display:"inline-flex", alignItems:"center", gap:8, padding:"9px 16px", borderRadius:999, border:"none", background:"transparent",
+                  fontFamily:dFB, fontSize:15, fontWeight:700, color:dT.ink, cursor: loadingMore ? "default" : "pointer"}}>
+                  <svg className={loadingMore ? "bd-spin" : ""} width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></svg>
+                  {loadingMore ? "Loading…" : "Load more"}
+                </button>
+              </div>
+            )}
           </div>
 
           </React.Fragment>)}
+          {st.welcome && (
+            <div style={{position:"fixed", inset:0, zIndex:120, background:"rgba(17,24,39,.42)", display:"grid", placeItems:"center", padding:16}}
+              onClick={e=>{ if(e.target===e.currentTarget) set({welcome:false}); }}>
+              <div role="dialog" aria-modal="true" aria-labelledby="wel-t" style={{position:"relative", width:"min(520px, 100%)", maxHeight:"92vh", overflow:"auto", boxSizing:"border-box",
+                background:"#fff", borderRadius:28, padding:"44px 36px 32px", textAlign:"center", boxShadow:"0 40px 80px rgba(0,0,0,.18), 0 0 0 1px #EAEAEA"}}>
+                <h2 id="wel-t" style={{fontFamily:dFD, fontWeight:700, fontSize:"clamp(30px, 6vw, 40px)", letterSpacing:"-0.035em", lineHeight:1.08, margin:"0 0 16px", color:"#0B0F14", textWrap:"balance"}}>
+                  Your job hunt,<br/>on autopilot</h2>
+                <p style={{fontSize:16.5, color:"#6B7280", fontWeight:500, lineHeight:1.6, margin:"0 auto 26px", maxWidth:420, textWrap:"pretty"}}>
+                  {isAuto ? "Bloom searches, matches and applies to the right jobs for you, around the clock. You just show up for the interviews."
+                          : "Bloom finds the right jobs and fills every form. You pick the ones you want, and Bloom sends them."}
+                </p>
+                <button aria-label="Play 1-minute demo video" className="wel-video" style={{position:"relative", display:"block", width:"100%", aspectRatio:"16/9", borderRadius:18, border:"none",
+                  cursor:"pointer", overflow:"hidden", padding:0, marginBottom:28, background:"linear-gradient(135deg,#0A3A41 0%,#0A6E6E 60%,#7FD8D8 100%)",
+                  boxShadow:"0 10px 24px rgba(2,47,54,.18)"}}>
+                  <span aria-hidden="true" style={{position:"absolute", left:"7%", right:"7%", top:"10%", bottom:"-6%", background:"#fff", borderRadius:"12px 12px 0 0",
+                    transform:"perspective(900px) rotateX(10deg)", transformOrigin:"bottom", boxShadow:"0 -6px 20px rgba(0,0,0,.12)", display:"flex", overflow:"hidden"}}>
+                    <span style={{width:"22%", borderRight:"1px solid #EEF0F2", padding:"10px 8px", display:"flex", flexDirection:"column", gap:6}}>
+                      <span style={{height:7, width:"60%", borderRadius:4, background:"#0A6E6E"}}/>
+                      {[0,1,2,3].map(i=><span key={i} style={{height:5, width:`${70-i*8}%`, borderRadius:4, background:"#E5E7EB"}}/>)}
+                    </span>
+                    <span style={{flex:1, padding:"10px 12px", display:"flex", flexDirection:"column", gap:7}}>
+                      <span style={{display:"flex", gap:8}}>{[0,1,2].map(i=><span key={i} style={{flex:1, height:22, borderRadius:6, background:"#F3F4F6"}}/>)}</span>
+                      {[0,1,2,3,4,5].map(i=>(
+                        <span key={i} style={{display:"flex", alignItems:"center", gap:8}}>
+                          <span style={{width:12, height:12, borderRadius:3, background:"#E5E7EB"}}/>
+                          <span style={{flex:1, height:5, borderRadius:4, background:"#EEF0F3"}}/>
+                          <span style={{width:"18%", height:7, borderRadius:999, background: i<2 ? "#DDF3E8" : "#E0F5F5"}}/>
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                  <span className="wel-play" style={{position:"absolute", left:"50%", top:"50%", transform:"translate(-50%,-50%)", width:66, height:66, borderRadius:"50%", background:"#fff",
+                    display:"grid", placeItems:"center", boxShadow:"0 8px 22px rgba(0,0,0,.22)", transition:"transform .15s"}}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#0B0F14" style={{marginLeft:3}}><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+                  </span>
+                </button>
+                <button autoFocus onClick={()=>set({welcome:false})} className="wel-cta" style={{width:"100%", padding:"17px 0", borderRadius:999, border:"none", cursor:"pointer",
+                  background:"linear-gradient(180deg, #0B4A52 0%, #022F36 100%)", boxShadow:"inset 0 1px 0 rgba(255,255,255,.14), 0 6px 16px rgba(2,47,54,.22)",
+                  color:"#fff", fontFamily:dFD, fontSize:19, fontWeight:700}}>{isAuto ? "Start Auto Apply" : "See my matches"}</button>
+                <div style={{fontSize:13.5, color:"#6B7280", fontWeight:500, marginTop:14}}>{isAuto ? "You can pause anytime from the dashboard." : "You can switch to Auto Apply anytime."}</div>
+              </div>
+            </div>
+          )}
           {upgradeOpen && (
             <div style={{position:"fixed", inset:0, zIndex:95, display:"grid", placeItems:"center", padding:24}}>
               <div onClick={()=>setUpgradeOpen(false)} style={{position:"absolute", inset:0, background:"rgba(2,30,36,.45)"}}/>
@@ -3490,14 +3811,14 @@ function Dashboard({ st, set, onSignOut }) {
                 </button>
                 <img src="assets/limit-reached-icon.png" alt="" style={{display:"block", width:150, height:"auto", margin:"0 auto 10px"}}/>
                 <div style={{fontFamily:dFD, fontWeight:700, fontSize:22, letterSpacing:"-0.02em", marginBottom:8}}>Your {D_FREE_LEFT} free applications are done</div>
-                <div style={{fontSize:14, color:"#4B5A5E", fontWeight:500, lineHeight:1.55, marginBottom:16, textWrap:"pretty"}}>
+                <div style={{fontSize:14, color:"#374151", fontWeight:500, lineHeight:1.55, marginBottom:16, textWrap:"pretty"}}>
                   {isAuto
                     ? `Bloom has paused. ${matches.length} matching jobs are ready to go the moment you upgrade.`
                     : `${matches.length} matching jobs are still waiting for you. Upgrade to keep applying.`}
                 </div>
                 <div style={{display:"flex", flexDirection:"column", gap:9, textAlign:"left", background:"#F9FAFB", borderRadius:12, padding:"14px 16px", marginBottom:20}}>
                   {["Up to 300 applications a month","Bloom keeps applying while you're busy","Pick up exactly where you left off"].map(t=>(
-                    <div key={t} style={{display:"flex", alignItems:"center", gap:10, fontSize:13.5, fontWeight:600, color:dT.ink}}>
+                    <div key={t} style={{display:"flex", alignItems:"center", gap:10, fontSize:14.5, fontWeight:600, color:dT.ink}}>
                       <span style={{width:18, height:18, borderRadius:"50%", background:"#1F8A5B", display:"grid", placeItems:"center", flexShrink:0}}>
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                       </span>{t}
@@ -3506,7 +3827,7 @@ function Dashboard({ st, set, onSignOut }) {
                 </div>
                 <button autoFocus onClick={()=>{ setUpgradeOpen(false); goPlans(); }} className="bd-cta" style={{width:"100%", padding:"13px 0", borderRadius:999, background:dT.ink, color:"#fff", border:"none",
                   fontFamily:dFB, fontSize:15, fontWeight:700, cursor:"pointer"}}>Upgrade now</button>
-                <div style={{fontSize:12, fontWeight:500, color:dT.muted, marginTop:10}}>From $19/month · cancel anytime</div>
+                <div style={{fontSize:13, fontWeight:500, color:dT.muted, marginTop:10}}>From $19/month · cancel anytime</div>
               </div>
             </div>
           )}
@@ -3516,9 +3837,9 @@ function Dashboard({ st, set, onSignOut }) {
             onSkip={()=>{ skipMatch(matchPanel, "Skipped from details"); setMatchPanel(null); }}/>}
           {toast && (
             <div role="status" style={{position:"fixed", bottom:24, left:"50%", transform:"translateX(-50%)", zIndex:90, display:"flex", alignItems:"center", gap:14,
-              padding:"12px 16px 12px 18px", borderRadius:12, background:dT.ink, color:"#fff", boxShadow:"0 10px 30px rgba(0,0,0,.2)", fontSize:13, fontWeight:600, maxWidth:"90vw"}}>
+              padding:"12px 16px 12px 18px", borderRadius:12, background:dT.ink, color:"#fff", boxShadow:"0 10px 30px rgba(0,0,0,.2)", fontSize:14, fontWeight:600, maxWidth:"90vw"}}>
               <span>{toast.msg}</span>
-              {toast.undo && <button onClick={()=>{ toast.undo(); setToast(null); }} style={{border:"none", background:"none", color:"#5AEBEB", fontFamily:dFB, fontSize:13, fontWeight:800, cursor:"pointer"}}>Undo</button>}
+              {toast.undo && <button onClick={()=>{ toast.undo(); setToast(null); }} style={{border:"none", background:"none", color:"#5AEBEB", fontFamily:dFB, fontSize:14, fontWeight:800, cursor:"pointer"}}>Undo</button>}
             </div>
           )}
         </div>

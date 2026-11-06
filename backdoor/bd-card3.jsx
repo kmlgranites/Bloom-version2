@@ -45,7 +45,7 @@ function WSelect({ value, onChange, options, placeholder, disabled }) {
         style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10,
           background: disabled ? "#F4F5F6" : "#fff", border:`1.5px solid ${open ? wT.ink : wT.hairline}`,
           borderRadius:8, padding:"11px 13px", fontFamily:wFB, fontSize:14.5, fontWeight:500,
-          color: disabled ? "#A9B2B4" : (value ? wT.ink : wT.muted), cursor: disabled ? "default" : "pointer", textAlign:"left"}}>
+          color: disabled ? "#9CA3AF" : (value ? wT.ink : wT.muted), cursor: disabled ? "default" : "pointer", textAlign:"left"}}>
         <span style={{minWidth:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{value || placeholder}</span>
         <span style={{display:"flex", transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><WChev/></span>
       </button>
@@ -186,7 +186,7 @@ function WorkCard({ st, set, locked, onNext }) {
     <div style={{display:"grid", gridTemplateColumns:"40% 60%", background:"#fff",
       border:`1px solid ${wT.hairline}`, borderRadius:24}}>
 
-      <window.BdMobileInfo resume why="Every application asks these. Answer once here, we fill the forms."/>
+      <window.BdMobileInfo why="Every application asks these. Answer once here, we fill the forms."/>
       <div className="m-rail" style={{background:"#F9FAFB", borderRadius:"0 0 0 24px", padding:"44px 32px 48px", display:"flex", flexDirection:"column", gap:26}}>
         <div>
           <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10}}>
@@ -195,13 +195,13 @@ function WorkCard({ st, set, locked, onNext }) {
               <span style={{width:7, height:7, borderRadius:"50%", background:"#1F8A5B"}}/>done
             </span>
           </div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
             Parsed. While you finish setup, we're matching jobs for you.
           </div>
         </div>
         <div>
           <div style={{fontSize:13.5, fontWeight:800, color:wT.ink, marginBottom:8}}>Why we ask</div>
-          <div style={{fontSize:13, fontWeight:600, color:"#4B5A5E", lineHeight:1.55}}>
+          <div style={{fontSize:13, fontWeight:600, color:"#374151", lineHeight:1.55}}>
             Every application asks these. Answer once here, we fill the forms.
           </div>
         </div>

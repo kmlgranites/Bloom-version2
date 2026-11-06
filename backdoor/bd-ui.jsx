@@ -160,6 +160,7 @@ function Note({ tint, ink, icon, children }) {
 function BdMobileInfo({ resume, pct, why, email }) {
   const [open, setOpen] = React.useState(false);
   const done = pct == null || pct >= 100;
+  if (!resume && !email && !why) return null;
   return (
     <div className="m-only" style={{padding:"16px 18px 0"}}>
       <div style={{display:"flex", flexDirection:"column", alignItems:"flex-start", gap:10}}>
@@ -171,7 +172,7 @@ function BdMobileInfo({ resume, pct, why, email }) {
           </span>
         )}
         {email && (
-          <div style={{fontSize:12.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.5, background:"#F9FAFB", borderRadius:10, padding:"10px 12px", width:"100%", boxSizing:"border-box"}}>
+          <div style={{fontSize:12.5, fontWeight:500, color:"#374151", lineHeight:1.5, background:"#F9FAFB", borderRadius:10, padding:"10px 12px", width:"100%", boxSizing:"border-box"}}>
             Your application email: <b style={{fontWeight:700, color:"#022F36", wordBreak:"break-all"}}>{email}</b>. Bloom uses it to create accounts on job sites for you.
           </div>
         )}
@@ -183,7 +184,7 @@ function BdMobileInfo({ resume, pct, why, email }) {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
                 style={{transform: open ? "rotate(180deg)" : "none", transition:"transform .15s"}}><path d="m6 9 6 6 6-6"/></svg>
             </button>
-            {open && <div style={{fontSize:12.5, fontWeight:500, color:"#4B5A5E", lineHeight:1.55, marginTop:4}}>{why}</div>}
+            {open && <div style={{fontSize:12.5, fontWeight:500, color:"#374151", lineHeight:1.55, marginTop:4}}>{why}</div>}
           </div>
         )}
       </div>

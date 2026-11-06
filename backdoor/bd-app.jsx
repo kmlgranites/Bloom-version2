@@ -28,6 +28,7 @@ const CARDS = [
 ];
 
 const INITIAL = {
+  welcome:true,
   role:"Software Engineer", engKinds:["Frontend Engineer"], level:["Senior"], types:["Fulltime"], setting:["Remote"],
   citizenship:["India"], targets:["United States"],
   elig:{ "United States": { authorized:"No", sponsorship:"Yes", visa:"H-1B", visaStatus:"Filed — pending" } },
@@ -166,7 +167,7 @@ function BackdoorOnboarding() {
       )}
 
       {/* Activated */}
-      {done && <BloomBoot mode={st.mode} channel={st.channel} onDone={()=>{ setDone(false); setAtDashboard(true); }}/>}
+      {done && <BloomBoot mode={st.mode} channel={st.channel} onDone={()=>{ setDone(false); set({welcome:true}); setAtDashboard(true); }}/>}
 
       <style>{`.rotate{animation:spin 1.1s linear infinite;display:inline-block}@keyframes spin{to{transform:rotate(360deg)}}
         a{color:${aT.cyanInk}}a:hover{color:${aT.ink}}

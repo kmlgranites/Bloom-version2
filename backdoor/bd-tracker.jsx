@@ -147,11 +147,11 @@ function TDetailPanel({ job, onClose }) {
                 <div style={{fontFamily:tFD, fontWeight:700, fontSize:15, marginBottom:6}}>Role</div>
                 <div style={{fontSize:13.5, color:tT.ink, fontWeight:500, marginBottom:22}}>{job.role}</div>
                 <div style={{fontFamily:tFD, fontWeight:700, fontSize:15, marginBottom:6}}>Key Responsibilities</div>
-                <div style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500, lineHeight:1.65, marginBottom:22}}>{job.responsibilities}</div>
+                <div style={{fontSize:13.5, color:"#374151", fontWeight:500, lineHeight:1.65, marginBottom:22}}>{job.responsibilities}</div>
                 <div style={{fontFamily:tFD, fontWeight:700, fontSize:15, marginBottom:10}}>Requirements</div>
                 <ul style={{margin:0, paddingLeft:18, display:"flex", flexDirection:"column", gap:6}}>
                   {job.requirements.map(r=>(
-                    <li key={r} style={{fontSize:13.5, color:"#4B5A5E", fontWeight:500}}>{r}</li>
+                    <li key={r} style={{fontSize:13.5, color:"#374151", fontWeight:500}}>{r}</li>
                   ))}
                 </ul>
               </div>
