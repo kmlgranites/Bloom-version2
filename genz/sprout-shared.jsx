@@ -10,7 +10,7 @@ const sprT = {
   paper:      "#FFFFFF",
   ink:        "#022F36",   // primary text — deep teal
   inkSoft:    "#3C5356",
-  muted:      "#7B8B8E",
+  muted:      "#5B6573",
   hairline:   "#E8DFCD",   // warm border on cream
   hairlineCool:"#E1E5E7",
 
